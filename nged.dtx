@@ -482,7 +482,8 @@
 % For giving hints, duh. :-)
 %    \begin{macrocode}
 \theoremstyle{remark}
-\newtheorem*{hint}{\nge@string@hint}
+\pgfqkeys{/nge/strings}{hint/.initial=Hint,note/.initial=Note}
+\newtheorem*{hint}{\pgfkeysvalueof{/nge/strings/hint}}
 %    \end{macrocode}
 % \end{environment}
 %
@@ -502,7 +503,7 @@
 %
 % \begin{environment}{note}
 %   \begin{macrocode}
-\newtheorem*{note}{\nge@string@note}
+\newtheorem*{note}{\pgfkeysvalueof{/nge/strings/note}}
 \theoremstyle{plain}
 %    \end{macrocode}
 % \end{environment}
@@ -531,7 +532,7 @@
 %    \begin{macrocode}
 \newcommand{\blankpage}{%  
   \clearpage
-  \begin{center}(\nge@string@pageisblank)\end{center}
+  \begin{center}(\pgfkeysvalueof{/nge/strings/pageisblank})\end{center}
   \clearpage}
 %    \end{macrocode}
 % \end{macro}
@@ -540,36 +541,25 @@
 %
 % These are all pretty self-explanatory.
 %
-% \begin{TODO}
-% \begin{itemize}
-% \item Internationalize these things
-% \item Provide a command to customize strings easily.  Or a configuration file system.
-% \item (Maybe) provide a |\localizedstring| command 
-% \begin{verbatim}
-% \setlocalizedstring{name}{Name}
-% \localizedstring{name} 
-% \end{verbatim}
-% Babel must have some kind of framework for this.
-% \end{itemize}
-% \end{TODO}
 % \changes{v0.5}{2006/08/14}{Added additional sentence to exam@pageisblankname}
 % \changes{v0.5}{2006/08/14}{Added exam@continuedname}
 % \changes{v0.5}{2006/08/15}{Renamed 
 % \texttt{\bslash exam@$\left<\right.$string$\left.\right>$name}
 % $\rightarrow$ \texttt{\bslash nge@string@$\left<\right.$string$\left.\right>$}}
+% \changes{v3.0-dev}{2009/04/02}{Using the pgf key registry}
 %    \begin{macrocode}
-\newcommand{\nge@string@points}{Points}
-\newcommand{\nge@string@pageisblank}{This page intentionally left blank.  
-    You can use it for scratch work.}
-\newcommand{\nge@string@name}{Name}
-\newcommand{\nge@string@section}{Section}
-\newcommand{\nge@string@SID}{ID\#}
-\newcommand{\nge@string@email}{e-mail}
-\newcommand{\nge@string@signature}{Signature}
-\newcommand{\nge@string@continued}{continued}
-\newcommand{\nge@string@draft}{DRAFT}
-\newcommand{\nge@string@note}{Note}
-\newcommand{\nge@string@hint}{Hint}
+\pgfqkeys{/nge/strings}{%
+    pageisblank/.initial={This page intentionally left blank. \\
+    You can use it for scratch work.  Please do not remove it.},
+    name/.initial=Name,
+    section/.initial=Section,
+    SID/.initial=ID\#,
+    email/.initial=email,
+    signature/.initial=Signature,
+    draft/.initial=DRAFT,
+    note/.initial=Note,
+    hint/.initial=Hint
+    }
 %    \end{macrocode}
 %
 % \subsubsection{Pagestyles}
@@ -582,16 +572,16 @@
   \renewcommand{\@oddhead}{%
     \begin{minipage}{\textwidth}
     \normalfont
-    \nge@string@name: \hrulefill\ 
-    \nge@string@section: \rule{0.5in}{0.4pt}
+    \pgfkeysvalueof{/nge/strings/name}: \hrulefill\ 
+    \pgfkeysvalueof{/nge/strings/section}: \rule{0.5in}{0.4pt}
     \\ \\
     \noindent 
-    \nge@string@SID: \rule{1.5in}{0.4pt}\
-    \nge@string@email: \hrulefill
+    \pgfkeysvalueof{/nge/strings/SID}: \rule{1.5in}{0.4pt}\
+    \pgfkeysvalueof{/nge/strings/email}: \hrulefill
     \end{minipage}}
   \renewcommand{\@evenhead}{\@oddhead}
   \renewcommand{\@oddfoot}{
-  \nge@string@signature: \hrulefill}
+  \pgfkeysvalueof{/nge/strings/signature}: \hrulefill}
 \renewcommand{\@evenfoot}{}}
 %    \end{macrocode}
 % \end{macro}
@@ -651,7 +641,7 @@
      \setlength{\@tempdimc}{.5\paperheight}%
      \setlength{\unitlength}{\@tempdimb}%
      \put(1,1.5){%
- \makebox(0,0){\rotatebox{45}{{\textcolor[gray]{0.75}{\tt\fontsize{5cm}{5cm}\selectfont{\nge@string@draft}}}}}}}
+ \makebox(0,0){\rotatebox{45}{{\textcolor[gray]{0.75}{\tt\fontsize{5cm}{5cm}\selectfont{\pgfkeysvalueof{/nge/strings/draft}}}}}}}}
 \newcommand{\draftnote}[1]{{{\color{draftblue}\begin{note} #1\end{note}}}}
 \newcommand{\draftmarginalnote}[1]{\marginpar{\color{draftblue}#1}}}
 %    \end{macrocode}
@@ -880,11 +870,18 @@
 % 
 % \begin{macro}{\t@problemstrut}
 % To make the table big enough to write in with red pen, 
-% this (way kludgy) internal macro generates some vertical space
+% this internal macro generates some vertical space
 % (was: |{$\displaystyle\vphantom{\int}$}|)
 %    \begin{macrocode}
-\newcommand{\t@problemstrut}{\rule{0pt}{4ex}}
+\pgfqkeys{/nge/table of problems}{row height/.initial=5ex,row depth/.initial=2ex}
+\newcommand{\t@problemstrut}{%
+  \rule[-\pgfkeysvalueof{/nge/table of problems/row depth}]{0pt}%
+        {\pgfkeysvalueof{/nge/table of problems/row height}}}
 %    \end{macrocode}
+% \begin{TODO}
+%   It might be nicer to specify the \emph{total} height of the row,
+%   with the problem number centered in the row.
+% \end{TODO}
 % \end{macro}
 %
 % Now we add hooks to |\begin{document}| and |\end{document}|
@@ -989,11 +986,14 @@
 
 % color business
 \definecolor{ScantronGreen}{RGB}{41,103,87} % Scantron is probably a trademark
-
-% Boxes
-% =====
+%    \end{macrocode}
+% 
+% \subsubsection{Boxes}
+%
+% An answer box is a box into which the student is supposed to write an answer.
 %
 % defaults -- leaving them @-less in case user wants to redefine
+%    \begin{macrocode}
 \newcommand{\answerboxanswerfont}{\normalfont\sffamily\Large}
 \newcommand{\answerboxanswercolor}{FireBrick}
 \newcommand{\answerboxboxcolor}{ScantronGreen}
@@ -1048,14 +1048,16 @@
   }%
 }
 
-
+%    \end{macrocode}
 % \subsubsection{Bubbles}
+%    \begin{macrocode}
 
 \newcommand{\answerbubblecolor}{ScantronGreen}
 \newcommand{\answerbubblefillcolor}{FireBrick}
 \newcommand{\answerbubblefont}{\sffamily\upshape}
 
 \define@boolkey{answerbubble}{fill}[true]{}
+\define@boolkey{answerbubble}{correct}[true]{}
 
 \newcommand{\answerbubble}[2][]{%
   % initialize variables
@@ -1072,12 +1074,18 @@
   ]%
   \ifthenelse{\boolean{KV@answerbubble@fill}}{%
     \tikzstyle{answerbubble}+=[fill=\answerbubblefillcolor]}{\relax}%
+  \ifthenelse{\boolean{KV@answerbubble@correct}}{%
+    \ifthenelse{\boolean{examformshowanswers}}{%
+      \tikzstyle{answerbubble}+=[fill=\answerbubblefillcolor]}{\relax}}{\relax}
   \tikz[baseline=-0.1cm]{
     \node[answerbubble] {#2};            
         }%
 }
 
+%    \end{macrocode}
 % \subsubsection{Rows of Exam Bubbles}
+%    \begin{macrocode}
+%
 %% eol - flush the box to the right of the line
 \define@boolkey{answerbubblerow}{eol}[true]{}
 %% showanswer - show the answer
@@ -1185,15 +1193,26 @@
 % \end{macro}
 %  
 % \subsection{Miscellaneous}
-%
+% \begin{environment}{centeredpage}
 %    \begin{macrocode}
 %<*misc>
 \newenvironment{centeredpage}{%
   \null\vfill}{%
   \vfill\clearpage}
-\newcommand{\nameIDline}{\nge@string@name: \hrulefill\ \nge@string@SID: \rule{1.5in}{0.4pt}\par}
-%</misc>
+\newcommand{\nameIDline}{\pgfkeysvalueof{/nge/strings/name}: \hrulefill\ \pgfkeysvalueof{/nge/strings/SID}: \rule{1.5in}{0.4pt}\par}
 %    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{continued}
+%    \begin{macrocode}
+\pgfkeys{/nge/strings/continued/.initial=continued}
+\newcommand{\continued}{%
+    \normalmarginpar%
+    \hfill\marginpar{(\pgfkeysvalueof{/nge/strings/continued})}}
+%    \end{macrocode}
+% \end{macro}
+%</misc>
+%
 %
 % \section{Example}
 % I gave this test in March 2003.

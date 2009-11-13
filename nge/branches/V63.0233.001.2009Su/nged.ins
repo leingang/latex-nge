@@ -1,0 +1,65 @@
+%%
+%% Copyright (C) 2003--9 by Matthew Leingang <leingang@courant.nyu.edu>
+%%
+%% This file may be distributed and/or modified under the conditions of
+%% the LaTeX Project Public License, either version 1.2 of this license
+%% or (at your option) any later version.  The latest version of this
+%% license is in:
+%% 
+%%    http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.2 or later is part of all distributions of LaTeX version
+%% 1999/12/01 or later.
+%%
+\input docstrip.tex
+%\keepsilent
+\askforoverwritefalse
+
+\usedir{tex/latex/nged}
+
+\preamble
+
+This is a generated file.
+
+Copyright (C) 2003--9 by Matthew Leingang <leingang@courant.nyu.edu>
+
+This file may be distributed and/or modified under the conditions of
+the LaTeX Project Public License, either version 1.2 of this license
+or (at your option) any later version.  The latest version of this
+license is in:
+
+   http://www.latex-project.org/lppl.txt
+
+and version 1.2 or later is part of all distributions of LaTeX version
+1999/12/01 or later.
+
+\endpreamble
+
+\generate{\file{ngeexam.cls}{\from{\jobname.dtx}{examclass}}
+          \file{ngequiz.cls}{\from{\jobname.dtx}{quizclass}}
+          \file{ngewksht.cls}{\from{\jobname.dtx}{worksheetclass}}
+          \file{ngeform.sty}{\from{\jobname.dtx}{forms}}
+          \file{ngeprob.sty}{\from{\jobname.dtx}{problems}}         
+          \file{ngever.sty}{\from{\jobname.dtx}{versions}}         
+          \file{ngevar.sty}{\from{\jobname.dtx}{variants}}
+          \file{ngemode.sty}{\from{\jobname.dtx}{modes}}
+          \file{ngemisc.sty}{\from{\jobname.dtx}{misc}}
+          \file{\jobname.drv}{\from{\jobname.dtx}{driver}}
+	  \file{example.tex}{\from{\jobname.dtx}{example}}
+          \file{test_exam1.tex}{\from{\jobname.dtx}{examunit1}}
+          \file{test_exam2.tex}{\from{\jobname.dtx}{examunit2}}
+          \file{test_exam3.tex}{\from{\jobname.dtx}{examunit3}}
+}
+
+\Msg{***************************************************************}
+\Msg{*}
+\Msg{* To finish the installation you have to move all .cls and}
+\Msg{* .sty files into a directory searched by TeX:}
+\Msg{*}
+\Msg{* To produce the documentation run the file \jobname.dtx}
+\Msg{* through LaTeX.}
+\Msg{*}
+\Msg{* Happy TeXing}
+\Msg{***********************************************************}
+
+\endbatchfile

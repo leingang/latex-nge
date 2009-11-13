@@ -1,0 +1,1748 @@
+% \iffalse (This is a meta-comment)
+% $Id$
+%
+% Copyright (C) 2003--2009 Matthew Leingang <leingang@courant.nyu.edu>
+% --------------------------------------------------------------------
+% 
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.2
+% of this license or (at your option) any later version.
+% The latest version of this license is in:
+%
+%    http://www.latex-project.org/lppl.txt
+%
+% and version 1.2 or later is part of all distributions of LaTeX 
+% version 1999/12/01 or later.
+%
+% \fi
+% \iffalse 
+%\NeedsTeXFormat{LaTeX2e}
+\usepackage{svninfo}
+\svnInfo $Id$
+\svnKeyword $HeadURL$
+%<examclass>\ProvidesClass{ngeexam}
+%<quizclass>\ProvidesClass{ngequiz}
+%<worksheetclass>\ProvidesClass{ngewksht}
+%<driver>\ProvidesFile{ngeexam.drv}
+%<example>\ProvidesFile{example.tex}
+%<examunit1>\ProvidesFile{test_ngeexam1.tex}
+%<examunit2>\ProvidesFile{test_ngeexam2.tex}
+%<examunit3>\ProvidesFile{test_ngeexam3.tex}
+%<forms>\ProvidesPackage{ngeform}
+%<problems>\ProvidesPackage{ngeprob}
+%<versions>\ProvidesPackage{ngever}
+%<variants>\ProvidesPackage{ngevar}
+%<modes>\ProvidesPackage{ngemode}
+%<misc>\ProvidesPackage{ngemisc}
+%<*dtx>
+\ProvidesFile{\jobname.dtx}
+%</dtx>
+ [2009/04/02 v3.0-dev (Matthew Leingang)]
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{url}
+\usepackage{units}
+\usepackage{hyperref}
+\newcommand{\defined}[1]{\textbf{#1}}
+\usepackage{todonotes}
+\EnableCrossrefs         
+\CodelineIndex
+\RecordChanges
+\usepackage{xspace}
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{0}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \newcommand\LaTeXClass[1]{\textsf{#1}}
+% \newcommand\LaTeXPackage[1]{\textsf{#1}}
+% \newcommand\LaTeXOption[1]{\textsf{#1}}
+% \newcommand\LaTeXFile[1]{\texttt{#1}}
+% \newcommand\LaTeXEnvironment[1]{\texttt{#1}}
+% \newcommand\option[1]{\texttt{#1}}
+% \newcommand{\truefalse}{\normalfont\texttt{true}/\texttt{false}}
+% \newcommand\nged{\textsf{nged}\xspace}
+%
+% \newenvironment{TODO}{\par\noindent\textbf{TODO:}}{\par}
+% \renewenvironment{TODO}{\noindent\marginpar{\hfill{\sffamily\bfseries TODO}}}{\par}
+%
+% \changes{v0.0.1}{2000}{Initial version}
+% \changes{v0.1}{2002/12/12}{Revision}
+% \changes{v0.2}{2002/04/10}{Packaged into docstrip}
+% \changes{v0.2.2}{2002/04/15}{Added Makefile and README}
+% \changes{v0.5}{2006/08/14}{Many changes}
+% \changes{v0.5}{2006/08/16}{Added support for document versions}
+% \changes{v0.5.1}{2006/11/30}{Added |ifsolutions| macro}
+%
+% \GetFileInfo{\jobname.dtx}
+%
+% \DoNotIndex{\newcommand,\newenvironment,\newcounter}
+% \DoNotIndex{\begin,\end}
+% \DoNotIndex{\(,\[,\],\),\item,\myvector,\mymatrix,
+%             \Span,\FiniteSet,\setS}
+%
+% \title{\nged: A Next Generation Educational Bundle}
+% \author{Matthew Leingang \\ leingang@courant.nyu.edu}
+%
+%
+% \maketitle
+% \tableofcontents
+% 
+% \section{Introduction}
+%
+% The \nged bundle is a set of classes and packages used for
+% typesetting educational assessments, particularly mathematics but
+% not specific to it.  
+%
+% \subsection{Goals}
+%
+% The \nged bundle classes and packages should be
+%
+% \begin{itemize}
+%   \item \emph{beautiful}
+%   \item \emph{useful} 
+%   \item \emph{flexible} items should be configurable
+%   \item \emph{modular} This is why the several different packages for different uses
+%   \item \emph{lazy} We will use other packages when they are useful
+% \end{itemize}
+%
+% \subsection{History}
+%
+% I first wrote the exam class in 2003 and have developed it in stages
+% since then.  Other pieces have been developed along the way, too.
+% Now (2009) I feel the need to bundle it up and distribute it so
+% others I collaborate with can produce similar documents.
+%
+% \subsection{Other classes which do this kind of thing}
+%
+% Look at examdesign, mathexam, and exam.
+% 
+% \section{Exams}
+%
+% \DescribeMacro{\course\oarg{shortname}\marg{name}} Sets the name of
+% the course to be \meta{name} for typsetting in the document title.
+% For page headings, a short name may be declared at the same time.
+% E.g.,
+% \begin{verbatim}
+% \course[Math 1a]{Math 1a: Introduction to Calculus}
+% \end{verbatim}
+% 
+% \section{Quizzes}
+%
+% |\maketitle| produces something more compact to allow for more room on the page.
+%
+% \section{Worksheets}
+%
+% Nothing here yet.
+%
+% \section{Problems and their parts}
+%
+% \section{Answer forms}
+%
+%
+% When typesetting documents used as assessments in a learning
+% environment one often needs to provide a form on which the student
+% should indicate their answer.  A box that should be checked, a blank
+% in which to write an answer, or a bubble to fill are examples of
+% common response forms.  
+%
+% It also helps to provide at the time of writing the assessment the
+% answer to the problem, and to use programmatic switches allowing the
+% typesetting of the answers.  If the answer is to be set in a
+% different color the task is even more tedious and worthy of
+% automation.
+%
+% The purpose of this package is to collect the author's hacks that
+% have been copied-and-pasted from quiz to worksheet to exam and back
+% again into a single package with a sane interface and ``correct''
+% implementation.
+%
+% \DescribeMacro{\answerbox\oarg{opts}} Set a box in which the
+% student is to put his or answer.  There is an optional list of
+% arguments in standard \meta{key}=\meta{val} format but no
+% mandatory arguments.  Calling \verb|\answerbox| with no argument
+% results in an empty answer box.
+%
+% \begin{description}
+% \item[\option{eol=}\meta{\truefalse}] Put the box at the end of
+%   the current line, if there is room.  Otherwise start a new line
+%   and put the box at the end of that line.  Default is \texttt{false}.
+% \item[\option{width=}\meta{dimen}] width of the box.  Default is \unit[1]{cm}.
+% \item[\option{height=}\meta{dimen}] height of the box.  Default is \unit[1]{cm}.
+% \item[\option{answer=}\meta{answer}] the answer that should be
+%   put in the box for credit.
+% \item[\option{showanswer=}\meta{\truefalse}] Put the answer in
+%   the box.  This is useful if you want to typeset solutions as a
+%   separate file.  The default is \texttt{false}.
+% \end{description}
+%
+% \DescribeMacro{\answerbubble\oarg{opts}\marg{text}} Set a
+%   ``bubble'' to be filled in by the student to indicate his or her
+%   answer.  The mandatory argument (which could be empty) is the text
+%   to place in the bubble, i.e., the answer that would be indicated
+%   by filling in the bubble.  There are options as well:
+%
+% \begin{description}
+% \item[\option{filled=}\meta{\truefalse}] Fill in this
+%   bubble. Default is \texttt{false}.
+% \end{description}
+%
+% \DescribeMacro{\answerbubblerow\oarg{opts}\marg{choices}}
+% Set a row of bubbles, one or more of which the student is to fill in
+% to indicate his or her answer. \meta{choices} is a
+% comma-separated list of choices for the bubbles.  The options are:
+%
+% \begin{description}
+% \item[\option{eol=}\meta{\truefalse}] Put the box at the end of
+%   the current line, if there is room.  Otherwise start a new line
+%   and put the box at the end of that line.  Default is \texttt{false}.
+% \item[\option{answer=}\meta{answer}] the answer or answers that
+%   should be filled in.
+% \item[\option{showanswer=}\meta{\truefalse}] Fill in the correct
+%   answers.  This is useful if you want to typeset solutions as a
+%   separate file.  The default is \texttt{false}.
+% \end{description}
+%
+% \section{Document modes}
+%
+% By \defined{mode} we mean a production of the assessment intended for a specific audience at a specific time:
+% \begin{itemize}
+% \item In ``regular'' mode the document produced is the one that students will write their
+% answers on (audience: students)
+% \item In solutions mode, the answers and solutions are typeset along with the questions (audience: students, after the assessment is completed)
+% \item In rubrics mode, the scoring guides are typeset along with the answers and solutions (audience: graders)
+% \item In assessment mode, notes about the problems and the students' performance are included along with the answers, solutions, and rubrics (audience: teachers, including older, more experienced forms of the original author)
+% \end{itemize}
+%
+% \section{Document variants}
+%
+% By \defined{variant} we mean a production of the assessment
+% similar to the original, differing only in minor ways to promote academic
+% honesty.
+%
+% \section{Document versions}
+%
+% By \defined{version} we mean an instance of the master document
+% marked by a point in the document's development, as in software development.
+%
+% \DescribeMacro{\version\marg{version}} Define the document version
+% to be the string \meta{version}.  This string could include a number
+% for major/minor revision as well as an alphanumeric tag for variant
+% label, or course section.
+%
+% This version label is typeset along the right margin of the page
+% along with the date and time the document was typeset.
+%
+% \DescribeMacro{\changes\marg{version}{date}{change}} records changes
+% as in a docstrip file.  As of this version this command produces no
+% output.
+%
+% \section{Miscellaneous eye candy}
+%
+% \DescribeEnv{centeredpage}
+% Put the enclosed text by itself on a page, centered vertically.
+% Useful for epigrams such as:
+% \begin{quote}
+% \textsc{Ave C\ae sar  \\ Moritvri te salutant} \\
+% \emph{---Gladiator salute}
+% \end{quote}
+%
+% \DescribeMacro{\problemfont}
+% Problem statements are set in this font. When typesetting I do
+%\begin{verbatim}
+%\renewcommand{\problemfont}{\itshape}
+%\end{verbatim}
+%
+% \DescribeMacro{\pagestyle\{namehead\}}
+% This page style gives blanks to fill in nice info:
+%
+% \begin{minipage}{\textwidth}
+%    \normalfont
+%   Name: \hrulefill\ 
+%    Section: \rule{0.5in}{0.4pt}
+%    \\ \\
+%    \noindent 
+%    Student ID: \rule{1.5in}{0.4pt}\
+%    Email: \hrulefill
+%    \end{minipage}
+%
+% \section{Using docstrip as a preprocessor}
+%
+% Here is how I currently do separate modes of an exam in the same file.  The master exam file has a |.dtx|
+% extension.  Versions are enclosed by \texttt{\%<*$\left<\textsf{mode}\right>$>\dots\%</$\left<\textsf{mode}\right>$>} % docstrip blocks.  
+% At the top of the source file is the driver block:
+%	\begin{verbatim}
+%	%<*driver>
+%	\input docstrip.tex
+%	\askforoverwritefalse
+%	\generate{\file{\jobname.tex}{\from{\jobname.dtx}{exam}}
+%	         \file{\jobname-draft.tex}{\from{\jobname.dtx}{exam,draft}}
+%	          \file{\jobname-pub.tex}{\from{\jobname.dtx}{exam,public}}
+%	          \file{\jobname-sol.tex}{\from{\jobname.dtx}{exam,solutions,public}}
+%	          \file{\jobname-key.tex}{\from{\jobname.dtx}{exam,solutions,rubric}}          
+%	          \file{\jobname-all.tex}{\from{\jobname.dtx}{exam,solutions,rubric,assessment}}          
+%	          \file{\jobname.ins}{\from{\jobname.dtx}{driver}}}
+%	\endbatchfile
+%	%</driver>
+%	\documentclass[titlepage]{lexam}
+%	...
+%	\end{verbatim}
+% 
+% Not all |\file| commands may be active.
+%
+% Then I define my commands, using the docstrip mode specifications to undo some if I need to.  
+%
+% One pass of \LaTeX\ on the |.dtx| file produces all the versions.  Then I \LaTeX\ one of 
+% them to get the file
+%
+% Advantages:
+%	\begin{itemize}
+%	\item Completely flexible
+%	\item Each PDF file has its own name
+%	\end{itemize}
+
+%	Disadvantages:
+%	\begin{itemize}
+%	\item Two passes of \LaTeX\ needed.  In TeXShop, I can hit command-T on the source file, then switch to the PDF of the target version and hit command-T again.  The \LaTeX window for the target version is minimize (and left out-of-date).
+%	\item Debugging is a little complicated.  Because of the above method, you need to reopen the target \LaTeX\ file to find the line number of the error
+%	\end{itemize}
+%
+%	Possible fixes:
+%	\begin{itemize}
+%	\item Use one of the packages available for conditional compilation.  See
+%	\url{http://www.cs.sunysb.edu/documentation/latex/help/faq/uktug-faq/FAQ191.html}
+%	\end{itemize}
+% 
+% I think the ideal solution might still use DocStrip on some level, but have no doc blocks
+% after the beginning.
+%
+%
+%
+% \StopEventually{\PrintChanges\PrintIndex}
+%
+% \section{Implementation}
+%
+% \subsection{Document Classes}
+% \subsubsection{Prerequisites}
+%
+% These is all derived from the \LaTeXClass{article} class.
+%    \begin{macrocode}
+%<*examclass|quizclass|worksheetclass>
+\LoadClass{article}
+%    \end{macrocode}
+% We use the package \LaTeXPackage{amsthm} because it gives us
+% the ability to define nice environments like ``hint'' and ``solution''
+%    \begin{macrocode}
+\RequirePackage{amsthm}
+%    \end{macrocode}
+% This package enables the \LaTeXEnvironment{comment} environment\dots very useful.
+%    \begin{macrocode}
+\RequirePackage{verbatim}
+%    \end{macrocode}
+%
+% I like to print solutions in a different color.  This requires a lot of |\normalcolor| commands to switch it off, which have to go at the class level.
+%    \begin{macrocode}
+\RequirePackage{xcolor}
+%    \end{macrocode}
+%
+% There are several pieces to an exam: the problems, the solutions, the grading key, and 
+% notes in case the exam is repeated.   The \LaTeXPackage{versions} package manages the 
+% conditional compiling of code.  It is not in the te\TeX\ distribution but it is in \TeX{}live and on CTAN.
+%    \begin{macrocode}
+\RequirePackage{versions}
+%    \end{macrocode}%
+%
+% For programming logic.
+%    \begin{macrocode}
+\RequirePackage{ifthen}
+%    \end{macrocode}
+%
+% Nice helpers for fancy headers
+%    \begin{macrocode}
+\RequirePackage{fancyhdr}
+%    \end{macrocode}
+%
+
+
+% \subsubsection{Options}
+%
+% \DescribeMacro{bigmath}
+% \DescribeMacro{nobigmath}
+% Makes all math big to be easily read (paper is highly overvalued
+% when typesetting an exam).  Default is active.
+%    \begin{macrocode}
+\DeclareOption{bigmath}{\everymath={\displaystyle}}
+\DeclareOption{nobigmath}{\everymath={}}
+%    \end{macrocode}
+% \DescribeMacro{draft}
+% \DescribeMacro{nodraft}
+% Puts ``DRAFT'' across each page and activates some commands for putting notes
+% and marginalia on a draft.  Default is inactive.
+%    \begin{macrocode}
+\newboolean{draftmode}
+\DeclareOption{draft}{\setboolean{draftmode}{true}}
+\DeclareOption{nodraft}{\setboolean{draftmode}{false}}
+%    \end{macrocode}
+%
+% \DescribeMacro{solutions}
+% \DescribeMacro{nosolutions}
+% Enables/Disables the typesetting of solutions.
+% Default is inactive
+%    \begin{macrocode}
+\newboolean{solutionsmode}
+\DeclareOption{solutions}{\setboolean{solutionsmode}{true}}
+\DeclareOption{nosolutions}{\setboolean{solutionsmode}{false}}
+%    \end{macrocode}
+%
+% \DescribeMacro{rubrics}
+% \DescribeMacro{norubrics}
+% Enables/Disables the typesetting of rubrics.
+% Default is inactive
+%    \begin{macrocode}
+\newboolean{rubricsmode}
+\DeclareOption{rubrics}{\setboolean{rubricsmode}{true}}
+\DeclareOption{norubrics}{\setboolean{rubricsmode}{false}}
+%    \end{macrocode}
+%
+% \DescribeMacro{notes}
+% \DescribeMacro{nonotes}
+% Enables/Disables the typesetting of notes.
+% Default is inactive
+%    \begin{macrocode}
+\newboolean{notesmode}
+\DeclareOption{notes}{\setboolean{notesmode}{true}}
+\DeclareOption{nonotes}{\setboolean{notesmode}{false}}
+%    \end{macrocode}
+%
+% Other options get passed to the parent class.
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+%    \end{macrocode}
+%
+% The bigmath and nodraft options are default.
+%    \begin{macrocode}
+\ExecuteOptions{bigmath,nodraft}
+\ProcessOptions
+%    \end{macrocode}
+%
+% Gives lots of options and commands for paper size and margins.  It
+% also parses the document options for ones that resemble paper size,
+% such as letterpaper and a4paper.  For some reason, putting this line
+% before the |\ExecuteOptions| line results in an error, so sorry this
+% is out of place.
+%    \begin{macrocode}
+\RequirePackage{geometry}
+%    \end{macrocode}
+
+% \subsubsection{pgfkeys interface}
+%
+% pgfkeys rocks.  We should try to do any configuration we can through its interface.
+%
+%    \begin{macrocode}
+\RequirePackage{pgfkeys}
+\def\ngeset{\pgfqkeys{/nge}}
+\def\ngestring{\pgfqkeys{/nge/strings}}
+\def\ngeget#1{\pgfkeysvalueof{/nge/#1}}
+%    \end{macrocode}
+%
+% \subsubsection{Loading other \nged packages}
+%
+%    \begin{macrocode}
+\RequirePackage{ngeprob}
+\RequirePackage{ngeform}
+\RequirePackage{ngemisc}
+%    \end{macrocode}
+%
+% \subsection{course name}
+%
+% \begin{macro}{\course}
+%    \begin{macrocode}
+\newcommand{\@shortcoursename}{\relax}
+\newcommand{\course}{\@dblarg\@@course}
+\def\@@course[#1]#2{
+\renewcommand{\@shortcoursename}{#1}
+\newcommand{\@course}{#2}}
+%    \end{macrocode}
+% \end{macro}
+% 
+%
+% \subsubsection{Paragraph Types}
+%
+% Mathematicians like to call out paragraphs with a word like
+% ``remark:'' or ``note.''  Various such are defined here.
+% These use the |\newtheorem| command from the \LaTeXPackage{amsthm} package.
+%
+% \begin{environment}{hint}
+% \changes{v0.2.2}{2002/04/11}{added the hint environment}
+% For giving hints, duh. :-)
+%    \begin{macrocode}
+\theoremstyle{remark}
+\pgfqkeys{/nge/strings}{hint/.initial=Hint,note/.initial=Note}
+\newtheorem*{hint}{\pgfkeysvalueof{/nge/strings/hint}}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{instructions}
+% \changes{v0.2.2}{2002/04/11}{added}
+% For giving exam instructions.  
+%    \begin{macrocode}
+\newenvironment{instructions}{\instructionsfont}{\normalfont}
+%    \end{macrocode}
+% \end{environment}
+% \begin{macro}{\instructionsfont}
+% \changes{v0.2.2}{2002/04/11}{added}
+%    \begin{macrocode}
+\newcommand{\instructionsfont}{\itshape}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{note}
+%   \begin{macrocode}
+\newtheorem*{note}{\pgfkeysvalueof{/nge/strings/note}}
+\theoremstyle{plain}
+%    \end{macrocode}
+% \end{environment}
+% 
+%
+%
+% \subsubsection{Strings}
+%
+% These are all pretty self-explanatory.
+%
+% \changes{v0.5}{2006/08/14}{Added additional sentence to exam@pageisblankname}
+% \changes{v0.5}{2006/08/14}{Added exam@continuedname}
+% \changes{v0.5}{2006/08/15}{Renamed 
+% \texttt{\bslash exam@$\left<\right.$string$\left.\right>$name}
+% $\rightarrow$ \texttt{\bslash nge@string@$\left<\right.$string$\left.\right>$}}
+% \changes{v3.0-dev}{2009/04/02}{Using the pgf key registry}
+%    \begin{macrocode}
+\pgfqkeys{/nge/strings}{%
+    pageisblank/.initial={This page intentionally left blank. \\
+    You can use it for scratch work.  Please do not remove it.},
+    name/.initial=Name,
+    section/.initial=Section,
+    SID/.initial=ID\#,
+    email/.initial=email,
+    signature/.initial=Signature,
+    draft/.initial=DRAFT,
+    note/.initial=Note,
+    hint/.initial=Hint
+    }
+%    \end{macrocode}
+%
+% \subsubsection{Pagestyles}
+%
+% \begin{TODO}
+% This probably only needs to go in the exam class.
+% \end{TODO}
+%
+% \begin{macro}{\ps@namehead}
+% This is for the title page.  It gives some blanks for filling-in
+% student information and signature.
+%    \begin{macrocode}
+\newcommand{\ps@namehead}{%
+  \renewcommand{\@oddhead}{%
+    \begin{minipage}{\textwidth}
+    \normalfont
+    \pgfkeysvalueof{/nge/strings/name}: \hrulefill\ 
+    \pgfkeysvalueof{/nge/strings/section}: \rule{0.5in}{0.4pt}
+    \\ \\
+    \noindent 
+    \pgfkeysvalueof{/nge/strings/SID}: \rule{1.5in}{0.4pt}\
+    \pgfkeysvalueof{/nge/strings/email}: \hrulefill
+    \end{minipage}}
+  \renewcommand{\@evenhead}{\@oddhead}
+  \renewcommand{\@oddfoot}{
+  \pgfkeysvalueof{/nge/strings/signature}: \hrulefill}
+\renewcommand{\@evenfoot}{}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ps@problem}
+% A page style for the majority of problems.  
+% This one puts the problem number in bold on the top left and top right
+% of every page.  In between goes the course (short) name, the test title, and the date.
+%
+% \begin{TODO}
+% Other page styles.  The AP test has the problem number as a leader all the way across 
+% the top row.  I tried 
+% \begin{verbatim}
+%  \renewcommand{\@oddhead}{\Huge\bfseries\hss\leaders\hbox to 0.08\textwidth{\hss\theproblem\hss}\hfill\hss}
+% \end{verbatim}
+% but that didn't even out the spacing quite right.  It's also kind of ugly when it \emph{is} 
+% right! 
+% \end{TODO}
+%
+% The bottom of the page has the page number centered, surrounded by en-dashes
+%    \begin{macrocode}
+\newcommand{\ps@problem}{%
+  \setlength{\headheight}{0.5in}
+  \renewcommand{\@oddhead}{%
+  \begin{minipage}{\textwidth}
+    {\Huge\bfseries\theproblem}
+    \hfill{\normalfont\normalsize\itshape\@shortcoursename 
+    \hfill \@title \hfill \@date}
+    \hfill{\Huge\bfseries\theproblem}
+  \\[-0.2ex]\rule{\textwidth}{0.4pt}
+  \end{minipage}}
+  \renewcommand{\@evenhead}{\@oddhead}
+  \renewcommand{\@oddfoot}{{%
+  \normalfont\normalsize\hfill--\thepage--\hfill}}
+  \renewcommand{\@evenfoot}{\@oddfoot}}
+%    \end{macrocode}
+% \end{macro}
+% 
+% But at any rate, we will start with an empty page style.
+%    \begin{macrocode}
+\AtBeginDocument{\pagestyle{empty}}
+%    \end{macrocode}
+%
+% \subsubsection{Document Modes}
+%
+%
+% \subsubsection{Draft Mode}
+%    \begin{macrocode}
+\ifthenelse{\boolean{draftmode}}
+{\message{(* draft mode on *)}
+\RequirePackage{eso-pic}
+\RequirePackage{graphicx}
+\definecolor{draftblue}{rgb}{0.74,0.75,0.99}
+\RequirePackage{type1cm}
+\makeatletter
+\def\stripAtPt{1}
+\AddToShipoutPicture{%
+     \setlength{\@tempdimb}{.5\paperwidth}%
+     \setlength{\@tempdimc}{.5\paperheight}%
+     \setlength{\unitlength}{\@tempdimb}%
+     \put(1,1.5){%
+ \makebox(0,0){\rotatebox{45}{{\textcolor[gray]{0.75}{\tt\fontsize{5cm}{5cm}\selectfont{\pgfkeysvalueof{/nge/strings/draft}}}}}}}}
+\newcommand{\draftnote}[1]{{{\color{draftblue}\begin{note} #1\end{note}}}}
+\newcommand{\draftmarginalnote}[1]{\marginpar{\color{draftblue}#1}}}
+%    \end{macrocode}
+% In non-draft mode these commands are disabled by making them ``eat'' their arguments.
+%    \begin{macrocode}
+{\let\draftnote=\gobble
+\let\draftmarginalnote=\gobble}
+%    \end{macrocode}
+%
+% \subsubsection{Solutions Mode}
+% In the solutions version
+% \begin{itemize}
+% \item The contents of the \LaTeXEnvironment{inexamonly} environment are ignored
+% \item The contents of the \LaTeXEnvironment{insolutions} environment are passed along without change
+% \item The contents of the \LaTeXEnvironment{solution} environment
+% are typeset solutions in red and with a QED symbol at the end.
+% \end{itemize}
+% First we have to initialize the environments
+%    \begin{macrocode}
+\RequirePackage{amssymb}
+\newenvironment{solution}{\relax}{\relax}
+\ifthenelse{\boolean{solutionsmode}}
+{\message{(* solutions mode on *)}
+\definecolor{darkred}{rgb}{0.75,0,0}
+\newcommand{\solutionfont}{\color{darkred}\normalfont}
+\AtBeginDocument{\renewcommand{\problemfont}{\itshape}}
+\examformshowanswers
+%    \end{macrocode}
+% \begin{environment}{solution}
+% The solution environment. Todo:
+%	\begin{itemize}
+%	\item When pagebreak happens before or during a solution, the problem text is in the 
+% solution color!
+%	\item Pagebreaks before solutions should be discouraged (better to break before the problem)
+%	\end{itemize}
+%    \begin{macrocode}
+\renewenvironment{solution}[1][Solution]{%
+	\renewcommand{\qedsymbol}{{\Large$\blacktriangle$}}
+	\nopagebreak[3]
+	\begingroup\solutionfont 
+	\begin{proof}[#1]}{\end{proof}\endgroup}
+%    \end{macrocode}
+% \end{environment}
+%    \begin{macrocode}
+\gdef\problemfont{\itshape}
+\global\let\examvfill=\relax
+\global\let\examclearpage=\relax
+%    \end{macrocode}
+% \begin{environment}{insolutions}
+%    \begin{macrocode}
+\includeversion{insolutions}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{inexamonly}
+%    \begin{macrocode}
+\excludeversion{inexamonly}
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% In the \textbf{absence} of solutions mode, we disable the 
+% \LaTeXEnvironment{solutions} environment by letting its start and end commands
+% be those of \LaTeXEnvironment{comment}.
+%    \begin{macrocode}
+{\message{(* solutions mode off *)}
+\let\solution=\comment
+\let\endsolution=\endcomment
+\includeversion{inexamonly}
+\excludeversion{insolutions}
+%    \end{macrocode}
+%
+% These commands are there to put space into the document for students to write. 
+% But they really only need to be available in the exam version.
+%
+% \begin{TODO}
+% Perhaps this needs to be folded into the \LaTeXEnvironment{enumerate} environment inside of
+% \LaTeXEnvironment{problem}?
+% \end{TODO} 
+%    \begin{macrocode} 
+\newcommand{\examvfill}{\vfill}
+\newcommand{\examclearpage}{\vfill\continued\clearpage}
+}
+%    \end{macrocode}
+% \begin{macro}{\ifsolutions}
+% A simple switch between text that should be used in solutions mode 
+% and text that shouldn't.  I think that in this case both arguments are expanded,
+% so it's probably not a good idea for large chunks of text.  But to switch between an empty 
+% checkbox and a checked box it works well.
+%    \begin{macrocode}
+\newcommand{\ifsolutions}[2]{%
+	\ifthenelse{\boolean{solutionsmode}}{#1}{#2}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \subsubsection{Rubrics}  
+% These are ``scoring guidelines'' that tell how points for each problem 
+% should be awarded.
+% \begin{macro}{marginalrubric}
+% \begin{environment}{rubric}
+%    \begin{macrocode}
+\newcommand{\marginalrubric}[1]{\relax}
+\newenvironment{rubric}{\relax}{\relax}
+\let\rubric=\comment
+\let\endrubric=\endcomment
+%    \end{macrocode}
+% If the rubric option is selected, activate the commands
+%    \begin{macrocode}
+\ifthenelse{\boolean{rubricsmode}}
+{\message{(* rubrics on *)}
+\global\def\rubricfont{\color{blue}}
+\global\def\marginalrubric#1{\mbox{}\hspace{0pt}\marginpar{\rubricfont#1}}
+\theoremstyle{remark}
+\newtheorem*{rubricenv}{Rubric}
+\renewenvironment{rubric}{\rubricfont\begin{rubricenv}}{\end{rubricenv}}
+}{}
+%    \end{macrocode}
+% \end{environment}
+% \end{macro}
+%
+% \subsubsection{Notes Assessment}
+% 
+% This is a place to put numerical data about how the problem tested, and how one might
+% change it next time around.  We provide an assessment environment.
+%    \begin{macrocode}
+\newcommand{\metafootnote}[1]{\relax}
+\newcommand{\marginalassessment}[1]{\relax}
+\ifthenelse{\boolean{notesmode}}
+{
+\message{(* notes mode on *)}
+\newcommand{\assessmentfont}{\color[rgb]{0.2,0.6,0}}
+\renewcommand{\marginalassessment}[1]{\marginpar{\assessmentfont#1}}
+\newcounter{metafootnote}
+\renewcommand{\metafootnote}[1]{
+\stepcounter{metafootnote}%
+\def\thefootnote{\assessmentfont\roman{metafootnote}}%
+{\assessmentfont\footnotemark[\value{metafootnote}]}%
+\footnotetext[\value{metafootnote}]{{\assessmentfont#1\normalfont\normalcolor}%
+}}
+\theoremstyle{remark}
+\newtheorem*{assessmentenv}{Assessment}
+\newenvironment{assessment}{\assessmentfont\begin{assessmentenv}}{\end{assessmentenv}}
+\includeversion{innotes}
+}
+{
+\message{(* notes mode off *)}
+\excludeversion{assessment}
+\excludeversion{innotes}
+}
+%    \end{macrocode}
+%
+% \subsubsection{End of common code}
+%    \begin{macrocode}
+%</examclass|quizclass|worksheetclass>
+%    \end{macrocode}
+%
+% \subsubsection{Title}
+% \begin{macro}{\maketitle}
+%
+%   Quizzes and worksheets have a header on the top of the first page
+%   for name, date, course, and assignment.  This is the format I
+%   learned in third grade.  God bless you, Mrs. Benfield, wherever
+%   you are.
+%
+%    \begin{macrocode}
+%<*quizclass|worksheetclass>
+\setlength{\headheight}{25pt}
+\lhead{\@course \\ \@title}
+\rhead{Name: 
+\ifthenelse{\boolean{solutionsmode}}{%
+  \underline{\raisebox{1pt}{\makebox[3in]{\solutionfont\sffamily\Large Solutions}}}
+  }{% else
+  \rule{3in}{0.4pt} 
+}
+\\ \@date}
+\cfoot{\thepage}
+\renewcommand{\maketitle}{\thispagestyle{fancy}}
+\AtBeginDocument{\pagestyle{plain}}
+%</quizclass|worksheetclass>
+%    \end{macrocode}
+%
+%   For exams, we want a big title to go on a title page.
+%
+%   This is the |\maketitle| from \LaTeXClass{article} when using the
+%   \LaTeXOption{titlepage} option.  The only difference is that
+%   |\@author| is replaced by |\@course|.
+%    \begin{macrocode}
+%<*examclass>
+\renewcommand{\maketitle}{
+  \null\vfil
+  \vskip 60\p@
+  \begin{center}%
+    {\LARGE \@title \par}%
+    \vskip 3em%
+    {\large
+     \lineskip .75em%
+      \begin{tabular}[t]{c}%
+        \@course
+      \end{tabular}\par}%
+      \vskip 1.5em%
+    {\large \@date \par}%       % Set date in \large size.
+  \end{center}\par\vfil\null}
+%</examclass>
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Document Partitioning (ngeexam  only)}
+%
+% Only used in multi-paged documents.
+%
+% \begin{macro}{\problems}
+%   Signal the start of the ``main matter'' --- i.e., the problems
+%    \begin{macrocode}
+%<*examclass>
+\newcommand{\problems}{%
+  \pagestyle{problem}
+  \setcounter{page}{1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\appendix}
+%   Signal the end of problems and beginning of ``back matter''
+%    \begin{macrocode}
+\renewcommand{\appendix}{%
+  \clearpage
+  \pagestyle{plain}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\blankpage}
+%   Generate a blank page.  This is useful if you want a scratch page
+%   at the end or after a long problem.
+%    \begin{macrocode}
+\newcommand{\blankpage}{%  
+  \clearpage
+  \begin{center}(\pgfkeysvalueof{/nge/strings/pageisblank})\end{center}
+  \clearpage}
+%</examclass>
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{ngeprob.sty}
+%
+% \begin{TODO}
+% marshal process package options to |\ngeset{every problem/.style}|
+% \end{TODO}
+%
+%    \begin{macrocode}
+%<*problems>
+
+\RequirePackage{ifthen}
+\RequirePackage{pgfkeys}
+
+\pgfqkeys{/nge/strings}{points/.initial=Points}
+\newif\ifnge@prob@grade@blank@left
+\pgfqkeys{/nge/problem/grade blank margin}{.is choice,
+  left/.code=\nge@prob@grade@blank@lefttrue,
+  right/.code=\nge@prob@grade@blank@leftfalse,
+  .initial=right}
+\newif\ifnge@prob@ownpage
+\def\nge@prob@headfont{\bfseries}
+\ngeset{problem/.cd,
+	points/.code={\setcounter{probpoints}{#1}},
+    ownpage/.is if=nge@prob@ownpage,
+    head font/.store in=\nge@prob@headfont,
+    body font/.store in=\problemfont,
+    head/.initial=\theproblem,
+    label/.code={\label{#1}}
+}
+%    \end{macrocode}
+%
+% \subsubsection{Counters}
+%
+% \begin{macro}{problem}
+% The problem number
+%    \begin{macrocode}
+\newcounter{problem}
+%\setcounter{problem}{0}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{probpoints}
+% The number of points in a problem 
+% (this counter is just a holder for an integer)
+%    \begin{macrocode}
+\newcounter{probpoints}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{totalpoints}
+% The total number of points in the exam
+%    \begin{macrocode}
+\newcounter{totalpoints}
+%    \end{macrocode}
+% \end{macro}
+
+% \subsubsection{Table of Problems}
+% This is done like a table of contents, with the |\@starttoc| command.
+% \begin{macro}{\tableofproblems}
+%    \begin{macrocode}
+\newcommand{\tableofproblems}{\@starttoc{top}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{exam@tableofproblems}
+% This internal environment generates the top and bottom of the table of
+% problems.
+%    \begin{macrocode}
+\newenvironment{exam@tableofproblems}{%
+  \setcounter{totalpoints}{0}
+  \begin{center}
+  \begin{tabular}{|c|c|c|}\hline
+  Problem & Possible & Points \\
+  Number  & Points   & Earned \\\hline}
+{%
+  \hline
+  \t@problemstrut
+  Total	  & \arabic{totalpoints} & \\\hline
+  \end{tabular}
+  \end{center}}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{\t@problem}
+% This internal macro generates a line of the table of problems
+%    \begin{macrocode}
+\newcommand{\t@problem}[2]{%
+  \addtocounter{totalpoints}{#2}
+  \t@problemstrut
+  #1 & #2 & \\\hline
+}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\t@problemstrut}
+% To make the table big enough to write in with red pen, 
+% this internal macro generates some vertical space
+% (was: |{$\displaystyle\vphantom{\int}$}|)
+%    \begin{macrocode}
+\pgfqkeys{/nge/table of problems}{row height/.initial=5ex,row depth/.initial=2ex}
+\newcommand{\t@problemstrut}{%
+  \rule[-\pgfkeysvalueof{/nge/table of problems/row depth}]{0pt}%
+        {\pgfkeysvalueof{/nge/table of problems/row height}}}
+%    \end{macrocode}
+% \begin{TODO}
+%   It might be nicer to specify the \emph{total} height of the row,
+%   with the problem number centered in the row.
+% \end{TODO}
+% \end{macro}
+%
+% Now we add hooks to |\begin{document}| and |\end{document}|
+% to open the table of problems file, write the top, write the bottom, 
+% and close it.
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \addtocontents{top}{\protect\begin{exam@tableofproblems}}}
+%    \end{macrocode}
+% For the end-hook, we'd like to do
+%\begin{center}
+%|\addtocontents{top}{\protect\end{exam@tableofproblems}}|
+%\end{center}
+% but for some reason that doesn't do anything.  So we go one step
+% deeper in the abstraction and copy the definition of 
+% |\addtocontents|
+%    \begin{macrocode}
+\AtEndDocument{%
+  \immediate\write\@auxout{\string\@writefile{top}%
+  {\string\end{exam@tableofproblems}}}}
+%    \end{macrocode}
+%
+% \subsubsection{Declaring Problems}
+%
+% \begin{environment}{problem}
+%   An optional argument of key=value pairs.  We also support the
+%   prior usage of a mandatory argument to mean the number of points.
+%    \begin{macrocode}
+%\newenvironment{problem}[1][]{%
+\def\problem{\@ifnextchar\bgroup%}
+  \@oldproblem
+  \@problem}
+\def\@oldproblem#1{\@@problem[points=#1]}
+\def\@problem{\@ifnextchar[%}
+  \@@problem
+  {\@@problem[]}}
+\def\@@problem[#1]{
+%    \end{macrocode}
+% Initialize.
+%    \begin{macrocode}
+	\ngeset{problem/points=0,every problem/.try}
+%    \end{macrocode}
+% Process options
+%    \begin{macrocode}
+	\ngeset{problem/.cd,#1}
+%    \end{macrocode}
+% Clear the page (optionally)
+%    \begin{macrocode}
+	\ifnge@prob@ownpage\clearpage\fi
+%    \end{macrocode}
+% Adjust counters according to the arguments.
+%    \begin{macrocode}
+	\refstepcounter{problem}
+%    \end{macrocode}
+% Write \LaTeX{} code to generate the table of problems to the |.top| file.
+%    \begin{macrocode}
+  \addtocontents{top}{\protect\t@problem{\theproblem}{\arabic{probpoints}}}
+%    \end{macrocode}
+% Typeset the problem number and number of points.  Switch to the
+% problem font.
+%    \begin{macrocode}
+  \normalfont\normalcolor%
+  \noindent%
+  {\nge@prob@headfont\ngeget{problem/head}} %
+  \normalfont (\arabic{probpoints} \ngestring{points})%
+  {\nge@prob@headfont.} % save that space
+  \problemfont%
+}
+%    \end{macrocode}
+% At the end of the problem, put a grade blank in the bottom-right
+% corner and switch back to the normal font. 
+%    \begin{macrocode}
+\def\endproblem{%
+  \ifnge@prob@ownpage
+  \vfill
+  % format the grade blank in  bottom left/right corner of the page
+    \ifnge@prob@grade@blank@left 
+      \def\tmp@corner{south west}
+      \def\tmp@xshift{1cm}
+      \tikzstyle{grade blank}=[%
+        at=(current page.south west),
+        xshift=1cm,yshift=1cm,above right]
+    \else
+      \def\tmp@corner{south east}
+      \def\tmp@xshift{-1cm}
+      \tikzstyle{grade blank}=[%
+        at=(current page.south east),
+        xshift=-1cm,yshift=1cm,above left]
+    \fi
+%   could be prettier, e.g., [%text width=7cm,fill=red!20,rounded corners,
+    \begin{tikzpicture}[remember picture,overlay] 
+       \node[grade blank]
+      { 
+        \rule{0pt}{1cm}\rule{1cm}{0.5pt} / \arabic{probpoints}
+      }; 
+    \end{tikzpicture}
+  \else
+  % put the grade blank in the left/right margin
+  % \vfill
+  % this could perhaps be done with tikz, too.
+    \normalfont\normalcolor
+    \ifnge@prob@grade@blank@left\reversemarginpar\else\normalmarginpar\fi%
+    \marginpar{\exam@gradeblank{\arabic{probpoints}}}
+  \fi
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{\exam@gradeblank}
+% (Internal)
+% |\exam@gradeblank|\marg{n} generates the grade line
+% \rule{0pt}{1cm}\rule{1cm}{0.5pt} / $n$.
+%    \begin{macrocode}
+\newcommand{\exam@gradeblank}[1]{%
+  \center\rule{0pt}{1cm}\rule{1cm}{0.5pt} / #1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Problem parts}
+%
+%    \begin{macrocode}
+\RequirePackage{enumitem}
+%    \end{macrocode}
+
+% \begin{environment}{partset}
+% List of a ``bag'' of parts
+%    \begin{macrocode}
+\ngeset{part set/item sep/.initial=\z@}
+\newenvironment{partset}[1][]{
+  \ifnge@prob@ownpage
+    \ngeset{part set/item sep=\fill}
+  \else
+    \ngeset{part set/item sep=0pt}
+  \fi
+  \ngeset{every part set/.try}
+  \ngeset{part set/.cd,#1}
+  \let\ltx@item=\item
+  \def\item{\ltx@item}
+  \begin{enumerate}[label=(\roman*),itemsep=\ngeget{part set/item sep}]
+  }{%
+  \end{enumerate}
+}
+%    \end{macrocode}
+% \end{environment} 
+%
+% \begin{environment}{partsequence}
+% List of a sequence of parts
+%    \begin{macrocode}
+\ngeset{part sequence/item sep/.initial=\z@}
+\newenvironment{partsequence}[1][]{
+  \ifnge@prob@ownpage
+    \ngeset{part sequence/item sep=\fill}
+  \else
+    \ngeset{part sequence/item sep=0pt}
+  \fi
+  \ngeset{every part sequence/.try}
+  \ngeset{part sequence/.cd,#1}
+  \let\ltx@item=\item
+  \def\item{\null\ltx@item}
+  \begin{enumerate}[label=(\alph*),itemsep=\ngeget{part sequence/item sep}]
+  }{%
+  \end{enumerate}
+}
+%    \end{macrocode}
+% \end{environment} 
+%
+% \subsubsection{Styling problems}
+%
+% \begin{macro}{\problemfont}
+%    \begin{macrocode}
+\gdef\problemfont{\normalfont}
+%    \end{macrocode}
+% \begin{TODO}
+%   Use \LaTeXPackage{pgfkeys} to handle all styling
+% \end{TODO}
+% \end{macro}
+% 
+% Done with this package!
+%    \begin{macrocode}
+%</problems>
+%    \end{macrocode}
+%
+%
+% \subsection{ngeform.sty}
+%
+%    \begin{macrocode}
+%<*forms>
+\RequirePackage{ifthen}
+\RequirePackage{tikz}
+\RequirePackage{xkeyval}
+\RequirePackage{xspace}
+\InputIfFileExists{svgnam.def}
+
+\makeatletter
+\newboolean{examformshowanswers}
+\newcommand{\examformshowanswers}{\setboolean{examformshowanswers}{true}}
+\newcommand{\examformhideanswers}{\setboolean{examformshowanswers}{false}}
+\examformhideanswers
+
+% color business
+\definecolor{ScantronGreen}{RGB}{41,103,87} % Scantron is probably a trademark
+%    \end{macrocode}
+% 
+% \subsubsection{Boxes}
+%
+% An answer box is a box into which the student is supposed to write an answer.
+%
+% defaults -- leaving them @-less in case user wants to redefine
+%    \begin{macrocode}
+\newcommand{\answerboxanswerfont}{\normalfont\sffamily\Large}
+\newcommand{\answerboxanswercolor}{FireBrick}
+\newcommand{\answerboxboxcolor}{ScantronGreen}
+\newcommand{\answerboxwidth}{1cm}
+\newcommand{\answerboxheight}{1cm}
+
+% keys for answerbox
+%% eol - flush the box to the right of the line
+\define@boolkey{answerbox}{eol}[true]{}
+%% showanswer - show the answer
+\define@boolkey{answerbox}{showanswer}[true]{}
+%% answer - save the answer
+\define@cmdkey{answerbox}{answer}{}
+%% width - minimum width of the answer box
+\define@cmdkey{answerbox}{width}{}
+%% height - maxmimum width of the answer box
+\define@cmdkey{answerbox}{height}{}
+%% prompt - text that goes before the answer box
+\define@cmdkey{answerbox}{prompt}{}
+
+% These boxes could be implemented with LaTeX boxes,
+% but not the bubbles. So does it make sense to partially refactor?
+\def\answerbox{\@ifnextchar[\@answerbox{\@answerbox[]}}
+\def\@answerbox[#1]{%
+  % initialize local variables.
+  %% copy the boolean examform@showanswers to answerbox@showanswer
+  %% there might be a higher-level way to do this but I can't get it to work.
+  %\let\ifKV@answerbox@showanswer=\ifexamformshowanswers
+  \setkeys{answerbox}{answer=,
+    width=\answerboxwidth,
+    height=\answerboxheight,
+    prompt=\relax,
+    eol=false}%
+  \ifthenelse{\boolean{examformshowanswers}}{%
+    \setkeys{answerbox}{showanswer=true}}{%
+    \setkeys{answerbox}{showanswer=false}}
+  % process options
+  \setkeys{answerbox}{#1}%
+  \ifthenelse{\boolean{KV@answerbox@eol}}{%
+    \leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill}{\relax}%
+  \@ifundefined{cmdKV@answerbox@prompt}{}{\cmdKV@answerbox@prompt }
+  \tikz[baseline=0.5cm]{
+    \node[above,rectangle,
+          draw=\answerboxboxcolor,
+          minimum width=\cmdKV@answerbox@width,
+          minimum height=\cmdKV@answerbox@height,
+          text=\answerboxanswercolor,
+          font={\answerboxanswerfont}] {
+      \ifthenelse{\boolean{KV@answerbox@showanswer}}{%
+        \cmdKV@answerbox@answer}{\relax}
+    };
+  }%
+}
+
+%    \end{macrocode}
+% \subsubsection{Bubbles}
+%    \begin{macrocode}
+
+\newcommand{\answerbubblecolor}{ScantronGreen}
+\newcommand{\answerbubblefillcolor}{FireBrick}
+\newcommand{\answerbubblefont}{\sffamily\upshape}
+
+\define@boolkey{answerbubble}{fill}[true]{}
+\define@boolkey{answerbubble}{correct}[true]{}
+
+\newcommand{\answerbubble}[2][]{%
+  % initialize variables
+  \setkeys{answerbubble}{fill=false}
+  % process options
+  \setkeys{answerbubble}{#1}%
+  \tikzstyle{answerbubble}=[
+    draw=\answerbubblecolor,
+    text=\answerbubblecolor,
+    font=\answerbubblefont,
+    minimum size=0.5cm,
+    circle,
+    inner sep=0pt
+  ]%
+  \ifthenelse{\boolean{KV@answerbubble@fill}}{%
+    \tikzstyle{answerbubble}+=[fill=\answerbubblefillcolor]}{\relax}%
+  \ifthenelse{\boolean{KV@answerbubble@correct}}{%
+    \ifthenelse{\boolean{examformshowanswers}}{%
+      \tikzstyle{answerbubble}+=[fill=\answerbubblefillcolor]}{\relax}}{\relax}
+  \tikz[baseline=-0.1cm]{
+    \node[answerbubble] {#2};            
+        }%
+}
+
+%    \end{macrocode}
+% \subsubsection{Rows of Exam Bubbles}
+%    \begin{macrocode}
+%
+%% eol - flush the box to the right of the line
+\define@boolkey{answerbubblerow}{eol}[true]{}
+%% showanswer - show the answer
+\define@boolkey{answerbubblerow}{showanswer}[true]{}
+
+\newcommand{\answerbubblerow}[2][]{%
+  % initialize
+  \setkeys{answerbubblerow}{eol=false}
+  \ifthenelse{\boolean{examformshowanswers}}{%
+    \setkeys{answerbubblerow}{showanswer=true}}{%
+    \setkeys{answerbubblerow}{showanswer=false}}
+  % process options
+  \setkeys{answerbubblerow}{#1}
+  \ifthenelse{\boolean{KV@answerbubblerow@eol}}{%
+    \leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill}{\relax}%
+  % walk down the list of choices
+  \mbox{\answerbubblerow@walk#2,\relax,}
+}
+
+\def\answerbubblerow@walk#1,{%
+  \ifx\relax#1\empty\else
+  \answerbubblerow@do#1**\relax
+  \expandafter\answerbubblerow@walk\fi
+}
+
+\def\answerbubblerow@do#1*#2*\relax{%
+  % #2 is either empty or star depending on the input
+  % If it's star and we're showing the answer, then fill
+  \ifx*#2\relax
+    \ifexamformshowanswers%
+      \answerbubble[fill]{#1}%
+    \else%
+      \ifKV@answerbubblerow@showanswer%
+        \answerbubble[fill]{#1}%
+      \else% starred, but not in a show-answers mode
+        \answerbubble{#1}%
+      \fi%
+    \fi%
+  \else% not starred
+    \answerbubble{#1}%
+  \fi}
+
+\newcommand{\tfline}[1][]{%
+  \ifx#1T%
+    \answerbubblerow[eol]{T*,F}%
+  \else
+    \ifx#1F%
+      \answerbubblerow[eol]{T,F*}%
+    \else
+      \answerbubblerow[eol]{T,F}%
+    \fi
+  \fi%
+}
+%</forms>
+%    \end{macrocode}
+%
+%
+% \subsection{ngever.sty}
+%
+%    \begin{macrocode}
+%<*versions>
+\RequirePackage{eso-pic}
+\RequirePackage{datetime}
+\newcommand{\@version}{\relax}
+%    \end{macrocode}
+%\begin{macro}{version}
+%    \begin{macrocode}
+\newcommand{\version}[1]{\renewcommand{\@version}{#1}}
+%    \end{macrocode}
+%\end{macro}
+%    \begin{macrocode}
+\newcommand{\theversion}{\@version}
+% ISO date: 2006-12-06
+\newdateformat{isodate}{%
+	\THEYEAR-\twodigit{\THEMONTH}-\twodigit{\THEDAY}%
+}
+\newsavebox{\versionbox}
+\savebox{\versionbox}[0pt]{\color{gray} version \theversion, \isodate\today\ \currenttime}
+\AtBeginDocument{
+\AddToShipoutPicture{%
+	\settimeformat{xxivtime}
+  \setlength{\unitlength}{1in}
+%  \ifthenelse{\isodd{\value{page}}}
+  {\put(8.15,5.5){\rotatebox{-90}{\makebox[0pt]{\normalfont\color{gray} version \theversion, \isodate\today\ \currenttime}}}}%
+%	{\put(0.35,5.5){\rotatebox{90}{\usebox{\versionbox}}}}%
+}}
+%    \end{macrocode}
+% \begin{TODO}
+%   \begin{itemize}
+%   \item customization of the version stamp
+%   \item option to make the stamp (default)
+%   \end{itemize}
+% \end{TODO}
+%
+% \begin{macro}{changes}
+% Here I wanted something like what's in the ltxdoc package.  You can
+% document changes in the preamble or at the point of the change.  The
+% changelog is produced by a makeindex command.  But the
+% implementation is pretty heavy. It changes some of the indexing
+% stuff.  I can roll my own later.
+%    \begin{macrocode}
+\newcommand{\changes}[3]{\relax}
+%</versions>
+%    \end{macrocode}
+% \end{macro}
+%  
+% \subsection{Miscellaneous}
+% \begin{environment}{centeredpage}
+%    \begin{macrocode}
+%<*misc>
+\newenvironment{centeredpage}{%
+  \null\vfill}{%
+  \vfill\clearpage}
+\newcommand{\nameIDline}{\pgfkeysvalueof{/nge/strings/name}: \hrulefill\ \pgfkeysvalueof{/nge/strings/SID}: \rule{1.5in}{0.4pt}\par}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{continued}
+%    \begin{macrocode}
+\pgfkeys{/nge/strings/continued/.initial=continued}
+\newcommand{\continued}{%
+    \normalmarginpar%
+    \hfill\marginpar{(\pgfkeysvalueof{/nge/strings/continued})}}
+%    \end{macrocode}
+% \end{macro}
+%</misc>
+%
+%
+% \section{Example}
+% I gave this test in March 2003.
+% This exam actually needs to be refactored to \nged version 3
+%    \begin{macrocode}
+%<*example>
+\documentclass[titlepage]{lexam}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{graphicx}
+
+\title{Midterm I}
+\author{Math 250:10 \\ Introduction to Linear Algebra}
+\date{March 3, 2003}
+
+\newcommand{\myvector}[1]{\mathbf{#1}}
+\newcommand{\mymatrix}[1]{\mathbf{#1}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\row}[1]{\mathbf{r}_{#1}}
+\newcommand{\FiniteSet}[1]{\mathcal{#1}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\setS}{\FiniteSet{S}}
+
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{namehead}
+
+\maketitle
+
+Show all of your work.  Full credit may not be given for an answer
+alone.  You may use the backs of the pages or the extra pages for
+scratch work.  Do not unstaple or remove pages.
+
+This is a non-calculator exam. One side of one sheet of US letter-size
+paper on which definitions, theorems, and formulas are handwritten by
+you may be used.  Worked-out examples are \emph{not allowed} on the
+formula sheet.  You will turn in your formula sheet with the exam.
+
+By taking this exam you are agreeing to abide by these rules and Rutgers
+University's Academic Integrity Policy.
+
+\vfil
+\end{titlepage}
+
+\begin{centeredpage}
+\tableofproblems
+\end{centeredpage}
+
+\problems
+
+\begin{problem}{20}
+Label each of the following statements as true (T) or false (F).  In
+each, give a justification: If the statement is true, explain why; if
+not, give a counterexample or cite a theorem which asserts the contrary.
+
+Example:
+\begin{enumerate}[(a)]
+\item All vectors are matrices.
+\begin{solution}
+\textbf{True.}  By definition, a vector is a $m \times 1$ or $1 \times
+n$ matrix.
+\end{solution}
+\item All matrices are invertible.
+\begin{solution}
+\textbf{False.}  Any $n \times n$ zero matrix is not invertible.
+\end{solution}
+\end{enumerate}
+
+\begin{enumerate}[\rule{1cm}{0.5pt} \upshape (a)]
+\item %1.1.1(a)
+Matrices must be of the same size for them to be added.
+
+
+\vfill\item %Cf. 1.2.1(d)
+Every vector in $\R^2$ is a linear combination of any two other vectors.
+
+
+\vfill\item %1.3.1(b)
+Some systems of linear equations have exactly two solutions.
+
+
+\vfill\item %1.3.1(i)
+Performing an elementary row operation of the augmented matrix of a
+system of linear equations produces the augmented matrix of an
+equivalent system of linear equations.
+
+
+\vfill\item %1.4.1(c)
+The rank of a matrix is equal to the number of pivot columns in the
+matrix.
+
+
+\clearpage
+\vfill\item %1.4.1(j)
+The equation $A \myvector x = \myvector b$ is consistent if and only if
+$\myvector b$ is a linear combination of the columns of $A$.
+
+
+\vfill\item %1.6.1(i)
+If $\setS_1$ and $\setS_2$ are finite subsets of $\R^n$ having equal spans,
+then $\setS_1$ and $\setS_2$ have the same number of elements.
+
+
+\vfill\item %1.7.1(b)
+If the only solution to $A\myvector x = \myvector
+0$ is $\myvector 0$, the rows of $A$ are linearly independent.
+
+
+\vfill\item %1.7.1(j)
+A set of vectors in $\R^n$ is linearly dependent if and only if one of
+the vectors is a multiple of another.
+
+
+\vfill\item %1.4.59
+if $\myvector u$ and $\myvector v$ are both solutions to $A\myvector x =
+\myvector b$, then $\myvector u + \myvector v$ is a solution to
+$A\myvector x = \myvector b$.
+
+
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{15}
+Write the parametric representation of the general solution to the given
+system of linear equations.
+\[
+\begin{array}{*{4}{rc}r}
+x_1 &+& 3x_2 &+& x_3 &+&  x_4 &=& -1 \\
+      -2x_1 &-& 6x_2 &-& x_3 & &      &=& 5 \\
+        x_1 &+& 3x_2 &+&2x_3 &+& 3x_4 &=& 2 \\
+\end{array}
+\]
+\textbf{In this and any problem in which Gaussian Elimination is used,
+label all row operations to receive full credit.}
+\end{problem}
+
+
+\begin{problem}{15}
+Let
+\[
+\setS = \set{
+\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix},
+\begin{bmatrix}1 \\ 1 \\ 0\end{bmatrix},
+\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix},
+\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}}.
+\]
+\begin{enumerate}[\upshape (a)]
+\item Prove $\Span \setS = \R^3$.
+
+
+\clearpage
+\item Find a subset of $\setS$ which also spans $\R^3$ but which is
+linearly independent.  Justify your claim.
+
+
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{10}
+\begin{enumerate}[(a)]
+\item Give an example of a $2 \times 2$ matrix $A$ for which $A \neq O$
+but $A^2 = O$.
+
+
+\vfill\item Give an example of a $2 \times 2$ matrix $B$ for which $A \neq I_2$
+but $B^2 = I_2$.
+
+
+\vfill\item Give an example of a $2 \times 2$ matrix $C$ for which $A \neq
+I_2, O$ but $C^2 = C$.
+
+
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{10}
+Let $B$ be an $m \times n$ matrix.  Prove that $BB^T$ and $B^TB$ are
+square and symmetric matrices.
+
+\end{problem}
+
+\begin{problem}{15}
+Let $U$ be an $m \times n$ matrix, and $Q$ an $n \times n$ matrix.  Let
+$V= UQ$.  As usual, let
+$\set{\myvector u_1, \dots, \myvector u_n}$ denote the set of columns of $U$, and
+$\set{\myvector v_1, \dots, \myvector v_n}$ denote the set of columns of $V$.
+\begin{enumerate}[(a)]
+\item  Prove
+\(
+\Span \set{\myvector v_1, \dots, \myvector v_n} \subseteq
+\Span \set{\myvector u_1, \dots, \myvector u_n}.
+\)
+\clearpage
+
+
+\item Prove
+\(
+\Span \set{\myvector v_1, \dots, \myvector v_n} =
+\Span \set{\myvector u_1, \dots, \myvector u_n}
+\)
+if $Q$ is invertible.
+
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{15}
+Let
+\[
+A = \begin{bmatrix}
+1 &-1 &0 &-1 & 2 \\
+-1& 1 &1 &-2 & 1 \\
+5 &-5 &-3& 4 & 1
+    \end{bmatrix}.
+\]
+Find the reduced row echelon form $R$ of $A$ and an invertible matrix
+$P$ such that $PA = R$.
+
+
+\end{problem}
+
+\appendix
+\blankpage\blankpage
+\end{document}
+%</example>
+%    \end{macrocode}
+%
+% \section{Examples/Tests}
+%  
+% \begin{TODO}
+% Look at the PGF manual for examples of displayed-then-excecuted code.
+% \end{TODO}
+% 
+% \subsection{Answerbox}
+%
+% \begin{macrocode}
+%<*unittests>
+% \begin{enumerate}
+% \newcommand{\testopts}[1][]{%
+% \item (Options: \texttt{#1}) What is the answer to life, the
+%   universe, and everything? 
+%   \answerbox[#1]}
+% \testopts[eol=false,answer=42]
+% \testopts[eol=true,answer=42,showanswer]
+% \testopts[eol,width=2cm,showanswer]
+% \testopts[]
+% \end{enumerate}
+%
+% \subsection{Answerbubble}
+%
+% \begin{tabular}{lc}
+% \verb+\answerbubble{A}+
+% & \answerbubble{A} \\
+% \verb+\answerbubble[fill]{B}+
+% & \answerbubble[fill]{B} \\
+% \verb+\answerbubble{C}+
+% & \answerbubble{C} \\
+% \end{tabular}
+%
+%
+% \subsection{Rows of bubbles}
+%
+%
+% \begin{enumerate}
+% \item \verb+\answerbubblerow[eol]{A,B*,C,D}+
+%             \answerbubblerow[eol]{A,B*,C,D}
+% \item \verb+\answerbubblerow[showanswer]{A,B*,C,D}+
+%             \answerbubblerow[showanswer]{A,B*,C,D}
+% \item
+%   \verb+\examformshowanswers\answerbubblerow{A,B*,C*,D}\examhideshowanswers+
+%   \examformshowanswers\answerbubblerow{A,B*,C*,D}\examformhideanswers
+% \item \verb+\answerbubblerow{?,!*,{*},{*}*,$\alpha$}
+%</unittests>
+%    \end{macrocode}
+%
+% \subsection{Exam stub}
+%
+% This is to get a minimal example for a ``something's wrong...maybe a missing 
+% |\item|'' error message.
+%
+%    \begin{macrocode}
+%<*examunit1>
+\documentclass{ngeexam}
+\title{Final Exam}
+\course{Geometry 0}
+\author{Euclid of Alexandra}
+\date{July 4, -127}
+\begin{document}
+
+\begin{problem}[points=10]
+foo
+\end{problem}
+
+\end{document}
+%</examunit1>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<*examunit2>
+\documentclass{ngeexam}
+\title{Final Exam}
+\course{Geometry 0}
+\author{Euclid of Alexandra}
+\date{July 4, -127}
+\begin{document}
+
+\begin{problem}[points=5,ownpage,grade blank margin=left]
+foo1
+\end{problem}
+
+\end{document}
+%</examunit2>
+%<*examunit3>
+\documentclass{ngeexam}
+\title{Final Exam}
+\course{Geometry 0}
+\author{Euclid of Alexandra}
+\date{July 4, -127}
+\begin{document}
+
+\begin{problem}[points=5,ownpage,grade blank margin=left]
+foo
+\end{problem}
+
+\begin{problem}[points=5,ownpage,grade blank margin=right]
+foo
+\end{problem}
+
+
+\end{document}
+%</examunit3>
+%    \end{macrocode}
+%
+% \Finale

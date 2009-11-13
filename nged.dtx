@@ -1,5 +1,5 @@
- % \iffalse (This is a meta-comment)
-% $Id: lexam.dtx,v 1.8 2003/04/15 15:13:24 leingang Exp $
+% \iffalse (This is a meta-comment)
+% $Id$
 %
 % Copyright (C) 2003--2009 Matthew Leingang <leingang@courant.nyu.edu>
 % --------------------------------------------------------------------
@@ -16,22 +16,26 @@
 %
 % \fi
 % \iffalse 
+\input nged.def
 %\NeedsTeXFormat{LaTeX2e}
-%<examclass>\ProvidesClass{ngeexam}
-%<quizclass>\ProvidesClass{ngequiz}
-%<worksheetclass>\ProvidesClass{ngewksht}
-%<driver>\ProvidesFile{ngeexam.drv}
-%<example>\ProvidesFile{example.tex}
-%<forms>\ProvidesPackage{ngeform}
-%<problems>\ProvidesPackage{ngeprob}
-%<versions>\ProvidesPackage{ngever}
-%<variants>\ProvidesPackage{ngevar}
-%<modes>\ProvidesPackage{ngemode}
-%<misc>\ProvidesPackage{ngemisc}
+%<examclass>\def\filedescription{NGED class for math exams}           \ProvidesClass{ngeexam}
+%<quizclass>\def\filedescription{NGED class for math quizzes}         \ProvidesClass{ngequiz}
+%<worksheetclass>\def\filedescription{NGED class for math worksheets} \ProvidesClass{ngewksht}
+%<driver>\def\filedescription{NGED driver}                            \ProvidesFile{ngeexam.drv}
+%<example>\def\filedescription{NGED Example exam}                     \ProvidesFile{example.tex}
+%<examunit1>\def\filedescription{NGED Unit Test 1}                    \ProvidesFile{test_ngeexam1.tex}
+%<examunit2>\def\filedescription{NGED Unit Test 2}                    \ProvidesFile{test_ngeexam2.tex}
+%<examunit3>\def\filedescription{NGED Unit Test 3}                    \ProvidesFile{test_ngeexam3.tex}
+%<forms>\def\filedescription{NGED package for exam/quiz forms}        \ProvidesPackage{ngeform}
+%<problems>\def\filedescription{NGED package for problem structure}   \ProvidesPackage{ngeprob}
+%<versions>\def\filedescription{NGED package for versioning}          \ProvidesPackage{ngever}
+%<variants>\def\filedescription{NGED package for variants}            \ProvidesPackage{ngevar}
+%<modes>\def\filedescription{NGED package for document modes}         \ProvidesPackage{ngemode}
+%<misc>\def\filedescription{NGED miscellaneous package}               \ProvidesPackage{ngemisc}
 %<*dtx>
-\ProvidesFile{\jobname.dtx}
+\def\filedescription{NGED source file}\ProvidesFile{\jobname.dtx}
 %</dtx>
- [2009/04/02 v3.0-dev (Matthew Leingang)]
+[\filedate\space \fileversion\space \filedescription]
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage{url}
@@ -94,7 +98,7 @@
 % \DoNotIndex{\(,\[,\],\),\item,\myvector,\mymatrix,
 %             \Span,\FiniteSet,\setS}
 %
-% \title{\nged: A Next Generation Educational Bundle}
+% \title{\nged: A Next Generation Educational Bundle \\ version \fileversion}
 % \author{Matthew Leingang \\ leingang@courant.nyu.edu}
 %
 %
@@ -142,7 +146,7 @@
 % 
 % \section{Quizzes}
 %
-% Nothing here yet
+% |\maketitle| produces something more compact to allow for more room on the page.
 %
 % \section{Worksheets}
 %
@@ -335,12 +339,12 @@
 %
 % \section{Implementation}
 %
-% \subsection{ngeexam.cls}
+% \subsection{Document Classes}
 % \subsubsection{Prerequisites}
 %
-% This is all derived from the \LaTeXClass{article} class.
+% These is all derived from the \LaTeXClass{article} class.
 %    \begin{macrocode}
-%<*examclass>
+%<*examclass|quizclass|worksheetclass>
 \LoadClass{article}
 %    \end{macrocode}
 % We use the package \LaTeXPackage{amsthm} because it gives us
@@ -369,6 +373,13 @@
 %    \begin{macrocode}
 \RequirePackage{ifthen}
 %    \end{macrocode}
+%
+% Nice helpers for fancy headers
+%    \begin{macrocode}
+\RequirePackage{fancyhdr}
+%    \end{macrocode}
+%
+
 
 % \subsubsection{Options}
 %
@@ -423,8 +434,32 @@
 % Other options get passed to the parent class.
 %    \begin{macrocode}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+%    \end{macrocode}
+%
+% The bigmath and nodraft options are default.
+%    \begin{macrocode}
 \ExecuteOptions{bigmath,nodraft}
 \ProcessOptions
+%    \end{macrocode}
+%
+% Gives lots of options and commands for paper size and margins.  It
+% also parses the document options for ones that resemble paper size,
+% such as letterpaper and a4paper.  For some reason, putting this line
+% before the |\ExecuteOptions| line results in an error, so sorry this
+% is out of place.
+%    \begin{macrocode}
+\RequirePackage{geometry}
+%    \end{macrocode}
+
+% \subsubsection{pgfkeys interface}
+%
+% pgfkeys rocks.  We should try to do any configuration we can through its interface.
+%
+%    \begin{macrocode}
+\RequirePackage{pgfkeys}
+\def\ngeset{\pgfqkeys{/nge}}
+\def\ngestring{\pgfqkeys{/nge/strings}}
+\def\ngeget#1{\pgfkeysvalueof{/nge/#1}}
 %    \end{macrocode}
 %
 % \subsubsection{Loading other \nged packages}
@@ -447,29 +482,6 @@
 %    \end{macrocode}
 % \end{macro}
 % 
-% \subsubsection{Title}
-% \begin{macro}{\maketitle}
-% This is the |\maketitle| from \LaTeXClass{article} when using the
-% \LaTeXOption{titlepage} option.  The only difference is that |\@author| 
-% is replaced by |\@course|.
-%    \begin{macrocode}
-\renewcommand{\maketitle}{
-  \null\vfil
-  \vskip 60\p@
-  \begin{center}%
-    {\LARGE \@title \par}%
-    \vskip 3em%
-    {\large
-     \lineskip .75em%
-      \begin{tabular}[t]{c}%
-        \@course
-      \end{tabular}\par}%
-      \vskip 1.5em%
-    {\large \@date \par}%       % Set date in \large size.
-  \end{center}\par\vfil\null}
-%    \end{macrocode}
-% \end{macro}
-
 %
 % \subsubsection{Paragraph Types}
 %
@@ -482,7 +494,8 @@
 % For giving hints, duh. :-)
 %    \begin{macrocode}
 \theoremstyle{remark}
-\newtheorem*{hint}{\nge@string@hint}
+\pgfqkeys{/nge/strings}{hint/.initial=Hint,note/.initial=Note}
+\newtheorem*{hint}{\pgfkeysvalueof{/nge/strings/hint}}
 %    \end{macrocode}
 % \end{environment}
 %
@@ -502,77 +515,43 @@
 %
 % \begin{environment}{note}
 %   \begin{macrocode}
-\newtheorem*{note}{\nge@string@note}
+\newtheorem*{note}{\pgfkeysvalueof{/nge/strings/note}}
 \theoremstyle{plain}
 %    \end{macrocode}
 % \end{environment}
 % 
-% \subsubsection{Document Partitioning}
-% \begin{macro}{\problems}
-% Signal the start of the ``main matter'' --- i.e., the problems
-%    \begin{macrocode}
-\newcommand{\problems}{%
-  \pagestyle{problem}
-  \setcounter{page}{1}}
-%    \end{macrocode}
-% \end{macro}
 %
-% \begin{macro}{\appendix}
-% Signal the end of problems and beginning of ``backmatter''
-%    \begin{macrocode}
-\renewcommand{\appendix}{%
-  \clearpage
-  \pagestyle{plain}}
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}{\blankpage}
-% Generate a blank page
-%    \begin{macrocode}
-\newcommand{\blankpage}{%  
-  \clearpage
-  \begin{center}(\nge@string@pageisblank)\end{center}
-  \clearpage}
-%    \end{macrocode}
-% \end{macro}
 %
 % \subsubsection{Strings}
 %
 % These are all pretty self-explanatory.
 %
-% \begin{TODO}
-% \begin{itemize}
-% \item Internationalize these things
-% \item Provide a command to customize strings easily.  Or a configuration file system.
-% \item (Maybe) provide a |\localizedstring| command 
-% \begin{verbatim}
-% \setlocalizedstring{name}{Name}
-% \localizedstring{name} 
-% \end{verbatim}
-% Babel must have some kind of framework for this.
-% \end{itemize}
-% \end{TODO}
 % \changes{v0.5}{2006/08/14}{Added additional sentence to exam@pageisblankname}
 % \changes{v0.5}{2006/08/14}{Added exam@continuedname}
 % \changes{v0.5}{2006/08/15}{Renamed 
 % \texttt{\bslash exam@$\left<\right.$string$\left.\right>$name}
 % $\rightarrow$ \texttt{\bslash nge@string@$\left<\right.$string$\left.\right>$}}
+% \changes{v3.0-dev}{2009/04/02}{Using the pgf key registry}
 %    \begin{macrocode}
-\newcommand{\nge@string@points}{Points}
-\newcommand{\nge@string@pageisblank}{This page intentionally left blank.  
-    You can use it for scratch work.}
-\newcommand{\nge@string@name}{Name}
-\newcommand{\nge@string@section}{Section}
-\newcommand{\nge@string@SID}{ID\#}
-\newcommand{\nge@string@email}{e-mail}
-\newcommand{\nge@string@signature}{Signature}
-\newcommand{\nge@string@continued}{continued}
-\newcommand{\nge@string@draft}{DRAFT}
-\newcommand{\nge@string@note}{Note}
-\newcommand{\nge@string@hint}{Hint}
+\pgfqkeys{/nge/strings}{%
+    pageisblank/.initial={This page intentionally left blank. \\
+    You can use it for scratch work.  Please do not remove it.},
+    name/.initial=Name,
+    section/.initial=Section,
+    SID/.initial=ID\#,
+    email/.initial=email,
+    signature/.initial=Signature,
+    draft/.initial=DRAFT,
+    note/.initial=Note,
+    hint/.initial=Hint
+    }
 %    \end{macrocode}
 %
 % \subsubsection{Pagestyles}
+%
+% \begin{TODO}
+% This probably only needs to go in the exam class.
+% \end{TODO}
 %
 % \begin{macro}{\ps@namehead}
 % This is for the title page.  It gives some blanks for filling-in
@@ -582,16 +561,16 @@
   \renewcommand{\@oddhead}{%
     \begin{minipage}{\textwidth}
     \normalfont
-    \nge@string@name: \hrulefill\ 
-    \nge@string@section: \rule{0.5in}{0.4pt}
+    \pgfkeysvalueof{/nge/strings/name}: \hrulefill\ 
+    \pgfkeysvalueof{/nge/strings/section}: \rule{0.5in}{0.4pt}
     \\ \\
     \noindent 
-    \nge@string@SID: \rule{1.5in}{0.4pt}\
-    \nge@string@email: \hrulefill
+    \pgfkeysvalueof{/nge/strings/SID}: \rule{1.5in}{0.4pt}\
+    \pgfkeysvalueof{/nge/strings/email}: \hrulefill
     \end{minipage}}
   \renewcommand{\@evenhead}{\@oddhead}
   \renewcommand{\@oddfoot}{
-  \nge@string@signature: \hrulefill}
+  \pgfkeysvalueof{/nge/strings/signature}: \hrulefill}
 \renewcommand{\@evenfoot}{}}
 %    \end{macrocode}
 % \end{macro}
@@ -600,6 +579,7 @@
 % A page style for the majority of problems.  
 % This one puts the problem number in bold on the top left and top right
 % of every page.  In between goes the course (short) name, the test title, and the date.
+%
 % \begin{TODO}
 % Other page styles.  The AP test has the problem number as a leader all the way across 
 % the top row.  I tried 
@@ -609,6 +589,7 @@
 % but that didn't even out the spacing quite right.  It's also kind of ugly when it \emph{is} 
 % right! 
 % \end{TODO}
+%
 % The bottom of the page has the page number centered, surrounded by en-dashes
 %    \begin{macrocode}
 \newcommand{\ps@problem}{%
@@ -651,7 +632,7 @@
      \setlength{\@tempdimc}{.5\paperheight}%
      \setlength{\unitlength}{\@tempdimb}%
      \put(1,1.5){%
- \makebox(0,0){\rotatebox{45}{{\textcolor[gray]{0.75}{\tt\fontsize{5cm}{5cm}\selectfont{\nge@string@draft}}}}}}}
+ \makebox(0,0){\rotatebox{45}{{\textcolor[gray]{0.75}{\tt\fontsize{5cm}{5cm}\selectfont{\pgfkeysvalueof{/nge/strings/draft}}}}}}}}
 \newcommand{\draftnote}[1]{{{\color{draftblue}\begin{note} #1\end{note}}}}
 \newcommand{\draftmarginalnote}[1]{\marginpar{\color{draftblue}#1}}}
 %    \end{macrocode}
@@ -671,11 +652,14 @@
 % \end{itemize}
 % First we have to initialize the environments
 %    \begin{macrocode}
+\RequirePackage{amssymb}
 \newenvironment{solution}{\relax}{\relax}
 \ifthenelse{\boolean{solutionsmode}}
 {\message{(* solutions mode on *)}
 \definecolor{darkred}{rgb}{0.75,0,0}
 \newcommand{\solutionfont}{\color{darkred}\normalfont}
+\AtBeginDocument{\renewcommand{\problemfont}{\itshape}}
+\examformshowanswers
 %    \end{macrocode}
 % \begin{environment}{solution}
 % The solution environment. Todo:
@@ -800,21 +784,124 @@
 }
 %    \end{macrocode}
 %
-% \subsubsection{Conclusion}
-% That's it!
+% \subsubsection{End of common code}
 %    \begin{macrocode}
+%</examclass|quizclass|worksheetclass>
+%    \end{macrocode}
+%
+% \subsubsection{Title}
+% \begin{macro}{\maketitle}
+%
+%   Quizzes and worksheets have a header on the top of the first page
+%   for name, date, course, and assignment.  This is the format I
+%   learned in third grade.  God bless you, Mrs. Benfield, wherever
+%   you are.
+%
+%    \begin{macrocode}
+%<*quizclass|worksheetclass>
+\setlength{\headheight}{25pt}
+\lhead{\@course \\ \@title}
+\rhead{Name: 
+\ifthenelse{\boolean{solutionsmode}}{%
+  \underline{\raisebox{1pt}{\makebox[3in]{\solutionfont\sffamily\Large Solutions}}}
+  }{% else
+  \rule{3in}{0.4pt} 
+}
+\\ \@date}
+\cfoot{\thepage}
+\renewcommand{\maketitle}{\thispagestyle{fancy}}
+\AtBeginDocument{\pagestyle{plain}}
+%</quizclass|worksheetclass>
+%    \end{macrocode}
+%
+%   For exams, we want a big title to go on a title page.
+%
+%   This is the |\maketitle| from \LaTeXClass{article} when using the
+%   \LaTeXOption{titlepage} option.  The only difference is that
+%   |\@author| is replaced by |\@course|.
+%    \begin{macrocode}
+%<*examclass>
+\renewcommand{\maketitle}{
+  \null\vfil
+  \vskip 60\p@
+  \begin{center}%
+    {\LARGE \@title \par}%
+    \vskip 3em%
+    {\large
+     \lineskip .75em%
+      \begin{tabular}[t]{c}%
+        \@course
+      \end{tabular}\par}%
+      \vskip 1.5em%
+    {\large \@date \par}%       % Set date in \large size.
+  \end{center}\par\vfil\null}
 %</examclass>
 %    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Document Partitioning (ngeexam  only)}
+%
+% Only used in multi-paged documents.
+%
+% \begin{macro}{\problems}
+%   Signal the start of the ``main matter'' --- i.e., the problems
+%    \begin{macrocode}
+%<*examclass>
+\newcommand{\problems}{%
+  \pagestyle{problem}
+  \setcounter{page}{1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\appendix}
+%   Signal the end of problems and beginning of ``back matter''
+%    \begin{macrocode}
+\renewcommand{\appendix}{%
+  \clearpage
+  \pagestyle{plain}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\blankpage}
+%   Generate a blank page.  This is useful if you want a scratch page
+%   at the end or after a long problem.
+%    \begin{macrocode}
+\newcommand{\blankpage}{%  
+  \clearpage
+  \begin{center}(\pgfkeysvalueof{/nge/strings/pageisblank})\end{center}
+  \clearpage}
+%</examclass>
+%    \end{macrocode}
+% \end{macro}
 %
 % \subsection{ngeprob.sty}
 %
+% \begin{TODO}
+% marshal process package options to |\ngeset{every problem/.style}|
+% \end{TODO}
+%
 %    \begin{macrocode}
 %<*problems>
+
+\RequirePackage{ifthen}
 \RequirePackage{pgfkeys}
+
 \pgfqkeys{/nge/strings}{points/.initial=Points}
-\pgfqkeys{/nge/grade blank/margin}{.is choice,
-  left/.code=\reversemarginpar,
-  right/.code=\normalmarginpar}
+\newif\ifnge@prob@grade@blank@left
+\pgfqkeys{/nge/problem/grade blank margin}{.is choice,
+  left/.code=\nge@prob@grade@blank@lefttrue,
+  right/.code=\nge@prob@grade@blank@leftfalse,
+  .initial=right}
+\newif\ifnge@prob@ownpage
+\def\nge@prob@headfont{\bfseries}
+\ngeset{problem/.cd,
+	points/.code={\setcounter{probpoints}{#1}},
+    ownpage/.is if=nge@prob@ownpage,
+    head font/.store in=\nge@prob@headfont,
+    body font/.store in=\problemfont,
+    head/.initial=\theproblem,
+    label/.code={\label{#1}}
+}
 %    \end{macrocode}
 %
 % \subsubsection{Counters}
@@ -880,11 +967,18 @@
 % 
 % \begin{macro}{\t@problemstrut}
 % To make the table big enough to write in with red pen, 
-% this (way kludgy) internal macro generates some vertical space
+% this internal macro generates some vertical space
 % (was: |{$\displaystyle\vphantom{\int}$}|)
 %    \begin{macrocode}
-\newcommand{\t@problemstrut}{\rule{0pt}{4ex}}
+\pgfqkeys{/nge/table of problems}{row height/.initial=5ex,row depth/.initial=2ex}
+\newcommand{\t@problemstrut}{%
+  \rule[-\pgfkeysvalueof{/nge/table of problems/row depth}]{0pt}%
+        {\pgfkeysvalueof{/nge/table of problems/row height}}}
 %    \end{macrocode}
+% \begin{TODO}
+%   It might be nicer to specify the \emph{total} height of the row,
+%   with the problem number centered in the row.
+% \end{TODO}
 % \end{macro}
 %
 % Now we add hooks to |\begin{document}| and |\end{document}|
@@ -910,21 +1004,34 @@
 % \subsubsection{Declaring Problems}
 %
 % \begin{environment}{problem}
+%   An optional argument of key=value pairs.  We also support the
+%   prior usage of a mandatory argument to mean the number of points.
 %    \begin{macrocode}
-\newenvironment{problem}[2][]{%
+%\newenvironment{problem}[1][]{%
+\def\problem{\@ifnextchar\bgroup%}
+  \@oldproblem
+  \@problem}
+\def\@oldproblem#1{\@@problem[points=#1]}
+\def\@problem{\@ifnextchar[%}
+  \@@problem
+  {\@@problem[]}}
+\def\@@problem[#1]{
 %    \end{macrocode}
-% Clear the page.
-%
-% \begin{TODO}
-%  Could be an option.
-% \end{TODO}
+% Initialize.
 %    \begin{macrocode}
-\clearpage
+	\ngeset{problem/points=0,every problem/.try}
+%    \end{macrocode}
+% Process options
+%    \begin{macrocode}
+	\ngeset{problem/.cd,#1}
+%    \end{macrocode}
+% Clear the page (optionally)
+%    \begin{macrocode}
+	\ifnge@prob@ownpage\clearpage\fi
 %    \end{macrocode}
 % Adjust counters according to the arguments.
 %    \begin{macrocode}
-  \stepcounter{problem}%
-  \setcounter{probpoints}{#2}%
+	\refstepcounter{problem}
 %    \end{macrocode}
 % Write \LaTeX{} code to generate the table of problems to the |.top| file.
 %    \begin{macrocode}
@@ -933,18 +1040,49 @@
 % Typeset the problem number and number of points.  Switch to the
 % problem font.
 %    \begin{macrocode}
-  \noindent\textbf{\theproblem.} (\arabic{probpoints}\ 
-  \pgfkeysvalueof{/nge/strings/points})
-  \problemfont
+  \normalfont\normalcolor%
+  \noindent%
+  {\nge@prob@headfont\ngeget{problem/head}} %
+  \normalfont (\arabic{probpoints} \ngestring{points})%
+  {\nge@prob@headfont.} % save that space
+  \problemfont%
 }
 %    \end{macrocode}
 % At the end of the problem, put a grade blank in the bottom-right
 % corner and switch back to the normal font. 
 %    \begin{macrocode}
-{%
+\def\endproblem{%
+  \ifnge@prob@ownpage
   \vfill
-  \normalfont\normalcolor
-  \marginpar{\hrulefill\exam@gradeblank{\arabic{probpoints}}}
+  % format the grade blank in  bottom left/right corner of the page
+    \ifnge@prob@grade@blank@left 
+      \def\tmp@corner{south west}
+      \def\tmp@xshift{1cm}
+      \tikzstyle{grade blank}=[%
+        at=(current page.south west),
+        xshift=1cm,yshift=1cm,above right]
+    \else
+      \def\tmp@corner{south east}
+      \def\tmp@xshift{-1cm}
+      \tikzstyle{grade blank}=[%
+        at=(current page.south east),
+        xshift=-1cm,yshift=1cm,above left]
+    \fi
+%   could be prettier, e.g., [%text width=7cm,fill=red!20,rounded corners,
+    \begin{tikzpicture}[remember picture,overlay] 
+       \node[grade blank]
+      { 
+        \rule{0pt}{1cm}\rule{1cm}{0.5pt} / \arabic{probpoints}
+      }; 
+    \end{tikzpicture}
+  \else
+  % put the grade blank in the left/right margin
+  % \vfill
+  % this could perhaps be done with tikz, too.
+    \normalfont\normalcolor
+    \ifnge@prob@grade@blank@left\reversemarginpar\else\normalmarginpar\fi%
+    \marginpar{\exam@gradeblank{\arabic{probpoints}}}
+  \fi
 }
 %    \end{macrocode}
 % \end{environment}
@@ -956,9 +1094,56 @@
 %    \begin{macrocode}
 \newcommand{\exam@gradeblank}[1]{%
   \center\rule{0pt}{1cm}\rule{1cm}{0.5pt} / #1}
-%</problems>
 %    \end{macrocode}
 % \end{macro}
+%
+% \subsubsection{Problem parts}
+%
+%    \begin{macrocode}
+\RequirePackage{enumitem}
+%    \end{macrocode}
+
+% \begin{environment}{partset}
+% List of a ``bag'' of parts
+%    \begin{macrocode}
+\ngeset{part set/item sep/.initial=\z@}
+\newenvironment{partset}[1][]{
+  \ifnge@prob@ownpage
+    \ngeset{part set/item sep=\fill}
+  \else
+    \ngeset{part set/item sep=0pt}
+  \fi
+  \ngeset{every part set/.try}
+  \ngeset{part set/.cd,#1}
+  \let\ltx@item=\item
+  \def\item{\ltx@item}
+  \begin{enumerate}[label=(\roman*),itemsep=\ngeget{part set/item sep}]
+  }{%
+  \end{enumerate}
+}
+%    \end{macrocode}
+% \end{environment} 
+%
+% \begin{environment}{partsequence}
+% List of a sequence of parts
+%    \begin{macrocode}
+\ngeset{part sequence/item sep/.initial=\z@}
+\newenvironment{partsequence}[1][]{
+  \ifnge@prob@ownpage
+    \ngeset{part sequence/item sep=\fill}
+  \else
+    \ngeset{part sequence/item sep=0pt}
+  \fi
+  \ngeset{every part sequence/.try}
+  \ngeset{part sequence/.cd,#1}
+  \let\ltx@item=\item
+  \def\item{\null\ltx@item}
+  \begin{enumerate}[label=(\alph*),itemsep=\ngeget{part sequence/item sep}]
+  }{%
+  \end{enumerate}
+}
+%    \end{macrocode}
+% \end{environment} 
 %
 % \subsubsection{Styling problems}
 %
@@ -970,6 +1155,12 @@
 %   Use \LaTeXPackage{pgfkeys} to handle all styling
 % \end{TODO}
 % \end{macro}
+% 
+% Done with this package!
+%    \begin{macrocode}
+%</problems>
+%    \end{macrocode}
+%
 %
 % \subsection{ngeform.sty}
 %
@@ -989,11 +1180,14 @@
 
 % color business
 \definecolor{ScantronGreen}{RGB}{41,103,87} % Scantron is probably a trademark
-
-% Boxes
-% =====
+%    \end{macrocode}
+% 
+% \subsubsection{Boxes}
+%
+% An answer box is a box into which the student is supposed to write an answer.
 %
 % defaults -- leaving them @-less in case user wants to redefine
+%    \begin{macrocode}
 \newcommand{\answerboxanswerfont}{\normalfont\sffamily\Large}
 \newcommand{\answerboxanswercolor}{FireBrick}
 \newcommand{\answerboxboxcolor}{ScantronGreen}
@@ -1048,14 +1242,16 @@
   }%
 }
 
-
+%    \end{macrocode}
 % \subsubsection{Bubbles}
+%    \begin{macrocode}
 
 \newcommand{\answerbubblecolor}{ScantronGreen}
 \newcommand{\answerbubblefillcolor}{FireBrick}
 \newcommand{\answerbubblefont}{\sffamily\upshape}
 
 \define@boolkey{answerbubble}{fill}[true]{}
+\define@boolkey{answerbubble}{correct}[true]{}
 
 \newcommand{\answerbubble}[2][]{%
   % initialize variables
@@ -1072,12 +1268,18 @@
   ]%
   \ifthenelse{\boolean{KV@answerbubble@fill}}{%
     \tikzstyle{answerbubble}+=[fill=\answerbubblefillcolor]}{\relax}%
+  \ifthenelse{\boolean{KV@answerbubble@correct}}{%
+    \ifthenelse{\boolean{examformshowanswers}}{%
+      \tikzstyle{answerbubble}+=[fill=\answerbubblefillcolor]}{\relax}}{\relax}
   \tikz[baseline=-0.1cm]{
     \node[answerbubble] {#2};            
         }%
 }
 
+%    \end{macrocode}
 % \subsubsection{Rows of Exam Bubbles}
+%    \begin{macrocode}
+%
 %% eol - flush the box to the right of the line
 \define@boolkey{answerbubblerow}{eol}[true]{}
 %% showanswer - show the answer
@@ -1185,15 +1387,26 @@
 % \end{macro}
 %  
 % \subsection{Miscellaneous}
-%
+% \begin{environment}{centeredpage}
 %    \begin{macrocode}
 %<*misc>
 \newenvironment{centeredpage}{%
   \null\vfill}{%
   \vfill\clearpage}
-\newcommand{\nameIDline}{\nge@string@name: \hrulefill\ \nge@string@SID: \rule{1.5in}{0.4pt}\par}
-%</misc>
+\newcommand{\nameIDline}{\pgfkeysvalueof{/nge/strings/name}: \hrulefill\ \pgfkeysvalueof{/nge/strings/SID}: \rule{1.5in}{0.4pt}\par}
 %    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{continued}
+%    \begin{macrocode}
+\pgfkeys{/nge/strings/continued/.initial=continued}
+\newcommand{\continued}{%
+    \normalmarginpar%
+    \hfill\marginpar{(\pgfkeysvalueof{/nge/strings/continued})}}
+%    \end{macrocode}
+% \end{macro}
+%</misc>
+%
 %
 % \section{Example}
 % I gave this test in March 2003.
@@ -1471,4 +1684,63 @@ $P$ such that $PA = R$.
 % \item \verb+\answerbubblerow{?,!*,{*},{*}*,$\alpha$}
 %</unittests>
 %    \end{macrocode}
+%
+% \subsection{Exam stub}
+%
+% This is to get a minimal example for a ``something's wrong...maybe a missing 
+% |\item|'' error message.
+%
+%    \begin{macrocode}
+%<*examunit1>
+\documentclass{ngeexam}
+\title{Final Exam}
+\course{Geometry 0}
+\author{Euclid of Alexandra}
+\date{July 4, -127}
+\begin{document}
+
+\begin{problem}[points=10]
+foo
+\end{problem}
+
+\end{document}
+%</examunit1>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<*examunit2>
+\documentclass{ngeexam}
+\title{Final Exam}
+\course{Geometry 0}
+\author{Euclid of Alexandra}
+\date{July 4, -127}
+\begin{document}
+
+\begin{problem}[points=5,ownpage,grade blank margin=left]
+foo1
+\end{problem}
+
+\end{document}
+%</examunit2>
+%<*examunit3>
+\documentclass{ngeexam}
+\title{Final Exam}
+\course{Geometry 0}
+\author{Euclid of Alexandra}
+\date{July 4, -127}
+\begin{document}
+
+\begin{problem}[points=5,ownpage,grade blank margin=left]
+foo
+\end{problem}
+
+\begin{problem}[points=5,ownpage,grade blank margin=right]
+foo
+\end{problem}
+
+
+\end{document}
+%</examunit3>
+%    \end{macrocode}
+%
 % \Finale

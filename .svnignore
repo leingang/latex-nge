@@ -1,0 +1,4 @@
+.nfs*
+bin
+texmf
+src

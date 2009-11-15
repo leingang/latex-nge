@@ -1,3 +1,22 @@
+% ^^A nge.dtx --- source file for NGEd package
+% ^^A
+% ^^A This file contains sources for NGEd package.  
+% ^^A In order to generate the installation file nge.ins 
+% ^^A and all the supporting files (README, etc...) run it through TeX.
+% ^^A
+% ^^A In order to generate all class and style files for LaTex
+% ^^A run TeX on nge.ins
+% ^^A
+% ^^A In order to generate documentation for NGEd run LaTeX on nged.dtx
+% ^^A an appropriate number of times together with makeindex and bibtex.
+% ^^A
+% ^^A
+% ^^A
+% ^^A
+% ^^A
+% ^^A
+% ^^A
+% ^^A
 % \iffalse (This is a meta-comment)
 % $Id$
 %
@@ -14,18 +33,27 @@
 % and version 1.2 or later is part of all distributions of LaTeX 
 % version 1999/12/01 or later.
 % \fi
+% \iffalse (This is a meta-comment)
+%
+% \fi
 % \iffalse
 %<*driver>
 \documentclass{ltxdoc}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
+
+\newcommand{\ngepackage}{\textsf{NGEd}}
+\newcommand{\ngefile}[1]{\textsf{#1}}
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
 %</driver>
 % \fi
 %
+% \iffalse (This is a meta-comment)
+% 
+% \fi
 % \CheckSum{0}
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -46,23 +74,143 @@
 % \iffalse (This is a meta-comment)
 %
 % \fi
-% \iffalse (This is a meta-comment)
 %
-% \fi
-%
-% \title{}
-% \author{}
+% \title{\ngepackage: A Next Generation Educational Bundle}^^A \\ version \fileversion}
+% \author{Matthew Leingang\\leingang@courant.nyu.edu
+%   \and Denis Kosygin\\kosygin@courant.nyu.edu}
 % \maketitle
+% \tableofcontents
+%
+% \subsection*{Introduction}
+%
+% \subsubsection*{Conventions, adopted in is this manual}
+% The word ``package'' is ambiguous and its meaning varies with the
+% context.  In this manual it may mean any of the following:
+% \begin{description}
+% \item[\LaTeX{} package:] a collection of \LaTeX{} styles and classes,
+%   designed to work well together and which may depend on each other.
+%   Files, comprising a \LaTeX{} package are usually located in a
+%   common directory of a \LaTeX{} distribution tree.  In particular,
+%   all files of \LaTeX{} package \ngepackage, described in this
+%   manual share are located in directory \ngefile{nge}.
+% \item[Distribution package:] a \LaTeX{} package together with its
+%   documentation and other supporting files (e.g. a list of files
+%   with their md5 checksums).  Distribution packages are frequently
+%   taylored to one of popular \TeX{} distributions, such as teTeX or
+%   liveTeX and most of them are available for download in archived
+%   forms at large Internet repositories, such as CTAN.
+% ^^A When this package is released and accepted to CTAN, uncommment
+% ^^A the following lines and insert the appropriate address.
+% \iffalse (this is meta-comment)
+%  In particular, the current version of \ngedpackage, documented in
+%  this manual, is available for download on CTAN at 
+% ^^A the address goes here
+%  and various CTAN mirrors (see ^^A address of CTAN mirrors )
+%   This distribution package does not actually contain any \LaTeX{} class or
+%   style files, they are generated automatically during package installation.
+% \fi
+% \item[Source package:] a collection of files and tools necessary for
+%   the production and further development of the corresponding
+%   \LaTeX{} package together with its supporting materials.  Source
+%   package may also include various configuration files for tools,
+%   package maintainers and developers use during the development process.
+% \end{description}
+% Most of the time this ambiguity does not lead to confusion, since
+% the intented meaning of word ``package'' is clear from the context.
+% In section \ref{sec:user} ``package'' usually means the \LaTeX{}
+% \ngepackage{} package and in section \ref{sec:admin} ``package''
+% usually means the distribution package \ngefile{nge}.
+%
+% \section{Using \ngepackage}
+% \label{sec:user}
+%
+% \subsection{Class \ngefile{ngemin.cls}}
+% \label{sec:user-ngemin}
+%
+% This class defines the common theme for all the documents produced
+% with the help of \ngepackage.  All other classes in this package
+% load it and add their own changes to document appearence.
+%
+% \section{Administration of \ngepackage}
+% \label{sec:admin}
 %
 % \StopEventually{\PrintChanges\PrintIndex}
 %
-% \section{The code}
+% \section{\LaTeX{} code}
 % \label{sec:code}
 %
+% All the classes and styles in this package rely on \LaTeXe.  No
+% support for earlier versions of \LaTeX{} is provided.
 %    \begin{macrocode}
-\NeedsTeXFormat{LaTeX2e}      
-%    \end{macrocode} 
+\NeedsTeXFormat{LateX2e}
+%    \end{macrocode}
 %
-%^^A <*cls>
-%^^A </cls>
+% \subsection{Class \ngefile{ngemin.cls}}
+% \label{sec:code-ngemin}
+%
+% This class defines the common theme for all the documents produced
+% with the help of \ngepackage.  All other classes in this package
+% load it and add their own changes to document appearence.
+%
+% ^^A <*cls>
+% ^^A </cls>
+%
+% \section{Source organization}
+% \label{sec:source}
+% 
+% This section discusses, in terms of conventions introduced in the
+% beginning of the users manual, the \emph{source package}
+% \ngepackage, that is collection of files and tools used in
+% generation and development of \ngepackage{} bundle.  We shall refer
+% to them briefly as \ngepackage{} \emph{sources} or simply \emph{the
+%   sources}.  The sources include in particular files
+% \ngefile{nge.dtx} and \ngefile{nge.ins}, from which all the class
+% and style \LaTeX{} files are generated, and also various support
+% files (README, documentation, \dots) which are distributed together
+% with \ngepackage.
+%
+% \subsection{Generation of \LaTeX{} files and other files}
+% \label{sec:source-documentation}
+%
+% In order to avoid duplication of effort, most of the package files
+% are generated from \ngefile{nge.dtx} by running various programs on
+% it. In particular, running \TeX{} on \ngefile{nge.dtx} generates
+% \ngefile{nge.sty} and all the class and style files.  Similarly,
+% running \TeX{} on \ngefile{nge.ins} generates all the class and
+% style files, but not \ngefile{nge.ins} itself, in order to avoid
+% vicious loops.  Setting the appropriate file structure takes some
+% effort, but once it is in place, adding to it is not very difficult.
+%
+%
+% \subsection{Documentation}
+% \label{sec:source-documentation}
+%
+%  
+% \section{Development notes}
+% \label{sec:dev}
+%
+% This section contains various bits and ends: ideas and things to try, notes to
+% self and other developers, lists of bugs, etc.
+%
+% \subsection{Bugs}
+% \label{sec:dev-bugs}
+%
+% \subsection{Bits and ends}
+% \label{sec:dev-misc}
+% \begin{list}{}{Things to do}
+% \item Add todo support to this file
+% \item Use svn support too for tags and in latex
+% \item Think through font selection for package names, file names and
+%    commands issued.
+%  \item Find a way to incorporate ChangeLog file.
+%  \item Add style for url references.
+%  \item Write about mirroring manual parts for user and developer.
+%  \end{list}
+%  \begin{list}{}{Things to think about}
+%  \item 
+%  \end{list}
+% \IfFileExists{ChangeLog}
+%   {\subsection{ChangeLog entries}\input{ChangeLog}}
+%   {\relax}
+%
 % \Finale

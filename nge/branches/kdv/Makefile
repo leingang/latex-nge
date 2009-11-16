@@ -1,3 +1,7 @@
+# Makefile for LaTeX package NGEd
+#
+# Copyright (C) 2009 Denis Kosygin <kosygin@courant.nyu.edu>
+#
 SHELL = /bin/sh
 TEXINPUTS = ./texmf//:
 TEX = tex
@@ -5,8 +9,8 @@ LATEX = latex
 MAKEINDEX = makeindex
 
 name = nge
-sources = $(name).dtx $(name).ins
-targets = $(name).cls
+sources = $(name).dtx
+targets = $(name).ins readme.txt install.txt license.txt
 
 .phony: all doc dvi pdf ps
 all: $(targets)
@@ -16,7 +20,7 @@ pdf:
 ps:
 
 $(targets): $(sources)
-	$(TEX) $(name).ins
+	$(LATEX) $(name).dtx
 
 $(name).dvi:
 	$(LATEX) $(name).dtx
@@ -39,7 +43,7 @@ svnroot = https://subversive.cims.nyu.edu/mathclinical
 svnbranch = kdv
 svn_url = $(svnroot)/$(name)/branches/$(svnbranch)
 checkoutdir = src
-EDITOR = "emacs -nw"
+SVN_EDITOR = "emacs -nw"
 
 .phony: checkout
 checkout:

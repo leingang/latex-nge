@@ -1,4 +1,5 @@
 # Makefile for LaTeX package NGEd
+# $Id$
 #
 # Copyright (C) 2009 Denis Kosygin <kosygin@courant.nyu.edu>
 #
@@ -13,18 +14,9 @@ sources = $(name).dtx
 targets = $(name).ins readme.txt install.txt license.txt
 
 .phony: all doc dvi pdf ps
-all: $(targets)
-doc: pdf
-dvi: $(name).dvi
-pdf:
-ps:
-
-$(targets): $(sources)
+all:
 	$(LATEX) $(name).dtx
-
-$(name).dvi:
-	$(LATEX) $(name).dtx
-	$(MAKEINDEX) $(name)
+	$(MAKEINDEX) -s gind.ist $(name)
 	$(MAKEINDEX) -s gglo.ist -o $(name).gls $(name).glo
 	$(LATEX) $(name).dtx
 	$(LATEX) $(name).dtx
@@ -45,7 +37,7 @@ svn_url = $(svnroot)/$(name)/branches/$(svnbranch)
 checkoutdir = src
 SVN_EDITOR = "emacs -nw"
 
-.phony: checkout
+.phony: checkout maintainer-clean
 checkout:
 	svn checkout $(svn_url) $(checkoutdir)
 	@echo 'sources from' $(svn_url)

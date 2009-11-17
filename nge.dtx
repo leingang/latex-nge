@@ -160,9 +160,12 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \CodelineIndex
 \RecordChanges
 
+%^^A \usepackage{todonotes}
+
 \newcommand{\texlive}{\TeX{}~Live}
 \newcommand{\ngepackage}{\textsf{NGEd}}
 \newcommand{\ngefile}[1]{\textsf{#1}}
+\newcommand{\nged}{FIXME!NGEd}
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
@@ -209,8 +212,35 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \author{Matthew Leingang\\leingang@courant.nyu.edu
 %   \and Denis Kosygin\\kosygin@courant.nyu.edu}
 % \maketitle
+% \begin{abstract}
+%   The \nged{} bundle is a set of \LaTeXe classes and packages,
+%   providing a unified typographic support for the entire line of
+%   educational materials: from tests and solutions to course
+%   assessments.  Its naturally oriented toward mathematics courses
+%   but it is not specific to them.
+% \end{abstract}
+%
 % \tableofcontents
 %
+% \section{Introduction}
+%
+%
+% \subsection{Goals}
+%
+% The \nged bundle classes and packages should be
+%
+% \begin{itemize}
+%   \item \emph{beautiful}
+%   \item \emph{useful} 
+%   \item \emph{flexible} items should be configurable
+%   \item \emph{modular} This is why the several different packages for different uses
+%   \item \emph{lazy} We will use other packages when they are useful
+% \end{itemize}
+%
+% \subsection{Other classes which do this kind of thing}
+%
+% Look at examdesign, mathexam, and exam.
+% 
 % \subsection*{Introduction}
 %
 % \subsubsection*{Conventions, adopted in is this manual}
@@ -250,6 +280,16 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % In section \ref{sec:user} ``package'' usually means the \LaTeX{}
 % \ngepackage{} package and in section \ref{sec:admin} ``package''
 % usually means the distribution package \ngefile{nge}.
+%
+% \subsection{History and changes}
+%
+% M.\ Leingang first wrote the exam class in 2003 and has developed it
+% in stages since then.  Other pieces have been developed along the
+% way, too.  In 2009 D.\ Kosygin refactored the package and its
+% documentation.  Version 3.0 has been released to public and uploaded
+% on CTAN on
+%^^A insert date here!
+%
 %
 % \section{Using \ngepackage}
 % \label{sec:user}

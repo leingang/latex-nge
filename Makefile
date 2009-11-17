@@ -45,8 +45,8 @@ checkout:
 	$(SVN) checkout $(svn_url) $(checkoutdir)
 	@echo '\nsources from '$(svn_url)' \nare placed in '$(checkoutdir)
 
-#commit: cleanall
-#	$(SVN) commit
+commit: cleanall
+	$(SVN) commit
 changelog:
 	if [ -f ChangeLog ]; \
         then cp ChangeLog ChangeLog.bak; \
@@ -62,3 +62,5 @@ maintainer-clean:
 	-$(RM) ChangeLog.bak ChangeLog.tmp
 
 cleanall: clean distclean maintainer-clean
+test:
+	echo $$TEXINPUTS

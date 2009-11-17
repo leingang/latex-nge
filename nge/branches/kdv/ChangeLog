@@ -1,0 +1,139 @@
+2009-11-17 00:38  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* Makefile, nge.dtx: nge.ins generates class and style files only.
+
+2009-11-16 06:24  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ., .svnignore, Makefile, nge.dtx, nge.ins: nge.ins is generated
+	now from nge.dtx.
+
+2009-11-15 00:49  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ., .svnignore, Makefile, nge.dtx: Outlined the structure of the
+	  manual.
+
+2009-11-14 17:15  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* Makefile, nge.dtx, nge.ins, nged.dtx, nged.ins: Started
+	refactoring with fresh templates
+
+2009-11-13 20:17  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* : Renamed nged to nge
+
+2009-11-09 18:30  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* : Creating a private branch for changes by D.  Kosygin
+
+2009-08-31 17:08  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.ins: Added some svninfo usefulness to the .ins file: it extracts
+	the file version from the $HeadURL$ keyword.
+
+2009-08-28 20:23  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* : Making a dev branch.
+
+2009-08-28 20:11  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: set ID and URL keywords
+
+2009-08-27 16:44  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* : ignore derivative files.
+
+2009-08-27 16:41  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.ins: ins file installs unit tests
+
+2009-07-26 23:58  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: \examformshowanswers is now called automatically in
+	solutions mode.
+
+2009-07-23 15:18  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: created partset and partsequence environments for
+	problems.
+
+2009-07-13 00:22  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Major change to the problem environment: no mandatory
+	arguments, one optional list of key=value options.
+
+	The once mandatory argument for the number of points is now an
+	option.
+
+	This breaks compatibility with other versions. Using pgfkeys we
+	can get lots of style options (and metadata while we're at it!).
+
+	Lookin' good.
+
+2009-07-03 15:26  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Filled out the ngequiz class so that it uses as much
+	of the exam class as possible (in particular document modes).
+
+	ngequiz is now functional.
+
+2009-07-02 16:46  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Stub of the ngequiz class which has a fancy header and
+	problems.
+
+2009-07-02 13:05  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Whoops, wrong section number.
+
+2009-05-08 13:19  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: added a correct key to answerbubble which in the case
+	of \showanswers fills in the bubble
+
+2009-05-08 11:21  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Inserted \begin{macrocode}...\end{macrocode} comments
+	in the ngeform section to structure the documentation a little bit
+	more ltxdoc-y.
+
+	Not there yet.
+
+2009-04-09 12:54  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: reincluded the \continued command with a configurable
+	string and normal (RHS) margin placement
+
+2009-04-09 10:49  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Thoughts on the \t@problemstrut macro (no change in
+	function)
+
+2009-04-09 10:47  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Refactored the \t@problemstrut macro to allow
+	customization.
+
+	Created two new keys to handle row height and depth.
+
+2009-04-08 21:12  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Localised the "hint" string
+
+2009-04-06 11:25  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: refactored the string macros to use the pgfkeys
+	registry
+
+2009-04-03 19:47  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* : ignore derivative files
+
+2009-04-03 18:32  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx: Recovered the installation file
+
+2009-04-03 18:17  Matthew Leingang <leingang@courant.nyu.edu>
+
+	* nged.dtx, nged.ins: LaTeX bundle of classes and packages to
+	produce educational assessment documents
+

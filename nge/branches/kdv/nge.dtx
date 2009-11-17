@@ -1,15 +1,12 @@
-%^^A nge.dtx --- source file for NGEd package
+%^^A nge.dtx --- the source file for NGEd package
 %^^A $Id$
 %^^A
-%^^A This file is the single source file for the entire NGEd package:
-%^^A its LaTeX classes and styles, the supporting files, and the
-%^^A documentation for the entire package, including this file
-%^^A itself.
-%^^A
-%^^A File nge.dtx has been structured and marked up so that each part
-%^^A of it generates some file (or several files) in the package while
-%^^A comments in that part, not only explain its structure, but also
-%^^A provide sources for the documentation of the package.
+%^^A File nge.dtx is the single source file for the entire NGEd
+%^^A package: all the LaTeX classes and styles, all the supporting
+%^^A files, and all the documentation is generated from it.  The file
+%^^A is structured so that each part in it generates some file or a
+%^^A group of files related to each  other in the package, while
+%^^A comments in that part provide the documentation.
 %^^A
 %^^A For general description of the package see section README below, for
 %^^A installation instructions see section INSTALL, for license and
@@ -21,83 +18,149 @@
 %^^A inspected separately.  This command will also generate other
 %^^A files, for details please consult the documentation.
 %^^A
-% \iffalse (This is a meta-comment)
+%^^A
+%^^A
+% \iffalse SOURCES FOR NGE.INS AND LICENSE.TXT
+%^^A
+%^^A 
+%^^A
 %<*hide>
 \begingroup
 %</hide>
+%^^A
+%^^A NGE.INS
+%^^A
 %<*ins>
 \input docstrip.tex
 \keepsilent
+%<*hide>
 \askforoverwritefalse
+%</hide>
+\usedir{tex/latex/nge}
+%^^A\showdirectory
 \preamble
 
+%^^A The line above is intentionally left blank for formatting purposes.
 %</ins>
+%^^A
+%^^A LICENSE
+%^^A
 %<*license>
 Copyright (C) 2003--2009 Matthew Leingang <leingang@courant.nyu.edu>
 Copyright (C) 2009 Denis Kosygin <kosygin@courant.nyu.edu>
 
-This file may be distributed and/or modified under the
-conditions of the LaTeX Project Public License, either version 1.2
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License, either version 1.3
 of this license or (at your option) any later version.
 The latest version of this license is in:
 
    http://www.latex-project.org/lppl.txt
 
-and version 1.2 or later is part of all distributions of LaTeX 
-version 1999/12/01 or later.
+and version 1.3 or later is part of all distributions of LaTeX 
+version 2005/12/01 or later.
+
+This work has LPPL mainenance status `maintained'.
+
+The Current Maintainer of this work is M. Leingang.
+
+%^^A Add to the line below the names of all generated files or give
+%^^A reference to manifest.txt
+This work consists of the file nge.dtx and the derived file nge.ins.
 %</license>
 %<*ins>
+%^^A The line below is intentionally left blank for formatting purposes.
 
 \endpreamble
-\generate{%\file{ngetest.cls}{\from{nge.dtx}{cls}}
+%% Some parts of the source file nge.dtx are concealed from this
+%% generation script with the help of <hide> anchor.  The correct
+%% generation of all the files with the help of docstrip utility
+%% relies on the assumption that option `hide' is never issued in
+%% generating commands below.
+\generate{%
+%^^A All generation commands for class and style files must go above
+%^^A this line. 
 %<*hide>
+%^^A This part is concealed from docstrip.  Place here all the file
+%^^A generating commands which should not be in nge.ins, in particular
+%^^A generating commands for files which form the distribution package
+%^^A `nge'.
   \nopostamble
-  \file{nge.ins}{\from{nge.dtx}{ins,license}\from{nge.dtx}{ins-tail}}
-%</hide>
+  \file{nge.ins}{\from{nge.dtx}{ins,license}}
   \nopreamble\nopostamble
   \file{license.txt}{\from{nge.dtx}{license}}
   \file{readme.txt}{\from{nge.dtx}{readme}}
   \file{install.txt}{\from{nge.dtx}{install}}
+%</hide>
 }
-
+\obeyspaces
 \Msg{***************************************************************}
-\Msg{*}
-\Msg{* To finish the installation you have to move all .cls and}
-\Msg{* .sty files into a directory searched by TeX:}
-\Msg{*}
-\Msg{* To produce the documentation run the file \jobname.dtx}
-\Msg{* through LaTeX.}
-\Msg{*}
-\Msg{* Happy TeXing}
-\Msg{***********************************************************}
+\Msg{*                                                             *}
+\Msg{* To finish the installation you have to move all .cls and    *}
+\Msg{* .sty files into a directory searched by TeX.                *}
+\Msg{*                                                             *}
+\Msg{* To produce the documentation run the file nge.dtx           *}
+\Msg{* through LaTeX.  For details see file install.txt.           *}
+\Msg{*                                                             *}
+\Msg{* Happy TeXing                                                *}
+\Msg{*                                                             *}
+\Msg{***************************************************************}
 %</ins>
 %<ins>\endbatchfile
 %<*hide>
 \endgroup
 %</hide>
 % \fi
-% \iffalse
+%^^A
+%^^A Every line of TeX code below must be either commented out with %,
+%^^A or enclosed in \iffalse ... \fi comments, or marked up with
+%^^A docstrip anchors.  Each line of code not concealed from
+%^^A `dosctrip' utility will be placed by it in every generated file.
+%^^A
+% \iffalse   SOURCES FOR *.TXT FILES
+%^^A 
+%^^A
 %<*hide>
 \iffalse
 %</hide>
+%^^A
+%^^A README
+%^^A
 %<*readme>
 %</readme>
+%^^A
+%^^A INSTALL
+%^^A
 %<*install>
 %</install>
+%^^A
+%^^A
+%^^A
 %<*hide>
 \fi
 %</hide>
 % \fi
+%^^A
+%^^A
+%^^A
 % \iffalse (This is a meta-comment)
+%^^A
+%^^A
+%^^A
+%^^A
+%^^A
+%^^A
 % \fi
 % \iffalse
+%^^A
+%^^A
+%^^A
 %<*driver>
 \documentclass{ltxdoc}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
 
-\newcommand{\liveTeX}{live\TeX}
+\newcommand{\texlive}{\TeX{}~Live}
 \newcommand{\ngepackage}{\textsf{NGEd}}
 \newcommand{\ngefile}[1]{\textsf{#1}}
 \begin{document}
@@ -105,9 +168,16 @@ version 1999/12/01 or later.
 \end{document}
 %</driver>
 % \fi
-%
+%^^A
+%^^A
+%^^A
 % \iffalse (This is a meta-comment)
-% 
+%^^A
+%^^A
+%^^A
+%^^A
+%^^A
+%^^A
 % \fi
 % \CheckSum{0}
 % \CharacterTable
@@ -127,7 +197,12 @@ version 1999/12/01 or later.
 %   Right brace   \}     Tilde         \~}
 %
 % \iffalse (This is a meta-comment)
-%
+%^^A
+%^^A
+%^^A
+%^^A
+%^^A
+%^^A
 % \fi
 %
 % \title{\ngepackage: A Next Generation Educational Bundle}^^A \\ version \fileversion}
@@ -193,7 +268,7 @@ version 1999/12/01 or later.
 % This section discusses \ngepackage{} distribution package as
 % described in the introduction of this manual.  The structure of this
 % package follows popular conventions, adopted in most of \LaTeX{}
-% packages of \liveTeX{} distribution.  \LaTeX{} code for the entire
+% packages of \texlive{} distribution.  \LaTeX{} code for the entire
 % package together with examples and supporting documentation is
 % contained in a single file \ngefile{nge.dtx}.
 %
@@ -207,9 +282,16 @@ version 1999/12/01 or later.
 % \section{\LaTeX{} code}
 % \label{sec:code}
 %
+%^^A Reminder: every line of TeX code in this section must be either
+%^^A commented out with % or marked up with docstrip anchors.  Each
+%^^A line of code not concealed from dosctrip utility will be placed
+%^^A by it in every generated file.
+%
 % All the classes and styles in this package rely on \LaTeXe.  No
 % support for earlier versions of \LaTeX{} is provided.
-%
+%    \begin{macrocode}
+%\NeedsTeXFormat{LaTeX2e}
+%    \end{macrocode}
 % \subsection{Class \ngefile{ngemin.cls}}
 % \label{sec:code-ngemin}
 %
@@ -248,7 +330,7 @@ version 1999/12/01 or later.
 % \subsection{Documentation}
 % \label{sec:source-documentation}
 %
-% \LaTeX code for each class and style file must be placed in a
+% \LaTeX{} code for each class and style file must be placed in a
 % separate subsection of section \ref{sec:code} together with detailed
 % explanations of its structore.  The title of this section is just
 % the name of this class or style file.  In addition there must be a
@@ -257,7 +339,7 @@ version 1999/12/01 or later.
 %
 %
 % \IfFileExists{Makefile}
-% {\subsection{ChangeLog entries}\label{sec:source-makefile}}
+% {\subsection{\ngefile{Makefile}}\label{sec:source-makefile}}
 % {\relax}
 %
 % \section{Development notes}
@@ -279,6 +361,17 @@ version 1999/12/01 or later.
 %  \item Find a way to incorporate ChangeLog file.
 %  \item Add style for url references.
 %  \item Write about mirroring manual parts for user and developer.
+%  \item Add paragraph about making releases.
+%  \item When nge.dtx is processed through latex, issue installation
+%  instructions in the end, not at the beginning.
+% \item Debug index generation
+% \item Add possibility to make todo and fixme notes right in the text
+% \item Mention in the manual packages which \ngepackage uses and what
+% is needed to compile documentation.
+% \item update message and sync it with installation instructions.
+% \item sync file list with license with what is generated by the package
+% \item make a list in the document of all the files, generated by it.
+% \item test nge.ins with local docstrip.cfg.
 %  \end{list}
 %  \begin{list}{}{Things to think about}
 %  \item Think through typographic conventions: urls, package names,
@@ -286,21 +379,80 @@ version 1999/12/01 or later.
 %  \item Combining several documents (exams, quizzes, etc\dots) in one
 %  document. Use report class?  \textsf{Doc} package and docstrip?
 % \item ``postmortem'' command and environment.
+% \item Is there a simple way to keep an up to date manifest.txt?
+% \item Is it possible to stop processing nge.dtx, if it is not
+% processed with LateX, without generating any errors?
+% \item the package should not depend on files outside \texlive{}
+%   distribution.
+% \item fix \verb|\showdirectory| call in \meta{ins} section.
 %  \end{list}
 %
-% ^^A \IfFileExists{ChangeLog}
-% ^^A  {\subsection{ChangeLog entries}\input{ChangeLog}}
-% ^^A  {\relax}
+% Two possibilities --- all problems back to back, or each problem on
+% a new page.  in the latter case an option to provide a space for the
+% answer and option to provide place for a problem grade.
+%
+% Compile list of problems with totals points in a table.  options for
+% placing this table on the front page, standalone table on the second
+% page  or on the last page.
+%
+% multiple variants.  options for solutions, rubrics.  Notes to
+% students and to graders. Assesment notes.
+%
+% compilation of all course materials under the same title, similar to
+% doc package.
+%
+% configuration file, where a common theme may be configured.
+%
+% Rudimentary control over vertical space for problems.
+%
+% Localization.
+%
+% Types of problems: multiple choice (circle, underline answer, fill
+% in the blanks), true or false, problems with parts (one level).
+%
+% examdesign produces multiple (randomized?) versions
+%
+% Simultaneous generation of exams (with versions), solutions and
+% rubrics in one batch, but in separate files.
+%
+% most options (where it makes sense) should provide a possibility of
+% manually overriding them, at least in principle.
+%
+% Multiple instructors, multiple sections -- think what to do in that
+% case. 
+%
+% Write about typographic conventions for the exam (e.g. display style
+% formulas vs. inline style formulas).
+%
+% in nyu classes may be it is possible to generate pages for
+% scantrone?
+%
+% partial grading tables?  Not sure whether it is a good idea
+%
+% use hyperref in PDF mode
+%
+% provide for bonus problems and points
+% 
+% write a manual with plenty of examples
+%
+% I think automatic generation of dtx file for release is unavoidable.
+% But still I would like to break it apart as little as possible.  May
+% be it is possible to keep everything in it and process it
+% conditionally depending on whether it is a release version or a
+% developlment version.  For now I am not going to worry about that.
+%
+% Write a simple script which guards agains common typos (forgotten
+% braces after macros like \verb|\LaTeX|, repeated words, etc.
+% Perhaps it should be written in perl.
+%
+% In addition to system-wide configuration there must be a possibility
+% to configure \ngepackage{} in a single directory, so that it
+% processes all the sources using the common theme, but which may be
+% overriden in individual documents.
+%
+% \IfFileExists{ChangeLog}
+% {\subsection{ChangeLog entries}\label{sec:dev-changelog}{ChangeLog}}
+% {\relax}
 %
 % \Finale
-%
-% \typeout{***************************************************************}
-% \typeout{*}
-% \typeout{* To finish the installation you have to move all .cls and}
-% \typeout{* .sty files into a directory searched by TeX:}
-% \typeout{*}
-% \typeout{* To produce the documentation run the file \jobname.dtx}
-% \typeout{* through LaTeX.}
-% \typeout{*}
-% \typeout{* Happy TeXing}
-% \typeout{***********************************************************}
+

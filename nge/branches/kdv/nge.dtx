@@ -77,6 +77,9 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %% relies on the assumption that option `hide' is never issued in
 %% generating commands below.
 \generate{%
+  \file{ngemin.cls}{\from{nge.dtx}{ngemin}}
+  \file{ngeexam.cls}{\from{nge.dtx}{ngeexam}}
+  \file{ngeprob.sty}{\from{nge.dtx}{ngeprob}}
 %^^A All generation commands for class and style files must go above
 %^^A this line. 
 %<*hide>
@@ -90,6 +93,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
   \file{license.txt}{\from{nge.dtx}{license}}
   \file{readme.txt}{\from{nge.dtx}{readme}}
   \file{install.txt}{\from{nge.dtx}{install}}
+%^^A  \file{makefile.out}{\from{nge.dtx}{makefile}}
 %</hide>
 }
 \obeyspaces
@@ -160,14 +164,24 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \CodelineIndex
 \RecordChanges
 
-\usepackage{url}
-\usepackage{todonotes}
 \usepackage{fancyvrb}
 
+
+\usepackage{hyperref}
+\usepackage{url}
+\newcommand{\ctanpackage}[1]%
+  {\url{http://mirror.hmc.edu/ctan/macros/latex/contrib/#1}}
 \newcommand{\texlive}{\TeX{}~Live}
-\newcommand{\ngepackage}{\textsf{NGEd}}
-\newcommand{\ngefile}[1]{\textsf{#1}}
-\newcommand{\nged}{FIXME!NGEd}
+\newcommand{\latexpackage}[1]{\textsf{#1}}
+\newcommand{\latexfile}[1]{\textsf{#1}}
+\newcommand{\ngefile}[1]{\latexfile{#1}}
+\newcommand{\nged}{\latexpackage{NGEd}}
+
+\usepackage[dvistyle]{todonotes}
+\newcommand{\fixme}[1][]{\todo{FIX ME! #1}}
+
+
+
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
@@ -210,7 +224,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %^^A
 % \fi
 %
-% \title{\ngepackage: A Next Generation Educational Bundle}^^A \\ version \fileversion}
+% \title{\nged: A Next Generation Educational Bundle}^^A \\ version \fileversion}
 % \author{Matthew Leingang\\leingang@courant.nyu.edu
 %   \and Denis Kosygin\\kosygin@courant.nyu.edu}
 % \maketitle
@@ -228,8 +242,8 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %
 %
 % \subsection{Goals}
-%
-% The \nged bundle classes and packages should be
+%\todo{Rewrite!}
+% The \nged{}bundle classes and packages should be
 %
 % \begin{itemize}
 %   \item \emph{beautiful}
@@ -240,7 +254,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \end{itemize}
 %
 % \subsection{Other classes which do this kind of thing}
-%
+%\todo{Expand!}
 % Look at examdesign, mathexam, and exam.
 % 
 % \subsection*{Introduction}
@@ -253,21 +267,20 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %   designed to work well together and which may depend on each other.
 %   Files, comprising a \LaTeX{} package are usually located in a
 %   common directory of a \LaTeX{} distribution tree.  In particular,
-%   all files of \LaTeX{} package \ngepackage, described in this
+%   all files of \LaTeX{} package \nged, described in this
 %   manual share are located in directory \ngefile{nge}.
 % \item[Distribution package:] a \LaTeX{} package together with its
 %   documentation and other supporting files (e.g. a list of files
 %   with their md5 checksums).  Distribution packages are frequently
 %   taylored to one of popular \TeX{} distributions, such as teTeX or
 %   liveTeX and most of them are available for download in archived
-%   forms at large Internet repositories, such as CTAN.
+%   forms at large Internet repositories, such as CTAN.\fixme{CTAN address here}
 % ^^A When this package is released and accepted to CTAN, uncommment
 % ^^A the following lines and insert the appropriate address.
 % \iffalse (this is meta-comment)
-%  In particular, the current version of \ngedpackage, documented in
-%  this manual, is available for download on CTAN at 
-% ^^A the address goes here
-%  and various CTAN mirrors (see ^^A address of CTAN mirrors )
+%  In particular, the current version of \nged, documented in
+%  this manual, is available for download on CTAN
+%  and various CTAN mirrors (see \ctanpackage{}).
 %   This distribution package does not actually contain any \LaTeX{} class or
 %   style files, they are generated automatically during package installation.
 % \fi
@@ -280,7 +293,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % Most of the time this ambiguity does not lead to confusion, since
 % the intented meaning of word ``package'' is clear from the context.
 % In section \ref{sec:user} ``package'' usually means the \LaTeX{}
-% \ngepackage{} package and in section \ref{sec:admin} ``package''
+% \nged{} package and in section \ref{sec:admin} ``package''
 % usually means the distribution package \ngefile{nge}.
 %
 % \subsection{History and changes}
@@ -289,11 +302,11 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % in stages since then.  Other pieces have been developed along the
 % way, too.  In 2009 D.\ Kosygin refactored the package and its
 % documentation.  Version 3.0 has been released to public and uploaded
-% on CTAN on
+% on CTAN on\fixme{date here}
 %^^A insert date here!
 %
 %
-% \section{Using \ngepackage}
+% \section{Using \nged}
 % \label{sec:user}
 % 
 % 
@@ -301,13 +314,13 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \label{sec:user-ngemin}
 %
 % This class defines the common theme for all the documents produced
-% with the help of \ngepackage.  All other classes in this package
+% with the help of \nged.  All other classes in this package
 % load it and add their own changes to document appearence.
 %
-% \section{Administration of \ngepackage}
+% \section{Administration of \nged}
 % \label{sec:admin}
 %
-% This section discusses \ngepackage{} distribution package as
+% This section discusses \nged{} distribution package as
 % described in the introduction of this manual.  The structure of this
 % package follows popular conventions, adopted in most of \LaTeX{}
 % packages of \texlive{} distribution.  \LaTeX{} code for the entire
@@ -332,24 +345,56 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % All the classes and styles in this package rely on \LaTeXe.  No
 % support for earlier versions of \LaTeX{} is provided.
 %    \begin{macrocode}
-%\NeedsTeXFormat{LaTeX2e}
+<ngemin|ngeexam|ngeprob>\NeedsTeXFormat{LaTeX2e}
+<ngemin>\ProvidesClass{ngemin}
+<ngeexam>\ProvidesClass{ngeexam}
+<ngeprob>\ProvidesPackage{ngeprob}
 %    \end{macrocode}
-% \subsection{Class \ngefile{ngemin.cls}}
+%
+% \subsection{File \ngefile{ngemin.cls}}
 % \label{sec:code-ngemin}
 %
+%^^A <*ngemin>
 % This class defines the common theme for all the documents produced
-% with the help of \ngepackage.  All other classes in this package
+% with the help of \nged.  All other classes in this package
 % load it and add their own changes to document appearence.
+% It is derived from \LaTeX{} class \latexfile{article.cls}
+%    \begin{macrocode}
+\LoadClass{article}
+%    \end{macrocode}
+% to which we pass all the unknown options\todo{can we load class
+% before passing all options to it?}
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionToClass{\CurrentOption}{article}}
+\ProcessOptions\relax
+%    \end{macrocode}
+% 
+%^^A </ngemin>
 %
+% \subsection{File \ngefile{ngexam.cls}}
+% \label{sec:code-ngeexam}
+%
+%^^A <*ngeexam>
+%    \begin{macrocode}
+\LoadClass{ngemin}
+%    \end{macrocode}
+%^^A </ngeexam>
+%
+% \subsection{File \ngefile{ngeprob.sty}}
+% \label{sec:code-ngeprob}
+%
+%^^A <*ngeprob>
+%
+%^^A </ngeprob>
 %
 % \section{Source}
 % \label{sec:source}
 % 
 % This section discusses the collection of files and tools used in
-% generation and development of \ngepackage{} bundle, that is, in
+% generation and development of \nged{} bundle, that is, in
 % terms of conventions in the beginning of this manual, the
-% \emph{source package} \ngepackage.  We shall refer to files in
-% \ngepackage{} source package as \ngepackage{} \emph{sources} or
+% \emph{source package} \nged.  We shall refer to files in
+% \nged{} source package as \nged{} \emph{sources} or
 % simply \emph{the sources}.
 %
 %
@@ -409,7 +454,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \label{sec:dev-misc}
 % To be processed.
 % \begin{list}{}{Things to do and to think about}
-% \item Add todo support to this file
+% \item Configure todos in this file
 % \item Use svn support too for tags and in latex
 % \item Think through font selection for package names, file names and
 %    commands issued.
@@ -421,7 +466,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %  instructions in the end, not at the beginning.
 % \item Debug index generation
 % \item Add possibility to make todo and fixme notes right in the text
-% \item Mention in the manual packages which \ngepackage uses and what
+% \item Mention in the manual packages which \nged{}uses and what
 % is needed to compile documentation.
 % \item update message and sync it with installation instructions.
 % \item sync file list with license with what is generated by the package
@@ -480,7 +525,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %    (forgotten braces after macros like \verb|\LaTeX|, repeated
 %    words, etc.  Perhaps it should be written in perl.
 %  \item In addition to system-wide configuration there must be a
-%    possibility to configure \ngepackage{} in a single directory, so
+%    possibility to configure \nged{} in a single directory, so
 %    that it processes all the sources using the common theme, but
 %    which may be overriden in individual documents.
 %  \item Review nged.dtx.  Separate cleanly style and logic.  Must
@@ -508,7 +553,12 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \item If something is omitted, such as course title, author, etc, it
 %   should not be printed, and must not produce error.  The only
 %   exception is the title and \verb|maketitle| command.
+% \item pdf output may provide something which is not available in dvi
+%   format.
 %  \end{list}
+%
+% Here is the list of todo notes located throughout the text.
+% \listoftodos 
 %
 % \IfFileExists{ChangeLog}
 % {\subsection{ChangeLog entries}\label{sec:dev-changelog}
@@ -518,5 +568,8 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \Finale
 %
 %^^A Local Variables:
+%^^A TeX-master: t
+%^^A TeX-parse-self: t
+%^^A TeX-auto-save: t
 %^^A LaTeX-command: "TEXINPUTS=\".:texmf//:\" latex"
 %^^A End:

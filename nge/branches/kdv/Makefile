@@ -11,8 +11,8 @@ MAKEINDEX = makeindex
 
 name = nge
 sources = $(name).dtx
-targets = $(name).ins readme.txt install.txt license.txt
-
+targets = $(name).ins readme.txt install.txt license.txt \
+          ngemin.cls ngeexam.cls ngeprob.sty
 .PHONY: all doc dvi pdf ps
 all:
 	$(LATEX) $(name).dtx
@@ -25,7 +25,7 @@ all:
 clean: texclean
 	-$(RM) *~
 texclean:
-	-$(RM) *.log *.aux *.dvi *.toc texput.*
+	-$(RM) *.log *.aux *.dvi *.toc *.out *.tdo texput.*
 	-$(RM) *.ind *.idx *.ilg *.glo *.gls
 distclean: texclean
 	-$(RM) $(targets) $(name).pdf $(name).ps

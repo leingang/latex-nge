@@ -393,6 +393,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %
 % \subsection{Bits and ends}
 % \label{sec:dev-misc}
+% To be processed.
 % \begin{list}{}{Things to do}
 % \item Add todo support to this file
 % \item Use svn support too for tags and in latex
@@ -426,69 +427,78 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %   distribution.
 % \item fix \verb|\showdirectory| call in \meta{ins} section.
 %  \end{list}
-%
-% Two possibilities --- all problems back to back, or each problem on
-% a new page.  in the latter case an option to provide a space for the
-% answer and option to provide place for a problem grade.
-%
-% Compile list of problems with totals points in a table.  options for
-% placing this table on the front page, standalone table on the second
-% page  or on the last page.
-%
-% multiple variants.  options for solutions, rubrics.  Notes to
-% students and to graders. Assesment notes.
-%
-% compilation of all course materials under the same title, similar to
-% doc package.
-%
-% configuration file, where a common theme may be configured.
-%
-% Rudimentary control over vertical space for problems.
-%
-% Localization.
-%
-% Types of problems: multiple choice (circle, underline answer, fill
-% in the blanks), true or false, problems with parts (one level).
-%
-% examdesign produces multiple (randomized?) versions
-%
-% Simultaneous generation of exams (with versions), solutions and
-% rubrics in one batch, but in separate files.
-%
-% most options (where it makes sense) should provide a possibility of
-% manually overriding them, at least in principle.
-%
-% Multiple instructors, multiple sections -- think what to do in that
-% case. 
-%
-% Write about typographic conventions for the exam (e.g. display style
-% formulas vs. inline style formulas).
-%
-% in nyu classes may be it is possible to generate pages for
-% scantrone?
-%
-% partial grading tables?  Not sure whether it is a good idea
-%
-% use hyperref in PDF mode
-%
-% provide for bonus problems and points
-% 
-% write a manual with plenty of examples
-%
-% I think automatic generation of dtx file for release is unavoidable.
-% But still I would like to break it apart as little as possible.  May
-% be it is possible to keep everything in it and process it
-% conditionally depending on whether it is a release version or a
-% developlment version.  For now I am not going to worry about that.
-%
-% Write a simple script which guards agains common typos (forgotten
-% braces after macros like \verb|\LaTeX|, repeated words, etc.
-% Perhaps it should be written in perl.
-%
-% In addition to system-wide configuration there must be a possibility
-% to configure \ngepackage{} in a single directory, so that it
-% processes all the sources using the common theme, but which may be
-% overriden in individual documents.
+%  \begin{list}{}{bits and pieces to think about}
+%  \item Two possibilities --- all problems back to back, or each
+%    problem on a new page.  in the latter case an option to provide a
+%    space for the answer and option to provide place for a problem
+%    grade.
+%  \item Compile list of problems with totals points in a table.
+%    options for placing this table on the front page, standalone
+%    table on the second page or on the last page.
+%  \item multiple variants.  options for solutions, rubrics.  Notes to
+%    students and to graders. Assesment notes.
+%  \item compilation of all course materials under the same title,
+%    similar to doc package.
+%  \item configuration file, where a common theme may be configured.
+%  \item Rudimentary control over vertical space for problems.
+%  \item Localization.
+%  \item Types of problems: multiple choice (circle, underline answer,
+%    fill in the blanks), true or false, problems with parts (one
+%    level).
+%  \item examdesign produces multiple (randomized?) versions
+%  \item Simultaneous generation of exams (with versions), solutions
+%    and rubrics in one batch, but in separate files.
+%  \item most options (where it makes sense) should provide a
+%    possibility of manually overriding them, at least in principle.
+%  \item Multiple instructors, multiple sections -- think what to do
+%    in that case.
+%  \item Write about typographic conventions for the exam (e.g.
+%    display style formulas vs. inline style formulas).
+%  \item in nyu classes may be it is possible to generate pages for
+%    scantrone?
+%  \item  partial grading tables?  Not sure whether it is a good idea
+%  \item  use hyperref in PDF mode
+%  \item provide for bonus problems and points
+%  \item  write a manual with plenty of examples
+%  \item I think automatic generation of dtx file for release is
+%    unavoidable.  But still I would like to break it apart as little
+%    as possible.  May be it is possible to keep everything in it and
+%    process it conditionally depending on whether it is a release
+%    version or a developlment version.  For now I am not going to
+%    worry about that.
+%  \item Write a simple script which guards agains common typos
+%    (forgotten braces after macros like \verb|\LaTeX|, repeated
+%    words, etc.  Perhaps it should be written in perl.
+%  \item In addition to system-wide configuration there must be a
+%    possibility to configure \ngepackage{} in a single directory, so
+%    that it processes all the sources using the common theme, but
+%    which may be overriden in individual documents.
+%  \item Review nged.dtx.  Separate cleanly style and logic.  Must
+%    have default behaviour similar to article.cls
+%  \item Sensible sets of defaults?
+%  \item Distinguish release package, release tools, release sources,
+%    development sources, development tools and personal development
+%    environment and structure Makefile accordingly.
+%  \item Write a short manual for developing too
+%  \item perhaps it is better to use group environment for sections
+%    included conditionally.
+%  \item Try a docstrip.cfg, so that it is as silent as possible
+%  during development
+% \item look at svn support in latex and emacs
+% \item Add discussion about file structure
+% \item write introduction about nged in broad view
+% \item produce reportsand assessments in doc style?
+% \item Is is possible to make releases with docstrip?
+% \item 2 rolling released branches --- stable and dev. also my
+%   private development branch kdv.
+% \item title pages are just special pages
+% \item course name macro, what shall it include?
+% \item course info: title, catalog number, timestamp (i.e. academic
+%   year, semester, etc, think of a better term in here).
+% \item If something is omitted, such as course title, author, etc, it
+%   should not be printed, and must not produce error.  The only
+%   exception is the title and \verb|maketitle| command.
+%  \end{list}
 %
 % \IfFileExists{ChangeLog}
 % {\subsection{ChangeLog entries}\label{sec:dev-changelog}{ChangeLog}}

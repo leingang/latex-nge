@@ -4,7 +4,7 @@
 # Copyright (C) 2009 Denis Kosygin <kosygin@courant.nyu.edu>
 #
 SHELL = /bin/sh
-TEXINPUTS = ./texmf//:
+export TEXINPUTS = ./texmf//:
 TEX = tex
 LATEX = latex
 MAKEINDEX = makeindex
@@ -36,7 +36,7 @@ svnbranch = kdv
 svn_url = $(svnroot)/$(name)/branches/$(svnbranch)
 checkoutdir = src
 SVN = svn
-SVN_EDITOR = "emacs -nw"
+export SVN_EDITOR = emacs -nw
 SVN2CL = bin/svn2cl.sh
 SVN2CL_OPTS = --authors .svn2cl_authors
 
@@ -62,5 +62,3 @@ maintainer-clean:
 	-$(RM) ChangeLog.bak ChangeLog.tmp
 
 cleanall: clean distclean maintainer-clean
-test:
-	echo $$TEXINPUTS

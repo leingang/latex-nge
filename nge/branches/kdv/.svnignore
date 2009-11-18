@@ -1,1 +1,13 @@
 .nfs*
+ChangeLog.bak
+ChangeLog.tmp
+nged
+*.log
+*.aux
+*.dvi
+*.toc
+*.ind
+*.ilg
+*.glo
+*.gls
+texput.*

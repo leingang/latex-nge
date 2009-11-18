@@ -1,3 +1,7 @@
+2009-11-18 03:23  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Added more ideas to be processed later.
+
 2009-11-17 00:38  Denis Kosygin <kosygin@courant.nyu.edu>
 
 	* Makefile, nge.dtx: nge.ins generates class and style files only.
@@ -21,26 +25,14 @@
 
 	* : Renamed nged to nge
 
-2009-11-09 18:30  Denis Kosygin <kosygin@courant.nyu.edu>
-
-	* : Creating a private branch for changes by D.  Kosygin
-
 2009-08-31 17:08  Matthew Leingang <leingang@courant.nyu.edu>
 
 	* nged.ins: Added some svninfo usefulness to the .ins file: it extracts
 	the file version from the $HeadURL$ keyword.
 
-2009-08-28 20:23  Matthew Leingang <leingang@courant.nyu.edu>
-
-	* : Making a dev branch.
-
 2009-08-28 20:11  Matthew Leingang <leingang@courant.nyu.edu>
 
 	* nged.dtx: set ID and URL keywords
-
-2009-08-27 16:44  Matthew Leingang <leingang@courant.nyu.edu>
-
-	* : ignore derivative files.
 
 2009-08-27 16:41  Matthew Leingang <leingang@courant.nyu.edu>
 
@@ -123,14 +115,6 @@
 
 	* nged.dtx: refactored the string macros to use the pgfkeys
 	registry
-
-2009-04-03 19:47  Matthew Leingang <leingang@courant.nyu.edu>
-
-	* : ignore derivative files
-
-2009-04-03 18:32  Matthew Leingang <leingang@courant.nyu.edu>
-
-	* nged.dtx: Recovered the installation file
 
 2009-04-03 18:17  Matthew Leingang <leingang@courant.nyu.edu>
 

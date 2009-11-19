@@ -171,11 +171,16 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \usepackage{url}
 \newcommand{\ctanpackage}[1]%
   {\url{http://mirror.hmc.edu/ctan/macros/latex/contrib/#1}}
+\newcommand{\ngedsvnroot}{\url{https://subversive.cims.nyu.edu/mathclinical/}}
 \newcommand{\texlive}{\TeX{}~Live}
 \newcommand{\latexpackage}[1]{\textsf{#1}}
+\newcommand{\latexclass}{\latexpackage}
 \newcommand{\latexfile}[1]{\textsf{#1}}
+\newcommand{\docstrip}{\latexpackage{DocStrip}}
 \newcommand{\ngefile}[1]{\latexfile{#1}}
 \newcommand{\nged}{\latexpackage{NGEd}}
+\newcommand{\ngedtx}{\ngefile{nge.dtx}}
+\newcommand{\ngeins}{\ngefile{nge.ins}}
 
 \usepackage[dvistyle]{todonotes}
 \newcommand{\fixme}[1][]{\todo{FIX ME! #1}}
@@ -187,17 +192,8 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \end{document}
 %</driver>
 % \fi
-%^^A
-%^^A
-%^^A
-% \iffalse (This is a meta-comment)
-%^^A
-%^^A
-%^^A
-%^^A
-%^^A
-%^^A
-% \fi
+%^^A The actual code and documentation go below this line.
+%
 % \CheckSum{0}
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -215,14 +211,6 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %   Right brace   \}     Tilde         \~}
 %
-% \iffalse (This is a meta-comment)
-%^^A
-%^^A
-%^^A
-%^^A
-%^^A
-%^^A
-% \fi
 %
 % \title{\nged: A Next Generation Educational Bundle}^^A \\ version \fileversion}
 % \author{Matthew Leingang\\leingang@courant.nyu.edu
@@ -325,7 +313,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % package follows popular conventions, adopted in most of \LaTeX{}
 % packages of \texlive{} distribution.  \LaTeX{} code for the entire
 % package together with examples and supporting documentation is
-% contained in a single file \ngefile{nge.dtx}.
+% contained in a single file \ngedtx{}.
 %
 % \subsection{Installation}
 % \label{sec:admin-installation}
@@ -397,13 +385,11 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \nged{} source package as \nged{} \emph{sources} or
 % simply \emph{the sources}.
 %
-%
-%
-% \subsection{Main source file: \ngefile{nge.dtx}}
+% \subsection{Main source file: \ngedtx{}}
 % \label{sec:source-dtx}
 %
 % 
-% File \ngefile{nge.dtx} is the single source file for the entire
+% File \ngedtx{} is the single source file for the entire
 % \nged{} package: all the \LaTeX{} classes and styles, all the
 % supporting files, and all of the documentation is generated from it.
 % The consists mostly of \LaTeX{} code together with copious comments
@@ -411,13 +397,15 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % structured so that each part in it generates some file or a group of
 % files related to each other in the package.
 %
+%
+%
 % \subsection{Generation of \LaTeX{} files and other files:
 %   \ngefile{nge.ins}}
 % \label{sec:source-ins}
 %
 % In order to avoid duplication of effort, most of the package files
-% are generated from \ngefile{nge.dtx} by running various programs on
-% it. In particular, running \TeX{} on \ngefile{nge.dtx} generates
+% are generated from \ngedtx{} by running various programs on
+% it. In particular, running \TeX{} on \ngedtx{} generates
 % \ngefile{nge.sty} and all the class and style files.  Similarly,
 % running \TeX{} on \ngefile{nge.ins} generates all the class and
 % style files, but not \ngefile{nge.ins} itself, in order to avoid
@@ -430,7 +418,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %
 % \LaTeX{} code for each class and style file must be placed in a
 % separate subsection of section \ref{sec:code} together with detailed
-% explanations of its structore.  The title of this section is just
+% explanations of its structure.  The title of this section is just
 % the name of this class or style file.  In addition there must be a
 % subsection of section \ref{sec:user} with the same title, discussing
 % with examples how to use it.
@@ -441,10 +429,303 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \VerbatimInput{Makefile}}
 % {\relax}
 %
-% \section{Development notes}
+% \section{Development notes and history}
 % \label{sec:dev}
 %
-% This section contains various bits and ends: ideas and things to
+%^^A All the code in this section is hidden from docstrip
+%^^A <*hide>
+%
+% This section documents the entire design of \nged{} package and the
+% history of its development.  Understanding the structure of an
+% unfamiliar software package frequently is not an easy task.  After
+% several cycles of development such a package may consist of several,
+% sometimes many sophisticated parts interacting is subtle and
+% complex.  I\footnote{DK} find it helpful to document the entire
+% process of development from the scratch, stage by stage, introducing
+% components of the design and implementation one by one.  This way it
+% is easier to comprehend (or recall after prolonged interruption) the
+% underlying structure of the package and the logic of its evolution.
+% So this section is written for my own benefit in the first place and
+% bearing in mind a possibility that someone else may find it useful
+% too.
+%
+% \subsection{The purpose of \nged}
+% \label{sec:dev-overview}
+%
+% I view \nged{} as a tool of teacher's personal toolkit in an
+% environment where teaching happens on an industrial scale: a large
+% school, a college with large classes, etc\dots.  This tool provides
+% typographic support for the entire lifetime of a course taught, from
+% its development stage through periodic assesments to a complete bank
+% of materials: assignments, tests, handouts for students, notes for
+% teachers and internal documentation.  In an ideal teaching
+% environment \nged{} will be complemented by a database with a bank
+% of questions, problems, tasks, and other materials, crossreferenced
+% by subjects, topics, keywords, difficulty level and so on, and
+% teaching support system, which automates as much as possible daily
+% routine tasks such as distribution and administration of tests,
+% grade processing and anything else which which may be reliably
+% delegated to machines and computers.
+%
+% \nged{} should make it possible to concentrate on development of
+% course structure, preparation of its materials without worrying too
+% much about uniformity and consistency of the appearence of all the
+% documents.  For example, preparation of exams, their solutions for
+% students, rubric notes for graders, postmortem discussions for
+% instructors and assessments for course designers could be possible
+% with selection of a few virtual switches applied to the contents of
+% the course, which integrates the printed output with other course
+% materials under the same typographic theme.
+%
+% On the other hand \nged{} must be flexible enough to allow
+% customization of such themes sa desired.  In addition the package
+% should provide a set of sensible defaults which work well out of the
+% box and supply an easily extensible theme, which may serve as a
+% basis for derivation of other themes, taylored to particular needs
+% of course designer.
+%
+% \subsection{Design decisions}
+% \label{sec:dev-design}
+%
+% \nged{} grew naturally out of design of tests and course materials
+% in mathematical courses, and there is a widely followed tradition of
+% using \LaTeX{} and other \TeX{}-derived programs for typesetting
+% mathematics.  It is then a straightforward decision to develop
+% \nged{} as a \LaTeX{} package at the same time keeping an eye for a
+% possibility of extending it later to other \TeX-breeds, such as
+% ConTeXt.  
+%
+% Package \nged{} will be developed following standards and
+% conventions of \texlive{} distribution (see
+% \url{http://www.tug.org/texlive/}) with the ultimate goal of making
+% it available for public download on the Comprehensive TeX Archive
+% Network (CTAN, \url{http://www.ctan.org}).  \nged{} should integrate
+% well with \texlive{} distribution.  In particular \nged{} in its
+% default configuration must not rely on any package outside for this
+% distribution neither in application of its classes and style files,
+% nor in generation of package documentation.
+% 
+% The released version of \emph{\nged{} distribution package},
+% intended for upload on CTAN, should consist of two main files:
+% \ngedtx{} and \ngefile{nge.ins}, supplemented with user
+% documentation in PDF and other supporting files.  File
+% \ngedtx{} will contain the \LaTeX{} code of all class and
+% style files in the package and file \ngefile{nge.ins} will be the
+% installation script, which extracts all the \LaTeX{} files from
+% \ngedtx{} and installs them in the appropriate places of
+% \texlive{} distribution.  File \ngedtx{} must also provide
+% sources for \nged{} user manual and possibly other documents related
+% to the package.
+% 
+% \nged{} development will follow the principle of creative lazyness:
+% no reinvention of wheels, if some task is done well by another
+% \texlive{} package, this task should be delegated to it.
+% Duplication of text will also be avoided as much as possible: the
+% best way to keep two blocks of text or code identical is to insert
+% the same source twice.  Finally, the best way to work rapidly is to
+% think slowly and provide plenty of explanations.  The package will
+% have documented as much as possible, even its own documentation.
+%
+% Thus \nged{} will be implemented as follows.  All the \LaTeX{}
+% sources together with their documentation and sources of all the
+% supporting files for distribution package will be contained in the
+% single source file \ngedtx{}.  File \ngedtx{} will
+% be structured so that all the parts of the distribution package for
+% upload on CTAN, including the installation script \ngefile{nge.ins}
+% will be extracted from \ngedtx{} with the help of
+% \docstrip{} utility.  File \ngedtx{} will also document its
+% own structure.  Thus \ngedtx{} is the only source file of
+% \nged{} distribution package.
+% 
+% The generation and development of \nged{} package will be aided by a
+% make file \ngefile{Makefile}, which will be evolved in parallel with
+% \nged{}.  This makefile will not be a part of \nged{} distribution
+% package, but it will be a part of \nged{} source package.  Its
+% development will be also documented in appropriate detail in
+% \ngedtx{}.  Thus \ngedtx{} and \ngefile{Makefile}
+% are the only two files of \emph{\nged{} source package}.  These two
+% files together with \LaTeX{} packages, required for application of
+% all \nged{} class and style files and generation of all \nged{}
+% documentation form \emph{\nged{} development package}.
+% 
+% \nged{} development package will be placed under version control in
+% a Subversion repository at \ngedsvnroot.
+%
+% Other design decisions pertinent to particular features of \nged{}
+% will be made below as such a necessity arises.
+%
+% \subsection{Main source file: \ngedtx{}}
+% \label{sec:dev-dtx}
+%
+% We begin with empty file \ngedtx{} and introduce its
+% structure step by step adding more and more details.  Let us
+% summarize the requirements for this file formulated in section
+% \ref{sec:dev-design}.  File \ngedtx{} contains \LaTeX{} code
+% for all \nged{} class and style files together with their
+% documentation.  It also contains sources of all the supporting files
+% of \nged{} distribution package and their documentation.  And
+% finally, it contains its own documentation too, part of which is
+% provided by this section.
+% 
+%
+% \subsubsection{The driver}
+% \label{sec:dev-dtx-driver}
+%
+% Since \ngedtx{} contains \LaTeX{} code for \nged{} \emph{and} its
+% documentation, we shall prepare it with the help \LaTeX{} package
+% \latexpackage{doc}, so that \nged{} class and style files could be
+% produced by processing \ngedtx{} with \docstrip{} and the package
+% documentation produced by running \ngedtx{} through \LaTeX{}.  For
+% this purpose we shall use \LaTeX{} class \latexclass{ltxdoc}, which
+% loads \latexpackage{doc} automatically.  Hence the initial template of
+% \ngedtx{} has the form
+% \begin{Verbatim}[frame=single]
+\documentclass{ltxdoc}
+
+\begin{document}
+
+\end{document}
+% \end{Verbatim}
+% The body of the document contains a command telling \LaTeX{} to
+% generate documentation from the documentation source file, that is
+% \ngedtx itself:
+% \begin{Verbatim}
+\DocInput{nge.dtx}
+% \end{Verbatim}
+% But running |latex| on file
+% \begin{Verbatim}[frame=single]
+\documentclass{ltxdoc}
+
+\begin{document}
+\DocInput{nge.dtx}
+\end{document}
+% \end{Verbatim}
+% will produce an error, since during the second processing of
+% \ngedtx{} \LaTeX{} sees |\documentclass{ltxdoc}| again.  In order to
+% avoid this error everything between |\documentclass{ltxdoc}| and
+% |\end{document}| in \ngedtx is concealed from \LaTeX{} on the second
+% reading by encasing it in a conditional statement which whose
+% condition is never fulfilled, that is between \TeX{} commands
+% |\iffalse| and |\fi|.
+%
+% However running |latex| on template  
+% \begin{Verbatim}[frame=single]
+\iffalse
+\documentclass{ltxdoc}
+
+\begin{document}
+\DocInput{nge.dtx}
+\end{document}
+\fi
+% \end{Verbatim}
+% demonstrates another problem: now this part is concealed from
+% \LaTeX{} on the first run too, and nothing is output at all.
+%
+% In order to make this part visible to \LaTeX{} on the first run
+% and invisible on the second run we can use the fact, that
+% package \latexpackage{doc} changes the meaning of character \%.
+% With \latexpackage{doc} loaded \% no longer indicates the beginning
+% of a comment, it is ignored by \LaTeX{} in the same way a blank
+% space is ignored.  Thus template
+% \begin{Verbatim}[frame=single]
+% \iffalse
+\documentclass{ltxdoc}
+
+\begin{document}
+\DocInput{nge.dtx}
+\end{document}
+% \fi
+% \end{Verbatim}
+% is processed by \LaTeX{} correctly and produces no errors:
+% everything between |%\iffalse| and |%\fi| is skipped on the second 
+% run.  
+%
+% Template above still produces no output, since it does not contain
+% anything, apart from commands, telling \LaTeX{} to load package
+% \latexpackage{doc} and reread file \ngedtx{}.  Now we may add some
+% text and \LaTeX{} commands above and below this template in order to
+% generate documentation.  Anything following an unquoted
+% |%| till the end of the
+% line will be skipped by \LaTeX{} on the first run and seen on the
+% second, except for parts enclosed between
+% |%\iffalse| and |%\fi| or commented
+% out with the help of |^^||A| (for details see the documentation for
+% package \latexpackage{doc}).
+%
+% We shall adopt the following conventions.  The template above,
+% enclosed between |%\iffalse| and |%\fi| will be called \emph{the
+% driver} part of \ngedtx.  Later we shall add other commands to the
+% driver, loading \LaTeX{} packages as needed and definitions of
+% macros used in typesetting the main text.  The entire \LaTeX{} code
+% together with explanations, marked up according to rules, specified
+% by \latexpackage{doc} package, will be placed \emph{below} the
+% driver.  The documentation of \ngedtx, including the text of this
+% section, will be also placed below the driver.  Thus the actual
+% source of \ngedtx{} has the following form:
+% \begin{Verbatim}[frame=single,commandchars=\+\[\]]
++dots 
+[+normalfont parts to be described later]
++dots
+% \iffalse
+\documentclass{ltxdoc}
++dots 
+[+normalfont commands, loading packages]
++dots
+[+normalfont macros definitions]
++dots
+\begin{document}
+\DocInput{nge.dtx}
+\end{document}
+^^A The actual code and documentation go below this line
++dots
+% \subsection{Main source file: \ngedtx{}}
+% \label{sec:dev-dtx}
+%
+% We begin with empty file \ngedtx{} and introduce its
+% structure step by step adding more and more details.
++dots
+% \end{Verbatim}
+% The structure of \ngedtx{} below the driver will be discussed later.
+%
+% \subsubsection{Generating \ngeins{} and supporting files}
+% \label{sec:dev-dtx-ins}
+%
+% Now let us discuss the structure of \ngedtx{} \emph{above} the
+% driver file.  This is the part where we shall place all the sources
+% of other files in \nged{} distribution package, in particular
+% \ngeins and other supporting files.  This part of \ngedtx{} begins
+% with loading \docstrip{} utility
+% \begin{Verbatim}
+\input docstrip.tex
+% \end{Verbatim}
+% followed by commands to extract some parts of \ngedtx, marked up
+% according to \docstrip{} specifications.  Thus the beginning of
+% \ngedtx{} looks like
+% \begin{Verbatim}[frame=single,commandchars=\+\[\]]
+\input docstrip.tex
+
++dots +normalfont[docstrip configuration commands] +dots
+
+\generate{%
+
++dots +normalfont[file generation commands] +dots
+
+}
+% \end{Verbatim}
+% Every part of \ngedtx{} above the driver part serves as a source of
+% some file in \nged{} distribution package.  For example, one part
+% contains installation instructions for \nged{} package.  It has the
+% form\fixme[install.txt must be empty so far]
+% \VerbatimInput{install.txt} 
+% 
+%
+%
+%
+%^^A </hide>
+%^^A Reminder: all the code in the section above is hidden from docstrip
+%
+% \section*{Misc unprocessed}
+% The rest of this section contains various bits and ends: ideas and things to
 % try, notes to self and other developers, lists of bugs, etc.
 %
 % \subsection{Bugs}
@@ -555,6 +836,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %   exception is the title and \verb|maketitle| command.
 % \item pdf output may provide something which is not available in dvi
 %   format.
+% \item when releasing package update checksum
 %  \end{list}
 %
 % Here is the list of todo notes located throughout the text.

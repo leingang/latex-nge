@@ -6,6 +6,7 @@
      '("latexfile" 1)
      '("latexpackage" 1)
      '("ctanpackage" 1)
+     '("texcatalogueentry" 1)
      "ngedsvnroot"
      "texlive"
      "latexclass"

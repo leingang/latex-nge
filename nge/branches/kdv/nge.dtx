@@ -165,10 +165,12 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \RecordChanges
 
 \usepackage{fancyvrb}
-
+%\newenvironment{framedcode}{\begin{Verbatim}[frame=single]}{\end{Verbatim}}
 
 \usepackage{hyperref}
 \usepackage{url}
+\newcommand{\texcatalogueentry}[1]%
+{\url{http://www.ctan.org/tex-archive/help/Catalogue/entries/#1.html}}
 \newcommand{\ctanpackage}[1]%
   {\url{http://mirror.hmc.edu/ctan/macros/latex/contrib/#1}}
 \newcommand{\ngedsvnroot}{\url{https://subversive.cims.nyu.edu/mathclinical/}}
@@ -440,7 +442,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % unfamiliar software package frequently is not an easy task.  After
 % several cycles of development such a package may consist of several,
 % sometimes many sophisticated parts interacting is subtle and
-% complex.  I\footnote{DK} find it helpful to document the entire
+% complex.  I\footnote[1]{\label{footnote:1}DK} find it helpful to document the entire
 % process of development from the scratch, stage by stage, introducing
 % components of the design and implementation one by one.  This way it
 % is easier to comprehend (or recall after prolonged interruption) the
@@ -452,7 +454,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \subsection{The purpose of \nged}
 % \label{sec:dev-overview}
 %
-% I view \nged{} as a tool of teacher's personal toolkit in an
+% I\footnotemark[1]\fixme view \nged{} as a tool of teacher's personal toolkit in an
 % environment where teaching happens on an industrial scale: a large
 % school, a college with large classes, etc\dots.  This tool provides
 % typographic support for the entire lifetime of a course taught, from
@@ -496,12 +498,13 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % ConTeXt.  
 %
 % Package \nged{} will be developed following standards and
-% conventions of \texlive{} distribution (see
-% \url{http://www.tug.org/texlive/}) with the ultimate goal of making
-% it available for public download on the Comprehensive TeX Archive
-% Network (CTAN, \url{http://www.ctan.org}).  \nged{} should integrate
-% well with \texlive{} distribution.  In particular \nged{} in its
-% default configuration must not rely on any package outside for this
+% conventions of \texlive{}
+% distribution\footnote{\url{http://www.tug.org/texlive/}} with the
+% ultimate goal of making it available for public download on the
+% Comprehensive TeX Archive Network\footnote{CTAN,
+%   \url{http://www.ctan.org}}.  \nged{} should integrate well with
+% \texlive{} distribution.  In particular \nged{} in its default
+% configuration must not rely on any package outside for this
 % distribution neither in application of its classes and style files,
 % nor in generation of package documentation.
 % 
@@ -557,28 +560,54 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \subsection{Main source file: \ngedtx{}}
 % \label{sec:dev-dtx}
 %
-% We begin with empty file \ngedtx{} and introduce its
-% structure step by step adding more and more details.  Let us
-% summarize the requirements for this file formulated in section
-% \ref{sec:dev-design}.  File \ngedtx{} contains \LaTeX{} code
+% We begin with empty file \ngedtx{} and introduce its structure step
+% by step adding more and more details.  
+%
+% Let us summarize the requirements for this file formulated in
+% section \ref{sec:dev-design}.  File \ngedtx{} contains \LaTeX{} code
 % for all \nged{} class and style files together with their
 % documentation.  It also contains sources of all the supporting files
 % of \nged{} distribution package and their documentation.  And
 % finally, it contains its own documentation too, part of which is
-% provided by this section.
-% 
+% provided by this section.  We shall adopt the following structure of
+% \ngedtx.  The file will consist of two parts: head and body
+% \begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\meta{head}
+\meta{body}
+% \end{Verbatim}
+% Part \meta{head} contains the sources of all the supporting files,
+% while part \meta{body} contains all the \LaTeX{} sources for class
+% and style files, their documentation and the package documentation
+% too.
+%
+% In order to combine \LaTeX{} code and its documentation in one file
+% we shall use \LaTeX{} package
+% \latexpackage{doc}\footnote{\texcatalogueentry{doc}}.  The \LaTeX{}
+% code for \nged{} class and style files in file \ngedtx{} is marked
+% up according to \latexpackage{doc} conventions and is interpspersed
+% with comments, which serve as \LaTeX{} source for documentation.
+% Actual \nged{} class and style files are extracted from \ngedtx{} by
+% \docstrip{}\footnote{\texcatalogueentry{docstrip}} utility and the
+% package documentation produced by processing \ngedtx{} with
+% \LaTeX{}.  Thus \ngedtx{} has the form
+% \begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textit{sources for supporting files in \nged{} distribution package}
+\textit{\latexpackage{doc} configuration}
+\textit{latex code for classes and styles code with \docstrip{} markup}
+  \textit{and their documentation}
+\textit{\nged{} documentation source}
+% \end{Verbatim}
+% The detailed structure of each part is discussed in subsections
+% below.
 %
 % \subsubsection{The driver}
 % \label{sec:dev-dtx-driver}
 %
-% Since \ngedtx{} contains \LaTeX{} code for \nged{} \emph{and} its
-% documentation, we shall prepare it with the help \LaTeX{} package
-% \latexpackage{doc}, so that \nged{} class and style files could be
-% produced by processing \ngedtx{} with \docstrip{} and the package
-% documentation produced by running \ngedtx{} through \LaTeX{}.  For
-% this purpose we shall use \LaTeX{} class \latexclass{ltxdoc}, which
-% loads \latexpackage{doc} automatically.  Hence the initial template of
-% \ngedtx{} has the form
+% By convention, the part of file \ngedtx{}, containing
+% \latexpackage{doc} configuration is called the \emph{driver}.
+% We shall use in the driver  \LaTeX{} class \latexclass{ltxdoc}, which loads
+% \latexpackage{doc} automatically.  Thus initially the driver looks
+% as follows.
 % \begin{Verbatim}[frame=single]
 \documentclass{ltxdoc}
 
@@ -586,29 +615,32 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 
 \end{document}
 % \end{Verbatim}
-% The body of the document contains a command telling \LaTeX{} to
-% generate documentation from the documentation source file, that is
-% \ngedtx itself:
+% The lines between |\begin{document}| and |\end{document}| contain
+% commands for \latexpackage{doc} to read and process files with the
+% code and documentation.  In our case there is only one file ---
+% \ngedtx{} itself and we use command
 % \begin{Verbatim}
 \DocInput{nge.dtx}
 % \end{Verbatim}
 % But running |latex| on file
-% \begin{Verbatim}[frame=single]
+% \begin{Verbatim}[frame=single,numbers=left]
 \documentclass{ltxdoc}
 
 \begin{document}
 \DocInput{nge.dtx}
 \end{document}
 % \end{Verbatim}
-% will produce an error, since during the second processing of
-% \ngedtx{} \LaTeX{} sees |\documentclass{ltxdoc}| again.  In order to
-% avoid this error everything between |\documentclass{ltxdoc}| and
-% |\end{document}| in \ngedtx is concealed from \LaTeX{} on the second
-% reading by encasing it in a conditional statement which whose
+% will produce an error, since after reading line 4 \LaTeX{} will
+% begin reading \ngedtx{} from the beginning and during the second
+% processing of this file \LaTeX{} again sees
+% |\documentclass{ltxdoc}|.  In order to avoid this error everything
+% between |\documentclass{ltxdoc}| and |\end{document}| in \ngedtx
+% needs to be concealed from \LaTeX{} on the second reading.  This is
+% done by encasing the driver in a conditional statement whose
 % condition is never fulfilled, that is between \TeX{} commands
 % |\iffalse| and |\fi|.
 %
-% However running |latex| on template  
+% However running |latex| on file
 % \begin{Verbatim}[frame=single]
 \iffalse
 \documentclass{ltxdoc}
@@ -618,15 +650,15 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \end{document}
 \fi
 % \end{Verbatim}
-% demonstrates another problem: now this part is concealed from
-% \LaTeX{} on the first run too, and nothing is output at all.
+% leads another problem: now driver part is concealed from
+% \LaTeX{} on the first run too.
 %
 % In order to make this part visible to \LaTeX{} on the first run
 % and invisible on the second run we can use the fact, that
 % package \latexpackage{doc} changes the meaning of character \%.
 % With \latexpackage{doc} loaded \% no longer indicates the beginning
 % of a comment, it is ignored by \LaTeX{} in the same way a blank
-% space is ignored.  Thus template
+% space is ignored.  Thus the driver
 % \begin{Verbatim}[frame=single]
 % \iffalse
 \documentclass{ltxdoc}
@@ -636,9 +668,35 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \end{document}
 % \fi
 % \end{Verbatim}
-% is processed by \LaTeX{} correctly and produces no errors:
-% everything between |%\iffalse| and |%\fi| is skipped on the second 
-% run.  
+% is processed by \LaTeX{} correctly and produces no errors: it is
+% seen by \LaTeX{} on the initial run and everything between
+% |%\iffalse| and |%\fi| is skipped on the second
+% run.
+%
+% Thus, the driver in \ngedtx has the following structure
+% \begin{Verbatim}[frame=single,commandchars=\+\[\],numbers=left]
+% \iffalse
+% <*driver>+label[drv:line1]
+\documentclass{ltxdoc}
++textit[+latexpackage[doc] configuration]
++textit[and configuration for other packages]
+\begin{document}
+\DocInput{nge.dtx}
+\end{document}
+% </driver>+label[drv:line2]
+% \fi
+% \end{Verbatim}
+% Additional tags |<*driver>| and |</driver}>| in lines
+% \ref{drv:line1} and \ref{drv:line2} mark up for \docstrip{} utility
+% the boundaries of the driver.
+%
+%
+% \subsubsection{\docstrip{} markup}
+% \label{sec:dev-dtx-docstrip-markup}
+%
+% 
+%
+%
 %
 % Template above still produces no output, since it does not contain
 % anything, apart from commands, telling \LaTeX{} to load package
@@ -837,6 +895,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \item pdf output may provide something which is not available in dvi
 %   format.
 % \item when releasing package update checksum
+% \item Do we need a bibliography with CTAN URLs for packages?
 %  \end{list}
 %
 % Here is the list of todo notes located throughout the text.
@@ -854,4 +913,4 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %^^A TeX-parse-self: t
 %^^A TeX-auto-save: t
 %^^A LaTeX-command: "TEXINPUTS=\".:texmf//:\" latex"
-%^^A End:
+%^^A End

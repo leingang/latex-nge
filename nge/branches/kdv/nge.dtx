@@ -93,6 +93,20 @@ This work consists of the file nge.dtx and the derived file nge.ins.
   \file{license.txt}{\from{nge.dtx}{license}}
   \file{readme.txt}{\from{nge.dtx}{readme}}
   \file{install.txt}{\from{nge.dtx}{install}}
+  \file{driver-skel.tex}{\from{nge.dtx}{driver-skel}}
+  \file{driver-body.tex}{\from{nge.dtx}{driver-body}}
+  \file{driver-2.dtx}{\from{nge.dtx}{driver-skel,driver-body}}
+  \file{driver-3.dtx}{\from{nge.dtx}{driver-skel,driver-body,driver-3}}
+  \file{driver-4.dtx}{\from{nge.dtx}{driver-skel,driver-body,driver-4}}
+  \file{driver-config.tex}{\from{nge.dtx}{driver-config}}
+  \file{driver-template.dtx}{\from{nge.dtx}{driver-skel,driver-config,driver-body,driver-template}}
+  \file{driver.dtx}{\from{nge.dtx}{driver}}
+  \file{\jobname.drv}{\from{nge.dtx}{driver,packages,macros}}
+  \file{checksum.dtx}{\from{nge.dtx}{checksum}}
+  \file{stopeventually.dtx}{\from{nge.dtx}{stopeventually}}
+  \file{nge-1.dtx}{\from{nge.dtx}{driver,nge-1,checksum,stopeventually,finale}}
+  \file{ngedoc.dtx}{\from{nge.dtx}{ngedoc}}
+  \file{hide-example.dtx}{\from{nge.dtx}{hide-example}}
 %^^A  \file{makefile.out}{\from{nge.dtx}{makefile}}
 %</hide>
 }
@@ -146,26 +160,39 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %^^A
 %^^A
 %^^A
-% \iffalse (This is a meta-comment)
-%^^A
-%^^A
-%^^A
-%^^A
-%^^A
-%^^A
-% \fi
 % \iffalse
 %^^A
 %^^A
-%^^A
-%<*driver>
+% \fi
+%^^A 
+%^^A The driver
+%^^A 
+%\iffalse
+%^^A The following lines are not part of  the driver itself.  They
+%^^A serve as building blocks for driver examples, quoted in
+%^^A documentation.
+%<driver-4|driver-template>%\iffalse
+%<driver-template>%<*driver>
+%<driver-3>\iffalse
+%^^A Begin driver
+%<*driver|driver-skel>
 \documentclass{ltxdoc}
+%</driver|driver-skel>
+%^^A The next line is inserted for formatting purposes
+%<driver-skel>
+%<*driver|driver-config>
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
+%</driver|driver-config>
+%^^A The next line is inserted for formatting purposes
+%<driver|driver-template|nge-1>
+%<*driver&packages>
+%^^A Draft options
+\usepackage{showkeys}
+%^^A End of draft options
 
 \usepackage{fancyvrb}
-%\newenvironment{framedcode}{\begin{Verbatim}[frame=single]}{\end{Verbatim}}
 
 \usepackage{hyperref}
 \usepackage{url}
@@ -187,33 +214,56 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \usepackage[dvistyle]{todonotes}
 \newcommand{\fixme}[1][]{\todo{FIX ME! #1}}
 
-
-
+%</driver&packages>
+%<*driver&macros>
+%</driver&macros>
+%<*driver|driver-skel>
 \begin{document}
+%</driver|driver-skel>
+%^^A The next line is inserted for formatting purposes
+%<driver-skel&!driver-body>
+%<*driver|driver-body>
   \DocInput{\jobname.dtx}
+%</driver|driver-body>
+%<*driver|driver-skel>
 \end{document}
-%</driver>
+%</driver|driver-skel>
+%^^A End driver
+%^^A
+%^^A The following lines are not part of  the driver itself.  They
+%^^A serve as building blocks for driver examples, quoted in
+%^^A documentation.  In particular, they provide matching \fi's for
+%^^A each \iffalse, placed in drivers' preamble.
+%<driver-3>\fi
+%<driver-template>%</driver>
+%<driver-4|driver-template>%\fi
 % \fi
+%\iffalse
+%<*checksum>
+%\fi
+%^^A The next line is inserted for formatting purposes
+%<nge-1>%
+%% \CheckSum{0}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%\iffalse
+%</checksum>
+%\fi
+%^^A
 %^^A The actual code and documentation go below this line.
-%
-% \CheckSum{0}
-% \CharacterTable
-%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
-%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
-%   Digits        \0\1\2\3\4\5\6\7\8\9
-%   Exclamation   \!     Double quote  \"     Hash (number) \#
-%   Dollar        \$     Percent       \%     Ampersand     \&
-%   Acute accent  \'     Left paren    \(     Right paren   \)
-%   Asterisk      \*     Plus          \+     Comma         \,
-%   Minus         \-     Point         \.     Solidus       \/
-%   Colon         \:     Semicolon     \;     Less than     \<
-%   Equals        \=     Greater than  \>     Question mark \?
-%   Commercial at \@     Left bracket  \[     Backslash     \\
-%   Right bracket \]     Circumflex    \^     Underscore    \_
-%   Grave accent  \`     Left brace    \{     Vertical bar  \|
-%   Right brace   \}     Tilde         \~}
-%
-%
 % \title{\nged: A Next Generation Educational Bundle}^^A \\ version \fileversion}
 % \author{Matthew Leingang\\leingang@courant.nyu.edu
 %   \and Denis Kosygin\\kosygin@courant.nyu.edu}
@@ -299,6 +349,9 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \section{Using \nged}
 % \label{sec:user}
 % 
+% \subsection{Regenerating user manual}
+% \label{sec:user-manual}
+%
 % 
 % \subsection{Class \ngefile{ngemin.cls}}
 % \label{sec:user-ngemin}
@@ -320,9 +373,22 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \subsection{Installation}
 % \label{sec:admin-installation}
 %
+% \subsection{Regenerating manuals}
+% \label{sec:admin-installation-manuals}
+%
 % \subsection{Configuration}
 % \label{sec:admin-configuration}
-% \StopEventually{\PrintChanges\PrintIndex}
+%
+%\iffalse
+%<*stopeventually>
+%^^A The next line is added for formatting purposes
+%<nge-1>%
+%\fi
+%% \StopEventually{\PrintChanges\PrintIndex}
+%\iffalse
+%</stopeventually>
+%\fi
+%
 %
 % \section{\LaTeX{} code}
 % \label{sec:code}
@@ -331,14 +397,17 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %^^A commented out with % or marked up with docstrip anchors.  Each
 %^^A line of code not concealed from dosctrip utility will be placed
 %^^A by it in every generated file.
+% \iffalse
+%<*code>
+% \fi
 %
 % All the classes and styles in this package rely on \LaTeXe.  No
 % support for earlier versions of \LaTeX{} is provided.
 %    \begin{macrocode}
-<ngemin|ngeexam|ngeprob>\NeedsTeXFormat{LaTeX2e}
-<ngemin>\ProvidesClass{ngemin}
-<ngeexam>\ProvidesClass{ngeexam}
-<ngeprob>\ProvidesPackage{ngeprob}
+%<ngemin|ngeexam|ngeprob>\NeedsTeXFormat{LaTeX2e}
+%<ngemin>\ProvidesClass{ngemin}
+%<ngeexam>\ProvidesClass{ngeexam}
+%<ngeprob>\ProvidesPackage{ngeprob}
 %    \end{macrocode}
 %
 % \subsection{File \ngefile{ngemin.cls}}
@@ -377,6 +446,12 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %
 %^^A </ngeprob>
 %
+%
+%^^A Reminder: Anchor </code> below matches the corresponding anchor
+%^^A <*code> in the beginning of this section.
+% \iffalse 
+%</code> 
+% \fi
 % \section{Source}
 % \label{sec:source}
 % 
@@ -434,40 +509,42 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \section{Development notes and history}
 % \label{sec:dev}
 %
-%^^A All the code in this section is hidden from docstrip
-%^^A <*hide>
-%
+% Understanding the structure of a mature
+% software package frequently is not an easy task.
 % This section documents the entire design of \nged{} package and the
-% history of its development.  Understanding the structure of an
-% unfamiliar software package frequently is not an easy task.  After
+% history of its development.   After
 % several cycles of development such a package may consist of several,
-% sometimes many sophisticated parts interacting is subtle and
-% complex.  I\footnote[1]{\label{footnote:1}DK} find it helpful to document the entire
-% process of development from the scratch, stage by stage, introducing
-% components of the design and implementation one by one.  This way it
-% is easier to comprehend (or recall after prolonged interruption) the
-% underlying structure of the package and the logic of its evolution.
-% So this section is written for my own benefit in the first place and
-% bearing in mind a possibility that someone else may find it useful
-% too.
+% (sometimes many) sophisticated parts interacting is subtle and
+% complex.  I\footnote[1]{\label{footnote:1}DK} find it helpful to
+% document the entire process of development from the scratch, stage
+% by stage, introducing components of the design and implementation
+% one by one.  This way it is easier to comprehend (or recall after
+% prolonged interruption) the underlying structure of the package and
+% the logic of its evolution.  This section is written for my own
+% benefit in the first place and bearing in mind a possibility that
+% someone else may find it useful too.  The exposition here is akin to
+% an exposition of a physical theory.  It does not reflect the
+% chronological order of development of ideas and tools, but instead
+% offers a coherent path, leading from one idea to another.
 %
 % \subsection{The purpose of \nged}
 % \label{sec:dev-overview}
 %
-% I\footnotemark[1]\fixme view \nged{} as a tool of teacher's personal toolkit in an
-% environment where teaching happens on an industrial scale: a large
-% school, a college with large classes, etc\dots.  This tool provides
-% typographic support for the entire lifetime of a course taught, from
-% its development stage through periodic assesments to a complete bank
-% of materials: assignments, tests, handouts for students, notes for
-% teachers and internal documentation.  In an ideal teaching
-% environment \nged{} will be complemented by a database with a bank
-% of questions, problems, tasks, and other materials, crossreferenced
-% by subjects, topics, keywords, difficulty level and so on, and
-% teaching support system, which automates as much as possible daily
-% routine tasks such as distribution and administration of tests,
-% grade processing and anything else which which may be reliably
-% delegated to machines and computers.
+% I\footnotemark[1]\fixme view \nged{} as a tool of teacher's personal
+% toolkit in an environment where teaching happens on an industrial
+% scale: a large school, a college with large classes, etc\dots.  This
+% tool provides typographic support for the entire lifetime of a
+% course taught, from its development stage through periodic
+% assesments to a complete bank of materials: assignments, tests,
+% handouts for students, notes for teachers and internal
+% documentation.  In an ideal teaching environment \nged{} will be
+% complemented by a database with a bank of questions, problems,
+% tasks, and other materials, crossreferenced by subjects, topics,
+% keywords, difficulty level and so on, and teaching support system,
+% which automates as much as possible daily routine tasks such as
+% distribution and administration of tests, grade processing and
+% anything else which which may be reliably delegated to machines and
+% computers.
 %
 % \nged{} should make it possible to concentrate on development of
 % course structure, preparation of its materials without worrying too
@@ -486,7 +563,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % basis for derivation of other themes, taylored to particular needs
 % of course designer.
 %
-% \subsection{Design decisions}
+% \subsection{Design and implementation decisions}
 % \label{sec:dev-design}
 %
 % \nged{} grew naturally out of design of tests and course materials
@@ -550,6 +627,27 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % files together with \LaTeX{} packages, required for application of
 % all \nged{} class and style files and generation of all \nged{}
 % documentation form \emph{\nged{} development package}.
+%
+% \nged{} must provide three types of documentation: end user manual,
+% which discusses how to use \LaTeX{} package, administrator manual,
+% which deals with installation and configuration questions, and
+% developers manual, which discusses the maintenance and further
+% development of the package.  In addition, maintainers of \nged{} may
+% have their private documentation, which, for obvious reasons, is not
+% discussed here.
+% 
+% Documentation of \nged{} must provide for several entry points into
+% the package: a user, trying to decide whether the package could be
+% useful, may begin with reading the manual, available as a PDF file
+% on CTAN.  A system administrator may start with reading the file
+% \ngefile{README.txt} in the distribution package.  A \LaTeX{}
+% programmer may start reading the source file \ngedtx{} directly.  In
+% all these cases clear and concise instructions must be placed near
+% the beginning telling where to find or how to build the complete
+% documentation.  Chains of references must be short and their length
+% should not exceed one in most of the cases and must never exceed
+% three.  It is better to tolerate some duplication of documentation,
+% than to force the user to chase one reference after another.
 % 
 % \nged{} development package will be placed under version control in
 % a Subversion repository at \ngedsvnroot.
@@ -571,10 +669,16 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % finally, it contains its own documentation too, part of which is
 % provided by this section.  We shall adopt the following structure of
 % \ngedtx.  The file will consist of two parts: head and body
+%\iffalse
+%<*hide>
+%\fi
 % \begin{Verbatim}[frame=single,commandchars=\\\{\}]
 \meta{head}
 \meta{body}
 % \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
 % Part \meta{head} contains the sources of all the supporting files,
 % while part \meta{body} contains all the \LaTeX{} sources for class
 % and style files, their documentation and the package documentation
@@ -590,6 +694,9 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \docstrip{}\footnote{\texcatalogueentry{docstrip}} utility and the
 % package documentation produced by processing \ngedtx{} with
 % \LaTeX{}.  Thus \ngedtx{} has the form
+%\iffalse
+%<*hide>
+%\fi
 % \begin{Verbatim}[frame=single,commandchars=\\\{\}]
 \textit{sources for supporting files in \nged{} distribution package}
 \textit{\latexpackage{doc} configuration}
@@ -597,6 +704,9 @@ This work consists of the file nge.dtx and the derived file nge.ins.
   \textit{and their documentation}
 \textit{\nged{} documentation source}
 % \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
 % The detailed structure of each part is discussed in subsections
 % below.
 %
@@ -604,77 +714,436 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \label{sec:dev-dtx-driver}
 %
 % By convention, the part of file \ngedtx{}, containing
-% \latexpackage{doc} configuration is called the \emph{driver}.
-% We shall use in the driver  \LaTeX{} class \latexclass{ltxdoc}, which loads
-% \latexpackage{doc} automatically.  Thus initially the driver looks
-% as follows.
-% \begin{Verbatim}[frame=single]
-\documentclass{ltxdoc}
-
-\begin{document}
-
-\end{document}
-% \end{Verbatim}
+% \latexpackage{doc} configuration is called the \emph{driver}.  We
+% shall use in the driver \LaTeX{} class \latexclass{ltxdoc}, which
+% loads \latexpackage{doc} automatically.  Thus initially the driver
+% looks as follows
+% \VerbatimInput{driver-skel.tex}
 % The lines between |\begin{document}| and |\end{document}| contain
 % commands for \latexpackage{doc} to read and process files with the
 % code and documentation.  In our case there is only one file ---
 % \ngedtx{} itself and we use command
-% \begin{Verbatim}
-\DocInput{nge.dtx}
-% \end{Verbatim}
+% \VerbatimInput{driver-body}
 % But running |latex| on file
-% \begin{Verbatim}[frame=single,numbers=left]
-\documentclass{ltxdoc}
-
-\begin{document}
-\DocInput{nge.dtx}
-\end{document}
-% \end{Verbatim}
-% will produce an error, since after reading line 4 \LaTeX{} will
-% begin reading \ngedtx{} from the beginning and during the second
-% processing of this file \LaTeX{} again sees
+% \VerbatimInput{driver-2.tex}
+% will produce an error, since after reading line
+% \VerbatimInput{driver-body}
+% \LaTeX{} will begin reading \ngedtx{} from the beginning and during
+% the second processing of this file \LaTeX{} again sees
 % |\documentclass{ltxdoc}|.  In order to avoid this error everything
 % between |\documentclass{ltxdoc}| and |\end{document}| in \ngedtx
-% needs to be concealed from \LaTeX{} on the second reading.  This is
-% done by encasing the driver in a conditional statement whose
-% condition is never fulfilled, that is between \TeX{} commands
-% |\iffalse| and |\fi|.
+% needs to be concealed from \LaTeX{} on the second reading.  
 %
-% However running |latex| on file
-% \begin{Verbatim}[frame=single]
-\iffalse
-\documentclass{ltxdoc}
-
-\begin{document}
-\DocInput{nge.dtx}
-\end{document}
-\fi
-% \end{Verbatim}
-% leads another problem: now driver part is concealed from
-% \LaTeX{} on the first run too.
+% In ordinary \TeX{} one could conceal parts of a source file from
+% reading by ``commenting out''.  If an unquoted \% sign occurs in a
+% line of a tex source file the first occurance of this sign together
+% with everything following it till the end of the line is considered
+% a comment and is skipped by \TeX{} during the processing.
+% Alternatively, we can tell \TeX{} to skip a block of lines by
+% placing it inside a conditional statement whose condition is never
+% fulfilled, that is between |\iffalse| and |\fi| commands.  \LaTeX{}
+% follows the same conventions as \TeX{}.  But commenting out the
+% entire driver or placing it between |\iffalse| and |\fi| creates
+% another problem.  Lines
+% \VerbatimInput{driver-3.tex}
+% are concealed from \LaTeX{} on the first run too and they are never
+% seen by \LaTeX{} at all.
 %
-% In order to make this part visible to \LaTeX{} on the first run
-% and invisible on the second run we can use the fact, that
-% package \latexpackage{doc} changes the meaning of character \%.
-% With \latexpackage{doc} loaded \% no longer indicates the beginning
-% of a comment, it is ignored by \LaTeX{} in the same way a blank
-% space is ignored.  Thus the driver
-% \begin{Verbatim}[frame=single]
-% \iffalse
-\documentclass{ltxdoc}
-
-\begin{document}
-\DocInput{nge.dtx}
-\end{document}
-% \fi
-% \end{Verbatim}
+% In order to make the driver visible to \LaTeX{} on the first run and
+% invisible on the second run, when the command |\DocInput{\jobname}|
+% is processed, we can use the fact, that package \latexpackage{doc}
+% changes the meaning of character \%.  With \latexpackage{doc} loaded
+% \% no longer indicates the beginning of a comment, it is treated by
+% \LaTeX{} in the same way a blank space is treated.  The driver
+% \VerbatimInput{driver-4.tex}
 % is processed by \LaTeX{} correctly and produces no errors: it is
-% seen by \LaTeX{} on the initial run and everything between
-% |%\iffalse| and |%\fi| is skipped on the second
-% run.
+% seen by \LaTeX{} on the initial pass over \ngedtx{} and everything
+% between |%\iffalse| and |%\fi| is skipped on the second pass.
 %
-% Thus, the driver in \ngedtx has the following structure
-% \begin{Verbatim}[frame=single,commandchars=\+\[\],numbers=left]
+% \subsubsection{Use of comments}
+% \label{sec:dev-dtx-comments}
+%
+% In the section \ref{sec:dev-dtx-driver} we concealed the driver of
+% \ngedtx{} from \latexpackage{doc} by placing it between commands
+% |%\iffalse| and |%\fi|. We shall use this method of commenting
+% systematically during the preparation of \ngedtx.  Comments in
+% \ngedtx{} are used mostly to conceal various parts of this file from
+% \LaTeX{} and not to provide detailed information about the file
+% structure.  The latter purpose is served by the document you are
+% currently reading.
+%
+% Every part of \ngedtx{} which needs to be concealed from \LaTeX{}
+% will be either commented out with \% signs or placed between
+% |\iffalse| and |\fi| commands.  Similarly, every part which needs to
+% be concealed from \latexpackage{doc} package during the stage, when
+% will be placed between |%\iffalse| and |%\fi| commands.
+% With the help of these techniques it is possible to achieve all four
+% possible combinations of visibility and invisibility of a particular
+% part of \ngedtx{} to \LaTeX{} on the first pass over \ngedtx{} and
+% \LaTeX{} on the second pass with \latexpackage{doc} already
+% loaded.
+%
+% Beware, however that using |\iffalse| and |\fi| or |%\iffalse| and
+% |%\fi| for commenting purposes requires care, since \TeX still reads
+% everything following |\iffalse| in search of a matching |\fi|.  This
+% may lead to unexpected results, if \TeX, for example, encounters a
+% construct |\iffalse...\fi...\fi|.  The first |\fi| is not ignored,
+% instead it matches the preceding |\iffalse|, thus ending a comment.
+% When \TeX{} encounters the second |\fi|, this may result in an
+% error, if this |\fi| does not match any prior |\iffalse| or the
+% second |\fi| may match some prior |\iffalse| for which it was not
+% intended.
+% 
+% In addition \latexpackage{doc} recognises sequence of characters
+% |^^A| as the beginning of a comment and skips everything, following
+% the first occurence of this unquoted character string till the end
+% of the line.  This string has the same relation to the pair
+% |%\iffalse| and |%\fi| in \latexpackage{doc} package, as character
+% |%| to the pair |\iffalse| and |\fi|.  We conceal from
+% \latexpackage{doc} those parts of \ngedtx{} which provide sources
+% for other files in \nged{} distribution package with the help of
+% |%\iffalse| and |%\fi|, and use |^^A| for short comments in
+% \ngedtx, helping to separate one part of the file from another and
+% serving as reminders of various conventions adopted during the
+% development.
+% 
+% \subsubsection{Configuration of \latexpackage{doc} package}
+% \label{sec:dev-dtx-doc}
+% 
+% After the line |\documentclass{ltxdoc}| we add configuration
+% commands for \latexpackage{doc}
+% \VerbatimInput{driver-config.tex}
+% which turn on indexing of macros and refer to line numbers of code
+% where they were used.  We also tell \latexpackage{doc} to record
+% history of changes, made in the file.  These configuration commands
+% for \latexpackage{doc} are also supplemented by the command
+% \VerbatimInput{stopeventually.dtx}
+% telling \LaTeX{} to perform appropriate actions at the end of
+% typesetting.  Configuration of \latexpackage{doc} used in processing
+% \ngedtx{} may by changed by the user with the help of 
+% configuration file \latexfile{ltxdoc.cfg}.  For details see
+% section \ref{sec:user-manual}.
+%
+% Later we shall add to \latexpackage{doc} configuration commands in
+% the preamble of the driver other commands, loading various \LaTeX{}
+% packages, configuring them, and defining custom macros.
+%
+% Right after the driver we also place commands
+% \VerbatimInput{checksum.dtx}
+% providing rudimentary error control for \ngedtx{} during network
+% transmissions.  Thus the initial version of \ngedtx{} takes the form
+% \VerbatimInput{nge-1.dtx}
+% User documentation will go before |\StopEventually| command and the
+% code and package documentation will follow this command.
+%
+% \subsubsection{\docstrip{} markup}
+% \label{sec:dev-dtx-docstrip-markup}
+%
+% \docstrip{} is used in \nged{} for two purposes.  All the class and
+% style files for \nged{} are extracted from \ngedtx{} with the help
+% of \docstrip{} utility.  Other parts of \ngedtx{} are extracted with
+% the help of \docstrip{} too.  Some of these extracted parts become
+% components of \nged{} distribution package, some are inserted
+% verbatim in the package documentation as quotations.  The latter
+% solves the consistency problem: it ensures that the quotation in the
+% documentation is indeed identical with the part of the code to which
+% it is referring.
+%
+% The extraction of parts is done with the help of \docstrip{}
+% |\generate| command.  The details are given in sections
+% \ref{sec:dev-dtx-docstrip-ins},
+% \ref{sec:dev-dtx-docstrip-extraction}.  In this section we shall
+% discuss the structure of \ngedtx{} from the point of view of
+% \docstrip.
+%
+% In its default configuration \docstrip{}, when run on a \TeX{} file,
+% removes all the lines, which begin with a single |%| sign and
+% outputs other lines literally.  There is also an important
+% exception: lines beginning with |%%| are not stripped, they are also
+% output literally.  For other details see \docstrip{}
+% documentation\fixme[reference].
+%
+% In order to simplify generation of multiple files from a single
+% source, \docstrip{} makes possible conditional extraction of lines.
+% This is done by giving |\generate| command an options list with with
+% which the input file is processed 
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}[commandchars=\+\[\]]
+\generate{\file{+textit[file.out]}{\from{+textit[file.in]}{+textit[opt1,+dots,optn]}}} 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi Every line of \latexfile{file.in} is also supplied with a boolean
+% expression of options in disjunctive normal form.  Such expressions
+% are called by \docstrip{} authors \emph{guards}.  One may view
+% quards as boolean functions which depend on boolean variables
+% \textit{opt1}, \dots, \textit{optn} and may depend on other boolean
+% variables (options) too.  The list of options, given to |\generate|
+% command tells, which variables in \meta{guard} evaluate to |true|.
+% All other variables in the guard evaluate to |false|.  Then
+% \latexfile{file.in} is read line by line and the extraction decision
+% is made according to the following criteria\footnote{Warning: these
+%   conclusions are based on my understanding and interpretation of
+%   \docstrip{} manual.  I have not studied \docstrip{} code itself.
+%   In cases where there is any doubt about the accuracy of this
+%   description, it is strongly advised to try experiment with
+%   \docstrip{}.}.
+% \begin{enumerate}
+% \item A line is a \emph{comment line} if it begins with |%| which is
+%   not followed by a guard or another |%|.  All the comment lines are
+%   stripped.
+% \item If the line begins with a guard \meta{guard}, possibly
+%   prefixed with |%|, then boolean expression \meta{guard} is
+%   evaluated according to the standard rules of boolean logic.  All
+%   the boolean variables from the list of options \textit{opt1},
+%   \dots, \textit{optn} evaluate to |true|, any other boolean
+%   variables, occuring in \meta{guard} evaluate to |false|.  If
+%   boolean function $\meta{guard}$ evaluates to |true|, then
+%   everything following the guard to the end of the line is
+%   extracted.  Otherwise the line is skipped.
+% \item If the line is not a comment line and it has no guard, it is
+%   extracted unconditionally, that is \emph{always}
+%   extracted\footnote{This criterion is strikingly different from the
+%     usual treatment of disjunctive normal forms (DNFs) in
+%     mathematical logic, where an empty DNF always evaluates to
+%     |false|.  Interpreting the empty DNF as a constant boolean
+%     function with value |false| would mean that failing to provide a
+%     guard for a line would make this line effectively unextractable.
+%     Naturally, no matter how consistent it is with DNFs' notations,
+%     this is not the behaviour one expects from an extraction
+%     process.  Even when no options for extraction are specified we
+%     expect the line to be extracted unless it is a comment line.
+%     But it is precisely this deviation from the standard
+%     interpretation of DNFs, which makes creation of extraction rules
+%     harder than necessary.  A different set of defaults is forced
+%     upon the language of DNFs, which make me wonder, whether the
+%     initial choice of the language for boolean expressions was well
+%     thought through.  Conjunctive normal forms (CNFs) look like a
+%     more suitable alternative here, but dealing with CNFs is much
+%     harder for humans than dealing with DNFs.  Is there a better
+%     form of presenting options for extractions, which makes it easy
+%     to comprehend by humans and consistent with set-theoretic
+%     operations?}.
+% \item A line which begins with |%%| is considered a comment line,
+%   marked for extraction.  It is processed for extraction in the same
+%   way as a line with an empty guard: it is extracted entirely,
+%   together with the leading |%%|.
+% \end{enumerate}
+% If a block of contiguous lines has to be marked for extraction with
+% the same guard \meta{guard}, instead of marking each line with
+% \meta{guard}, one can enclose the entire block between two anchors
+% \meta{*guard} and \meta{/guard}, produced from \meta{guard} with
+% modifiers |*| and |/|.  Guard \meta{guard} with guard modifier |*|
+% marks the beginning of the block, marked with \meta{guard}, and
+% \meta{guard} with guard modifier |/| marks the end of this block.
+% Simple guards may be nested.  Constructs like
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+<*A>
+<B> some text   
+</A>
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% and
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+<*A>
+<*B>
+ some text
+</B>   
+</A>
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% are equivalent to 
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+<A&B> some text
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% provided that expression |<A&B>| is well defined for \docstrip{}.
+%
+% While preparing \ngedtx{} we adopt the following conventions.  In
+% order to avoid inadvertent extraction of lines into multiple files,
+% \emph{all} \LaTeX{} code will be marked up with guards.  Most of the
+% quards will have mnemonic names, clearly relating them to the part
+% of \ngedtx{} they are guarding.  Here is, for example, the driver of
+% \ngedtx{} with appropriate guards incorporated
+% \VerbatimInput{driver-template.dtx}
+% Note that quards |<*driver>| and |</driver>| are not seen by
+% \LaTeX{}, since they are prepended by the comment sign |%|.  These
+% guards are not seen by \latexpackage{doc} package either, since the
+% entire driver is placed between |%\iffalse| and |%\fi|.
+%
+% Concealing guards from \latexpackage{doc} may require additional
+% care.  For example, the line
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%<guard> some text   
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi 
+% will be processed by \docstrip{} correctly: if option |<guard>| is
+% given, | some text| will be output, and the line will be ignored
+% otherwise.  Similarly, this line will be ignored by \LaTeX{},
+% because it begins with a comment character |%|.  But
+% \latexpackage{doc} will see this line and it will be typeset as\\
+% \leftline{<guard> some text}
+% which presumably was not our intention.  In order to conceal the
+% guard from \LaTeX{} and \latexpackage{doc} it has to be placed
+% between |%\iffalse| and |%\fi| commands.  Hence the correct way to
+% prepare the line above for typesetting by \LaTeX{} is
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%\iffalse
+%<*guard>
+%\fi
+ some text   
+%\iffalse
+%</guard>
+%\fi 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi 
+% If we want to conceal this line from \LaTeX{} and make it visible to
+% \latexpackage{doc} only, we can prepend | some text| with |%|.
+% \iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%\iffalse
+%<*guard>
+%\fi
+% some text   
+%\iffalse
+%</guard>
+%\fi 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi 
+% This does typeset the line above correctly, but produces another
+% problem: even with option |guard| given explicitely \docstrip{} will
+% view  line |% some text| as a comment line and it will strip it off.
+% If we still want this line to be in \docstrip{} output, we have to
+% prepend it not with one |%|, but with |%%|.  
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%\iffalse
+%<*guard>
+%\fi
+%% some text   
+%\iffalse
+%</guard>
+%\fi 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi 
+% This way, as explained above, \docstrip{}\footnote{provided that
+%   docstrip is in its default configuration} will consider line
+% |%% some text| as a comment,
+% intended for extraction and it will be extracted from the file.
+% That is why the lines for |\CheckSum|, |\CharacterTable|,
+% |\StopEventually| and |\Finale| in the examples in section
+% \ref{sec:dev-dtx-doc} were prepended not with one, but with two |%|
+% signs.  This way they are processed correctly by both
+% \latexpackage{doc} package and \docstrip{}.  
+%
+% Guard |<hide>| will be used for marking up parts of \ngedtx{} which
+% are never to be extracted with \docstrip{}, with the explicit
+% assumption, that option |hide| will \emph{never} be given to
+% |\generate| command.  Guard |<hide>| is used in particular to
+% conceal lines containing |<guard>| in examples above.  Here is how
+% the source for the first of the three examples above looks like
+% \iffalse
+%<hide-example>%\iffalse
+%<hide-example>%<*hide>
+%<hide-example>%\fi
+%<hide-example>% \begin{Verbatim}
+%<hide-example>\iffalse
+%<hide-example><*guard>
+%<hide-example>\fi
+%<hide-example> some text   
+%<hide-example>\iffalse
+%<hide-example></guard>
+%<hide-example>\fi 
+%<hide-example>% \end{Verbatim}
+%<hide-example>%\iffalse
+%<hide-example>%</hide>
+%<hide-example>%\fi 
+% \fi
+% \VerbatimInput{hide-example.dtx}
+% There is also a simple way to place in docstrip output a line which
+% begins with exactly one |%| character, provided, that this line does
+% not need to be processed by \latexpackage{doc}.  For this it
+% suffices to put it between |%\iffalse| and |%\fi| commands and
+%  prepend the entire line with an appropriate guard.
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%\iffalse
+%<guard>% some text   
+%\fi 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% After running \docstrip{} with option |guard| on the source, line\\
+% |% some text|\\
+% will be extracted into another file, whose contents may be then
+% quoted verbatim with the help of |\VerbatimInput| command.
+% This is how the example above with a hidden |<guard>| was
+% produced.
+%
+% \subsubsection{File \latexfile{nge.ins}}
+% \label{sec:dev-dtx-docstrip-ins}
+%
+% \subsubsection{\latexfile{nge.dtx}: extraction from itself}
+% \label{sec:dev-dtx-docstrip-extraction}
+% ^^A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The actual \LaTeX{} code for \nged{} class and style files, together
+% with their documentation follows the driver.  Before them we place
+% the following lines
+% These lines with |%%|, so that \docstrip{}
+% in its default configuration does not strip away them during
+% processing.
+%
+%
+%
+% The rest of the body of the file is partitioned into sections and
+% subsections, introducing and developing \LaTeX{} code, and
+% documenting the entire package.
+%
+%
+%
+% After taking this into account, the driver in \ngedtx takes the form
+% \iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}[commandchars=\+\[\],numbers=left]
 % \iffalse
 % <*driver>+label[drv:line1]
 \documentclass{ltxdoc}
@@ -686,16 +1155,100 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % </driver>+label[drv:line2]
 % \fi
 % \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
 % Additional tags |<*driver>| and |</driver}>| in lines
 % \ref{drv:line1} and \ref{drv:line2} mark up for \docstrip{} utility
 % the boundaries of the driver.
 %
 %
-% \subsubsection{\docstrip{} markup}
-% \label{sec:dev-dtx-docstrip-markup}
+% The part of \ngedtx{}, containing the driver, is followed by the
+% part, containing \LaTeX{} code for class and style files of \nged{},
+% interspersed with comments, documenting these files.  Each class or
+% style file is described and documented in its own subsection (see
+% section \ref{sec:code}).  \LaTeX{} code in each subsection is
+% placed between two anchors \meta{*anchor} and \meta{/anchor}, which
+% are given as options to \docstrip{} for code extraction.  For
+% example, the code for \ngefile{ngeexam.cls}, together with its
+% documentation is given in section \ref{sec:code-ngeexam}, which in
+% file \ngedtx{} is included between lines
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}[commandchars=\+\[\]]
+% \subsection{Class \ngefile{ngeexam.cls}}
+% \label{sec:code-ngeexam}
 %
+% \iffalse
+%<*ngeexam>
+% \fi
++textit[+LaTeX[] code and comments]
+% \iffalse
+%</ngeexam>
+% \fi
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% Note, that anchors |<*ngeexam>| and |</ngeexam>| had to be concealed
+% from \latexpackage{doc} package by placing them between
+% |%\iffalse| and |%\fi|.
+% File \ngefile{nge.ins} contains the extraction command for
+% \ngefile{ngeexam.cls}
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+\generate{\file{ngeexam.cls}{\from{nge.dtx}{ngeexam}}}
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% Code for other class and style files is included and marked up
+% similarly.  Anchor |<hide>| is also used in markup for concealing
+% some parts of \ngedtx{} from \docstrip{} completely under the
+% assumption, that option |hide| is \emph{never} issued to \docstrip{}
+% file generation commands in files \ngefile{nge.ins} and
+% \ngefile{nge.dtx}.  Below is the complete listing of file
+% \ngefile{nge.ins}, used for extraction of all the \LaTeX{} classes
+% and styles in \nged{}.  In addition to nesessary file generation
+% commands it also provides the text of copyright notice and license,
+% included into each generated file.  \VerbatimInput{nge.ins} Note,
+% that file \ngefile{nge.ins} is also generated with \docstrip{} from
+% \ngefile{nge.dtx}.  The source for \ngefile{nge.ins} and appropriate
+% generating commands are discussed in subsection \ref{sec:dev-dtx-ins}.
+%
+%\iffalse
+%<*ngedoc>
+%\fi
+% \subsubsection{Documentation for file \ngefile{nge.dtx}}
+% \label{sec:dev-dtx-doc}
+%
+% Section \ref{sec:code} with \LaTeX{} code for \nged{} is followed in
+% the body of \ngedtx{} with section \ref{sec:dev}, outlining the structure of
+% \nged{} distribution package, its sources and documenting its
+% development.  Section \ref{sec:dev} includes in particular the
+% current subsection:\fixme[Use VerbatimInput!]
+%^^A \VerbatimInput{ngedoc.dtx}
+%\iffalse
+%</ngedoc>
+%\fi
+% In all other respects section \ref{sec:dev} is just a common
+% \LaTeX{} section.  There is nothing unusual about its structure.
+%
+% \subsubsection{Sources for \nged{} supporting files}
+% \label{sec:dev-dtx-ins}
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%   
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
 % 
-%
 %
 %
 % Template above still produces no output, since it does not contain
@@ -720,6 +1273,9 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % driver.  The documentation of \ngedtx, including the text of this
 % section, will be also placed below the driver.  Thus the actual
 % source of \ngedtx{} has the following form:
+%\iffalse
+%<*hide>
+%\fi
 % \begin{Verbatim}[frame=single,commandchars=\+\[\]]
 +dots 
 [+normalfont parts to be described later]
@@ -743,6 +1299,9 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % structure step by step adding more and more details.
 +dots
 % \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
 % The structure of \ngedtx{} below the driver will be discussed later.
 %
 % \subsubsection{Generating \ngeins{} and supporting files}
@@ -753,12 +1312,21 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % of other files in \nged{} distribution package, in particular
 % \ngeins and other supporting files.  This part of \ngedtx{} begins
 % with loading \docstrip{} utility
+%\iffalse
+%<*hide>
+%\fi
 % \begin{Verbatim}
 \input docstrip.tex
 % \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
 % followed by commands to extract some parts of \ngedtx, marked up
 % according to \docstrip{} specifications.  Thus the beginning of
 % \ngedtx{} looks like
+%\iffalse
+%<*hide>
+%\fi
 % \begin{Verbatim}[frame=single,commandchars=\+\[\]]
 \input docstrip.tex
 
@@ -770,17 +1338,18 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 
 }
 % \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
 % Every part of \ngedtx{} above the driver part serves as a source of
 % some file in \nged{} distribution package.  For example, one part
 % contains installation instructions for \nged{} package.  It has the
 % form\fixme[install.txt must be empty so far]
-% \VerbatimInput{install.txt} 
+%^^A \VerbatimInput{install.txt} 
 % 
 %
 %
 %
-%^^A </hide>
-%^^A Reminder: all the code in the section above is hidden from docstrip
 %
 % \section*{Misc unprocessed}
 % The rest of this section contains various bits and ends: ideas and things to
@@ -896,6 +1465,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %   format.
 % \item when releasing package update checksum
 % \item Do we need a bibliography with CTAN URLs for packages?
+% \item figure out a way to include draft options conditionally
 %  \end{list}
 %
 % Here is the list of todo notes located throughout the text.
@@ -906,11 +1476,16 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \VerbatimInput{ChangeLog}}
 % {\relax}
 %
-% \Finale
+%\iffalse
+%<*finale>
+%^^A The next line is added for formatting purposes
+%<nge-1>%
+%\fi
+%% \Finale
+%\iffalse
+%</finale>
+%\fi
 %
 %^^A Local Variables:
 %^^A TeX-master: t
-%^^A TeX-parse-self: t
-%^^A TeX-auto-save: t
-%^^A LaTeX-command: "TEXINPUTS=\".:texmf//:\" latex"
-%^^A End
+%^^A End:

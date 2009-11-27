@@ -11,8 +11,12 @@ MAKEINDEX = makeindex
 
 name = nge
 sources = $(name).dtx
-targets = $(name).ins readme.txt install.txt license.txt \
-          ngemin.cls ngeexam.cls ngeprob.sty
+targets = $(name).ins $(name).drv readme.txt install.txt license.txt \
+          ngemin.cls ngeexam.cls ngeprob.sty \
+          driver-skel.tex driver-body.tex driver-2.dtx driver-3.dtx \
+          driver-4.dtx driver-config.tex driver-template.dtx driver.dtx \
+          checksum.dtx stopeventually.dtx nge-1.dtx hide-example.dtx \
+	  ngedoc.dtx
 .PHONY: all doc dvi pdf ps
 all:
 	$(LATEX) $(name).dtx

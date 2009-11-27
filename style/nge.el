@@ -1,18 +1,18 @@
 ;;; nge.el --- support for locally defined commands in nge.dtx
 
 
-;; (TeX-add-style-hook
-;;  "nge"
-;;  (function (lambda ()
-;; 	     (message "loading nge.el")
-;; 	     (setq TeX-auto-save t
-;; 		   TeX-parse-self t
-;; 		   reftex-enable-partial-scans t
-;;  			    reftex-save-parse-info t
-;; ;; 			    reftex-use-multiple-selection-buffers t
-;;  			    reftex-plug-into-AUCTeX t
-;;  			    reftex-insert-label-flags '(nil "s"))
-;; 	     (turn-on-reftex))))	    )
+ (TeX-add-style-hook
+  "nge"
+  (function (lambda ()
+	      (setq TeX-auto-save t
+	       TeX-parse-self t
+	       LaTeX-command "TEXINPUTS=\".:texmf//:\" latex"
+ 		   reftex-enable-partial-scans t
+  			    reftex-save-parse-info t
+ 			    reftex-use-multiple-selection-buffers t
+  			    reftex-plug-into-AUCTeX t
+  			    reftex-insert-label-flags '(nil "s"))
+ 	     (turn-on-reftex))))
 ;; (TeX-add-style-hook
 ;;  "nge"
 ;;  (function (lambda () (TeX-add-symbols

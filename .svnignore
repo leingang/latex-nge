@@ -12,4 +12,3 @@ nged
 *.gls
 texput.*
 auto/*
-mock

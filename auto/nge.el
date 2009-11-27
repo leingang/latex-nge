@@ -24,6 +24,7 @@
      "url"
      "hyperref"
      "fancyvrb"
+     "showkeys"
      "latex2e"
      "ltxdoc10"
      "ltxdoc"

@@ -22,7 +22,6 @@
      "todonotes"
      "dvistyle"
      "url"
-     "hyperref"
      "fancyvrb"
      "showkeys"
      "latex2e"

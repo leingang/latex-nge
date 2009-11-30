@@ -478,7 +478,7 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %\fi
 %
 % \subsection{File \ngefile{nge.def}}
-% \label{sec:code-ngemin}
+% \label{sec:code-def}
 %
 % \iffalse
 %<*def>
@@ -526,7 +526,7 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %\fi
 %
 % \subsection{Package \latexclass{ngeunit}}
-% \label{sec:code-ngetest}
+% \label{sec:code-ngeunit}
 %
 %\iffalse
 %<*ngeunit>
@@ -571,7 +571,7 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % Classes \latexclass{ngeexam} and \latexclass{ngequiz} do little
 % other than selecting appropriate defaults.
 %
-% \subsection{File \ngefile{ngexam.cls}}
+% \subsection{File \ngefile{ngeexam.cls}}
 % \label{sec:code-ngeexam}
 %
 %\iffalse
@@ -601,6 +601,32 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %
 %\iffalse
 %</ngeprob>
+%\fi
+%
+%
+% \subsection{File \ngefile{ngeproblem.sty}}
+% \label{sec:code-ngeproblem}
+%
+%\iffalse
+%<*ngeproblem>
+%\fi
+% This package provides tools for |problem| environment.  It is
+% designed to that it could be used separately from the rest of
+% \nged{} package.
+%
+%    \begin{macrocode}
+\RequirePackage{ifthen}
+\RequirePackage{pgfkeys}
+%\RequirePackage{pgfopts}
+%    \end{macrocode}
+%
+%
+%
+%
+%
+%
+%\iffalse
+%</ngeproblem>
 %\fi
 %
 % \section{Source}

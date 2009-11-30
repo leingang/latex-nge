@@ -8,12 +8,10 @@
      '("ctanpackage" 1)
      '("texcatalogueentry" 1)
      "ngedsvnroot"
-     "texlive"
      "latexclass"
      "docstrip"
      "nged"
-     "ngedtx"
-     "ngeins")
+     "filedescription")
     (TeX-run-style-hooks
      "ngemin10"
      "ngemin"

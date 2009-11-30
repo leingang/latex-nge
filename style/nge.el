@@ -12,7 +12,16 @@
  			    reftex-use-multiple-selection-buffers t
   			    reftex-plug-into-AUCTeX t
   			    reftex-insert-label-flags '(nil "s"))
- 	     (turn-on-reftex))))
+ 	     (turn-on-reftex)
+	     (TeX-add-symbols
+	      '("nged" nil)
+	      '("ngefile" t)
+	      '("docstrip" nil)
+	      '("latexfile" t)
+	      '("latexpackage" t)
+	      '("texcatalogueentry" t)
+	      '("ctanpackage" t)
+	      )
 ;; (TeX-add-style-hook
 ;;  "nge"
 ;;  (function (lambda () (TeX-add-symbols

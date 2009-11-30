@@ -11,8 +11,8 @@
 %^^A For general description of the package see section README below, for
 %^^A installation instructions see section INSTALL, for license and
 %^^A copyright notice see section LICENSE.  Alternatively, processing
-%^^A this file through LaTeX, i.e. running the command 
-%^^A     latex nge.dtx
+%^^A this file through TeX, i.e. running the command 
+%^^A       tex nge.dtx
 %^^A will extract the content of these sections into files readme.txt,
 %^^A install.txt and license.txt, respectively, which can be then
 %^^A inspected separately.  This command will also generate other
@@ -56,11 +56,8 @@
 %^^A The line above is intentionally left blank for formatting purposes.
 %</ins|ins-preamble>
 %<ext-preamble>%</ins>
-%^^A
-%^^A LICENSE
-%^^A
 %<ext-preamble>%<*license|ins>
-%<*license|ins>
+%<*license|ins> ^^A LICENSE and COPYRIGHT NOTICE
 Copyright (C) 2003--2009 Matthew Leingang <leingang@courant.nyu.edu>
 Copyright (C) 2009 Denis Kosygin <kosygin@courant.nyu.edu>
 
@@ -80,7 +77,8 @@ The Current Maintainer of this work is M. Leingang.
 
 %^^A Add to the line below the names of all generated files or give
 %^^A reference to manifest.txt
-This work consists of the file nge.dtx and the derived file nge.ins.
+This work consists of the file nge.dtx and derived files
+nge.ins,... (for complete list see file manifest.txt)
 %</license|ins>
 %<ext-preamble>%</license|ins>
 %<ext-preamble>%<*ins>
@@ -105,21 +103,23 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %</ins|ins-body|ext-skel|ext-mock>
 %<*ins|ins-body>
 %^^A All generation commands for class and style files go here.
-  \file{ngemin.cls}{\from{nge.dtx}{code,code-cls,ngemin}}
-  \file{ngeexam.cls}{\from{nge.dtx}{code,code-cls,ngeexam}}
-  \file{ngeprob.sty}{\from{nge.dtx}{code,code-sty,ngeprob}}
+  \file{ngemin.cls}{\from{\jobname.dtx}{code,code-cls,ngemin}}
+  \file{ngeexam.cls}{\from{\jobname.dtx}{code,code-cls,ngeexam}}
+  \file{ngeprob.sty}{\from{\jobname.dtx}{code,code-sty,ngeprob}}
 %</ins|ins-body>
 %<ext-body>%</ins>
 %<ext-body>%<*dist>
 %<*dist>
 %^^A Generation commands for files in NGEd distribution package,
-%^^A including nge.ins, go here.  This block is not included in nge.ins
+%^^A including nge.ins, go here.  This block is not included in
+%^^A nge.ins
+  \file{\jobname.def}{\from{\jobname.dtx}{def}}
   \nopostamble
-  \file{nge.ins}{\from{nge.dtx}{ins,license}}
+  \file{\jobname.ins}{\from{\jobname.dtx}{ins,license}}
   \nopreamble\nopostamble
-  \file{license.txt}{\from{nge.dtx}{license}}
-  \file{readme.txt}{\from{nge.dtx}{readme}}
-  \file{install.txt}{\from{nge.dtx}{install}}
+  \file{license.txt}{\from{\jobname.dtx}{license}}
+  \file{readme.txt}{\from{\jobname.dtx}{readme}}
+  \file{install.txt}{\from{\jobname.dtx}{install}}
 %</dist>
 %<ext-body>%</dist>
 %<ext-body>%<*examples>
@@ -127,36 +127,36 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %^^A Files below are not needed for NGEd distribution package.
 %^^A They are used as examples in package documentation for
 %^^A developers.
-  \file{driver-skel.tex}{\from{nge.dtx}{driver-skel}}
-  \file{driver-body.tex}{\from{nge.dtx}{driver-body}}
-  \file{driver-2.dtx}{\from{nge.dtx}{driver-skel,driver-body}}
-  \file{driver-3.dtx}{\from{nge.dtx}{driver-skel,driver-body,driver-3}}
-  \file{driver-4.dtx}{\from{nge.dtx}{driver-skel,driver-body,driver-4}}
-  \file{driver-config.tex}{\from{nge.dtx}{driver-config}}
-  \file{driver-template.dtx}{\from{nge.dtx}{driver-skel,driver-config,driver-body,driver-template}}
-  \file{driver.dtx}{\from{nge.dtx}{driver}}
-  \file{\jobname.drv}{\from{nge.dtx}{driver,packages,macros}}
-  \file{checksum.dtx}{\from{nge.dtx}{checksum}}
-  \file{stopeventually.dtx}{\from{nge.dtx}{stopeventually}}
-  \file{nge-1.dtx}{\from{nge.dtx}{driver,nge-1,checksum,stopeventually,finale}}
-  \file{ngedoc.dtx}{\from{nge.dtx}{ngedoc}}
-  \file{hide-example.dtx}{\from{nge.dtx}{hide-example}}
-  \file{ext-docstrip.dtx}{\from{nge.dtx}{ext-docstrip}}
-  \file{ext-mock-config.dtx}{\from{nge.dtx}{ext-config,ext-mock-config}}
-  \file{ext-skel.dtx}{\from{nge.dtx}{ext-skel}}
-  \file{ext-examples.dtx}{\from{nge.dtx}{ext-mock,examples}}
-  \file{ins-1.dtx}{\from{nge.dtx}{ext-docstrip,ins-config}}
-  \file{ins-texlive.dtx}{\from{nge.dtx}{ins-texlive}}
-  \file{ins-preamble.dtx}{\from{nge.dtx}{ins-preamble,license}}
-  \file{ins-body.dtx}{\from{nge.dtx}{ins-body}}
-  \file{ins-tail.dtx}{\from{nge.dtx}{ins-tail}}
-  \file{ext-head.dtx}{\from{nge.dtx}{ext-head}}
-  \file{ext-fullconfig.dtx}{\from{nge.dtx}{ext-config,ins-config,ext-fullconfig}}
-  \file{ext-preamble.dtx}{\from{nge.dtx}{ext-preamble,ins-preamble,license}}
-  \file{ext-body.dtx}{\from{nge.dtx}{ext-body,ins-body,dist,examples}}
-  \file{ext-tail.dtx}{\from{nge.dtx}{ext-tail,ins-tail}}
+  \file{driver-skel.tex}{\from{\jobname.dtx}{driver-skel}}
+  \file{driver-body.tex}{\from{\jobname.dtx}{driver-body}}
+  \file{driver-2.dtx}{\from{\jobname.dtx}{driver-skel,driver-body}}
+  \file{driver-3.dtx}{\from{\jobname.dtx}{driver-skel,driver-body,driver-3}}
+  \file{driver-4.dtx}{\from{\jobname.dtx}{driver-skel,driver-body,driver-4}}
+  \file{driver-config.tex}{\from{\jobname.dtx}{driver-config}}
+  \file{driver-template.dtx}{\from{\jobname.dtx}{driver-skel,driver-config,driver-body,driver-template}}
+  \file{driver.dtx}{\from{\jobname.dtx}{driver}}
+  \file{\jobname.drv}{\from{\jobname.dtx}{driver,packages,macros}}
+  \file{checksum.dtx}{\from{\jobname.dtx}{checksum}}
+  \file{stopeventually.dtx}{\from{\jobname.dtx}{stopeventually}}
+  \file{nge-1.dtx}{\from{\jobname.dtx}{driver,nge-1,checksum,stopeventually,finale}}
+  \file{ngedoc.dtx}{\from{\jobname.dtx}{ngedoc}}
+  \file{hide-example.dtx}{\from{\jobname.dtx}{hide-example}}
+  \file{ext-docstrip.dtx}{\from{\jobname.dtx}{ext-docstrip}}
+  \file{ext-mock-config.dtx}{\from{\jobname.dtx}{ext-config,ext-mock-config}}
+  \file{ext-skel.dtx}{\from{\jobname.dtx}{ext-skel}}
+  \file{ext-examples.dtx}{\from{\jobname.dtx}{ext-mock,examples}}
+  \file{ins-1.dtx}{\from{\jobname.dtx}{ext-docstrip,ins-config}}
+  \file{ins-texlive.dtx}{\from{\jobname.dtx}{ins-texlive}}
+  \file{ins-preamble.dtx}{\from{\jobname.dtx}{ins-preamble,license}}
+  \file{ins-body.dtx}{\from{\jobname.dtx}{ins-body}}
+  \file{ins-tail.dtx}{\from{\jobname.dtx}{ins-tail}}
+  \file{ext-head.dtx}{\from{\jobname.dtx}{ext-head}}
+  \file{ext-fullconfig.dtx}{\from{\jobname.dtx}{ext-config,ins-config,ext-fullconfig}}
+  \file{ext-preamble.dtx}{\from{\jobname.dtx}{ext-preamble,ins-preamble,license}}
+  \file{ext-body.dtx}{\from{\jobname.dtx}{ext-body,ins-body,dist,examples}}
+  \file{ext-tail.dtx}{\from{\jobname.dtx}{ext-tail,ins-tail}}
 %^^A file canary.txt checks for docstrip leaks.
-  \file{canary.txt}{\from{nge.dtx}{}}
+  \file{canary.txt}{\from{\jobname.dtx}{}}
 %</examples>
 %<ext-body>%</examples>
 %<ext-body>%<*ins>
@@ -205,18 +205,27 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \iffalse %^^A SOURCES for TEXT FILES
 %</hide>
 %^^A
-%^^A README
 %^^A
-%<*readme>
+%<*readme> %^^A README
+This is file readme.txt for NGEd package.
+
+Installation instructions:
+(a copy of these instructions may be found in file instal.txt)
 %</readme>
-%^^A
-%^^A INSTALL
-%^^A
-%<*install>
-%</install>
-%^^A
-%^^A
-%^^A
+%<install>This is file install.txt with installation instructions for NGEd package.
+%<*install|readme> %^^A INSTALL
+%^^A the next line is left blank for formatting purposes
+
+To generate the entire package run `tex nge.dtx'
+To generate all the class and style files only, run `tex nge.ins'
+To generate the documentation run the following commands:
+	latex nge.dtx
+	makeindex -s gind.ist nge
+	makeindex -s gglo.ist -o nge.gls nge.glo
+	latex nge.dtx
+	latex nge.dtx
+Move all .cls and .sty files to a directory, where TeX can find them.
+%</install|readme>
 %<*hide>
 \fi
 %</hide>
@@ -259,15 +268,12 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 \newcommand{\ctanpackage}[1]%
   {\url{http://mirror.hmc.edu/ctan/macros/latex/contrib/#1}}
 \newcommand{\ngedsvnroot}{\url{https://subversive.cims.nyu.edu/mathclinical/}}
-\newcommand{\texlive}{\TeX{}~Live}
 \newcommand{\latexpackage}[1]{\textsf{#1}}
 \newcommand{\latexclass}{\latexpackage}
 \newcommand{\latexfile}[1]{\textsf{#1}}
 \newcommand{\docstrip}{\latexpackage{DocStrip}}
 \newcommand{\ngefile}[1]{\latexfile{#1}}
 \newcommand{\nged}{\latexpackage{NGEd}}
-\newcommand{\ngedtx}{\ngefile{nge.dtx}}
-\newcommand{\ngeins}{\ngefile{nge.ins}}
 
 \usepackage[dvistyle]{todonotes}
 \newcommand{\fixme}[1][]{\todo{FIX ME! #1}}
@@ -426,9 +432,9 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % This section discusses \nged{} distribution package as
 % described in the introduction of this manual.  The structure of this
 % package follows popular conventions, adopted in most of \LaTeX{}
-% packages of \texlive{} distribution.  \LaTeX{} code for the entire
+% packages of \TeX{}\ Live distribution.  \LaTeX{} code for the entire
 % package together with examples and supporting documentation is
-% contained in a single file \ngedtx{}.
+% contained in a single file \ngefile{nge.dtx}.
 %
 % \subsection{Installation}
 % \label{sec:admin-installation}
@@ -463,6 +469,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %<ngemin>\ProvidesClass{ngemin}
 %<ngeexam>\ProvidesClass{ngeexam}
 %<ngeprob>\ProvidesPackage{ngeprob}
+  [\filedate \fileversion \filedescription]
 %    \end{macrocode}
 % We reserve prefix |NGE@| for internal commands in \nged{} classes
 % and styles.
@@ -470,6 +477,30 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %</code>
 %\fi
 %
+% \subsection{File \ngefile{nge.def}}
+% \label{sec:code-ngemin}
+%
+% \iffalse
+%<*def>
+% \fi
+% This file contain information, common for all the files in \nged{}
+% package.  First we introduce necessary commands, in case they are
+% not defined yet.
+%    \begin{macrocode}
+\providecommand*{\fileversion}{--}
+\providecommand*{\filedate}{--}
+\providecommand*{\filedescription}{--}
+%    \end{macrocode}
+% Now let us supply the values.
+%    \begin{macrocode}
+\renewcommand*{\fileversion}{--}
+\renewcommand*{\filedate}{--}
+%    \end{macrocode}
+% File description requires more care.
+%
+% \iffalse
+%</def>
+% \fi
 % \subsection{File \ngefile{ngemin.cls}}
 % \label{sec:code-ngemin}
 %
@@ -493,6 +524,52 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %\iffalse
 %</ngemin>
 %\fi
+%
+% \subsection{Package \latexclass{ngeunit}}
+% \label{sec:code-ngetest}
+%
+%\iffalse
+%<*ngeunit>
+%\fi
+%
+% This package supplies the logical structure and the common theme for
+% all other classes.
+%
+% The entire \nged{} package is centered around the concept of a
+% course as the single unit.  This package defines various commands
+% for specifying and accessing various course properties.
+%
+%
+%
+%
+%
+%
+%\iffalse
+%</ngeunit>
+%\fi
+%
+% \subsection{Class \latexclass{ngetest} and its derivatives}
+% \label{sec:code-ngetest}
+%
+%
+%\iffalse
+%<*ngetest>
+%\fi
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%\iffalse
+%</ngetest>
+%\fi
+%
+% Classes \latexclass{ngeexam} and \latexclass{ngequiz} do little
+% other than selecting appropriate defaults.
 %
 % \subsection{File \ngefile{ngexam.cls}}
 % \label{sec:code-ngeexam}
@@ -536,11 +613,11 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \nged{} source package as \nged{} \emph{sources} or
 % simply \emph{the sources}.
 %
-% \subsection{Main source file: \ngedtx{}}
+% \subsection{Main source file: \ngefile{nge.dtx}}
 % \label{sec:source-dtx}
 %
 % 
-% File \ngedtx{} is the single source file for the entire
+% File \ngefile{nge.dtx} is the single source file for the entire
 % \nged{} package: all the \LaTeX{} classes and styles, all the
 % supporting files, and all of the documentation is generated from it.
 % The consists mostly of \LaTeX{} code together with copious comments
@@ -555,8 +632,8 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \label{sec:source-ins}
 %
 % In order to avoid duplication of effort, most of the package files
-% are generated from \ngedtx{} by running various programs on
-% it. In particular, running \TeX{} on \ngedtx{} generates
+% are generated from \ngefile{nge.dtx} by running various programs on
+% it. In particular, running \TeX{} on \ngefile{nge.dtx} generates
 % \ngefile{nge.sty} and all the class and style files.  Similarly,
 % running \TeX{} on \ngefile{nge.ins} generates all the class and
 % style files, but not \ngefile{nge.ins} itself, in order to avoid
@@ -643,31 +720,31 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % ConTeXt.  
 %
 % Package \nged{} will be developed following standards and
-% conventions of \texlive{}
+% conventions of \TeX{}\ Live
 % distribution\footnote{\url{http://www.tug.org/texlive/}} with the
 % ultimate goal of making it available for public download on the
 % Comprehensive TeX Archive Network\footnote{CTAN,
 %   \url{http://www.ctan.org}}.  \nged{} should integrate well with
-% \texlive{} distribution.  In particular \nged{} in its default
+% \TeX{}\ Live distribution.  In particular \nged{} in its default
 % configuration must not rely on any package outside for this
 % distribution neither in application of its classes and style files,
 % nor in generation of package documentation.
 % 
 % The released version of \emph{\nged{} distribution package},
 % intended for upload on CTAN, should consist of two main files:
-% \ngedtx{} and \ngefile{nge.ins}, supplemented with user
+% \ngefile{nge.dtx} and \ngefile{nge.ins}, supplemented with user
 % documentation in PDF and other supporting files.  File
-% \ngedtx{} will contain the \LaTeX{} code of all class and
+% \ngefile{nge.dtx} will contain the \LaTeX{} code of all class and
 % style files in the package and file \ngefile{nge.ins} will be the
 % installation script, which extracts all the \LaTeX{} files from
-% \ngedtx{} and installs them in the appropriate places of
-% \texlive{} distribution.  File \ngedtx{} must also provide
+% \ngefile{nge.dtx} and installs them in the appropriate places of
+% \TeX{}\ Live distribution.  File \ngefile{nge.dtx} must also provide
 % sources for \nged{} user manual and possibly other documents related
 % to the package.
 % 
 % \nged{} development will follow the principle of creative lazyness:
 % no reinvention of wheels, if some task is done well by another
-% \texlive{} package, this task should be delegated to it.
+% \TeX{}\ Live package, this task should be delegated to it.
 % Duplication of text will also be avoided as much as possible: the
 % best way to keep two blocks of text or code identical is to insert
 % the same source twice.  Finally, the best way to work rapidly is to
@@ -677,12 +754,12 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % Thus \nged{} will be implemented as follows.  All the \LaTeX{}
 % sources together with their documentation and sources of all the
 % supporting files for distribution package will be contained in the
-% single source file \ngedtx{}.  File \ngedtx{} will
+% single source file \ngefile{nge.dtx}.  File \ngefile{nge.dtx} will
 % be structured so that all the parts of the distribution package for
 % upload on CTAN, including the installation script \ngefile{nge.ins}
-% will be extracted from \ngedtx{} with the help of
-% \docstrip{} utility.  File \ngedtx{} will also document its
-% own structure.  Thus \ngedtx{} is the only source file of
+% will be extracted from \ngefile{nge.dtx} with the help of
+% \docstrip{} utility.  File \ngefile{nge.dtx} will also document its
+% own structure.  Thus \ngefile{nge.dtx} is the only source file of
 % \nged{} distribution package.
 % 
 % The generation and development of \nged{} package will be aided by a
@@ -690,7 +767,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \nged{}.  This makefile will not be a part of \nged{} distribution
 % package, but it will be a part of \nged{} source package.  Its
 % development will be also documented in appropriate detail in
-% \ngedtx{}.  Thus \ngedtx{} and \ngefile{Makefile}
+% \ngefile{nge.dtx}.  Thus \ngefile{nge.dtx} and \ngefile{Makefile}
 % are the only two files of \emph{\nged{} source package}.  These two
 % files together with \LaTeX{} packages, required for application of
 % all \nged{} class and style files and generation of all \nged{}
@@ -709,7 +786,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % useful, may begin with reading the manual, available as a PDF file
 % on CTAN.  A system administrator may start with reading the file
 % \ngefile{README.txt} in the distribution package.  A \LaTeX{}
-% programmer may start reading the source file \ngedtx{} directly.  In
+% programmer may start reading the source file \ngefile{nge.dtx} directly.  In
 % all these cases clear and concise instructions must be placed near
 % the beginning telling where to find or how to build the complete
 % documentation.  Chains of references must be short and their length
@@ -723,10 +800,10 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % Other design decisions pertinent to particular features of \nged{}
 % will be made below as such a necessity arises.
 %
-% \subsection{Main source file: \ngedtx{}}
+% \subsection{Main source file: \ngefile{nge.dtx}}
 % \label{sec:dev-dtx}
 %
-% We begin with empty file \ngedtx{} and introduce its structure step
+% We begin with empty file \ngefile{nge.dtx} and introduce its structure step
 % by step adding more and more details.  Contrary to the common
 % approach, when \LaTeX{} code is developed by introducing more and more
 % parts of it which are finally extracted into a class or style file,
@@ -734,14 +811,14 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \emph{quoted} code, which were extracted from other parts of this
 % file.
 %
-% Let us summarize the requirements for \ngedtx{} formulated in
-% section \ref{sec:dev-design}.  File \ngedtx{} contains \LaTeX{} code
+% Let us summarize the requirements for \ngefile{nge.dtx} formulated in
+% section \ref{sec:dev-design}.  File \ngefile{nge.dtx} contains \LaTeX{} code
 % for all \nged{} class and style files together with their
 % documentation.  It also contains sources of all the supporting files
 % of \nged{} distribution package and their documentation.  And
 % finally, it contains its own documentation too, part of which is
 % provided by this section.  We shall adopt the following structure of
-% \ngedtx.  The file will consist of two parts: head and body
+% \ngefile{nge.dtx}.  The file will consist of two parts: head and body
 %\iffalse
 %<*hide>
 %\fi
@@ -760,13 +837,13 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % In order to combine \LaTeX{} code and its documentation in one file
 % we shall use \LaTeX{} package
 % \latexpackage{doc}\footnote{\texcatalogueentry{doc}}.  The \LaTeX{}
-% code for \nged{} class and style files in file \ngedtx{} is marked
+% code for \nged{} class and style files in file \ngefile{nge.dtx} is marked
 % up according to \latexpackage{doc} conventions and is interpspersed
 % with comments, which serve as \LaTeX{} source for documentation.
-% Actual \nged{} class and style files are extracted from \ngedtx{} by
+% Actual \nged{} class and style files are extracted from \ngefile{nge.dtx} by
 % \docstrip{}\footnote{\texcatalogueentry{docstrip}} utility and the
-% package documentation produced by processing \ngedtx{} with
-% \LaTeX{}.  Thus \ngedtx{} has the form
+% package documentation produced by processing \ngefile{nge.dtx} with
+% \LaTeX{}.  Thus \ngefile{nge.dtx} has the form
 %\iffalse
 %<*hide>
 %\fi
@@ -786,7 +863,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \subsubsection{The driver}
 % \label{sec:dev-dtx-driver}
 %
-% By convention, the part of file \ngedtx{}, containing
+% By convention, the part of file \ngefile{nge.dtx}, containing
 % \latexpackage{doc} configuration is called the \emph{driver}.  We
 % shall use in the driver \LaTeX{} class \latexclass{ltxdoc}, which
 % loads \latexpackage{doc} automatically.  Thus initially the driver
@@ -795,16 +872,16 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % The lines between |\begin{document}| and |\end{document}| contain
 % commands for \latexpackage{doc} to read and process files with the
 % code and documentation.  In our case there is only one file ---
-% \ngedtx{} itself and we use command
+% \ngefile{nge.dtx} itself and we use command
 % \VerbatimInput{driver-body}
 % But running |latex| on file
 % \VerbatimInput{driver-2.dtx}
 % will produce an error, since after reading line
 % \VerbatimInput{driver-body}
-% \LaTeX{} will begin reading \ngedtx{} from the beginning and during
+% \LaTeX{} will begin reading \ngefile{nge.dtx} from the beginning and during
 % the second processing of this file \LaTeX{} again sees
 % |\documentclass{ltxdoc}|.  In order to avoid this error everything
-% between |\documentclass{ltxdoc}| and |\end{document}| in \ngedtx
+% between |\documentclass{ltxdoc}| and |\end{document}| in \ngefile{nge.dtx}
 % needs to be concealed from \LaTeX{} on the second reading.  
 %
 % In ordinary \TeX{} one could conceal parts of a source file from
@@ -830,29 +907,29 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \LaTeX{} in the same way a blank space is treated.  The driver
 % \VerbatimInput{driver-4.dtx}
 % is processed by \LaTeX{} correctly and produces no errors: it is
-% seen by \LaTeX{} on the initial pass over \ngedtx{} and everything
+% seen by \LaTeX{} on the initial pass over \ngefile{nge.dtx} and everything
 % between |%\iffalse| and |%\fi| is skipped on the second pass.
 %
 % \subsubsection{Use of comments}
 % \label{sec:dev-dtx-comments}
 %
 % In the section \ref{sec:dev-dtx-driver} we concealed the driver of
-% \ngedtx{} from \latexpackage{doc} by placing it between commands
+% \ngefile{nge.dtx} from \latexpackage{doc} by placing it between commands
 % |%\iffalse| and |%\fi|. We shall use this method of commenting
-% systematically during the preparation of \ngedtx.  Comments in
-% \ngedtx{} are used mostly to conceal various parts of this file from
+% systematically during the preparation of \ngefile{nge.dtx}.  Comments in
+% \ngefile{nge.dtx} are used mostly to conceal various parts of this file from
 % \LaTeX{} and not to provide detailed information about the file
 % structure.  The latter purpose is served by the document you are
 % currently reading.
 %
-% Every part of \ngedtx{} which needs to be concealed from \LaTeX{}
+% Every part of \ngefile{nge.dtx} which needs to be concealed from \LaTeX{}
 % will be either commented out with \% signs or placed between
 % |\iffalse| and |\fi| commands.  Similarly, every part which needs to
 % be concealed from \latexpackage{doc} package during the stage, when
 % will be placed between |%\iffalse| and |%\fi| commands.
 % With the help of these techniques it is possible to achieve all four
 % possible combinations of visibility and invisibility of a particular
-% part of \ngedtx{} to \LaTeX{} on the first pass over \ngedtx{} and
+% part of \ngefile{nge.dtx} to \LaTeX{} on the first pass over \ngefile{nge.dtx} and
 % \LaTeX{} on the second pass with \latexpackage{doc} already
 % loaded.
 %
@@ -873,10 +950,10 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % of the line.  This string has the same relation to the pair
 % |%\iffalse| and |%\fi| in \latexpackage{doc} package, as character
 % |%| to the pair |\iffalse| and |\fi|.  We conceal from
-% \latexpackage{doc} those parts of \ngedtx{} which provide sources
+% \latexpackage{doc} those parts of \ngefile{nge.dtx} which provide sources
 % for other files in \nged{} distribution package with the help of
 % |%\iffalse| and |%\fi|, and use |^^A| for short comments in
-% \ngedtx, helping to separate one part of the file from another and
+% \ngefile{nge.dtx}, helping to separate one part of the file from another and
 % serving as reminders of various conventions adopted during the
 % development.
 % 
@@ -893,7 +970,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \VerbatimInput{stopeventually.dtx}
 % telling \LaTeX{} to perform appropriate actions at the end of
 % typesetting.  Configuration of \latexpackage{doc} used in processing
-% \ngedtx{} may by changed by the user with the help of 
+% \ngefile{nge.dtx} may by changed by the user with the help of 
 % configuration file \latexfile{ltxdoc.cfg}.  For details see
 % section \ref{sec:user-manual}.
 %
@@ -903,8 +980,8 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %
 % Right after the driver we also place commands
 % \VerbatimInput{checksum.dtx}
-% providing rudimentary error control for \ngedtx{} during network
-% transmissions.  Thus the initial version of \ngedtx{} takes the form
+% providing rudimentary error control for \ngefile{nge.dtx} during network
+% transmissions.  Thus the initial version of \ngefile{nge.dtx} takes the form
 % \VerbatimInput{nge-1.dtx}
 % User documentation will go before |\StopEventually| command and the
 % code and package documentation will follow this command.
@@ -913,8 +990,8 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \label{sec:dev-dtx-docstrip-markup}
 %
 % \docstrip{} is used in \nged{} for two purposes.  All the class and
-% style files for \nged{} are extracted from \ngedtx{} with the help
-% of \docstrip{} utility.  Other parts of \ngedtx{} are extracted with
+% style files for \nged{} are extracted from \ngefile{nge.dtx} with the help
+% of \docstrip{} utility.  Other parts of \ngefile{nge.dtx} are extracted with
 % the help of \docstrip{} too.  Some of these extracted parts become
 % components of \nged{} distribution package, some are inserted
 % verbatim in the package documentation as quotations.  The latter
@@ -926,7 +1003,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % |\generate| command.  The details are given in sections
 % \ref{sec:dev-dtx-docstrip-ins},
 % \ref{sec:dev-dtx-docstrip-extraction}.  In this section we shall
-% discuss the structure of \ngedtx{} from the point of view of
+% discuss the structure of \ngefile{nge.dtx} from the point of view of
 % \docstrip.
 %
 % In its default configuration \docstrip{}, when run on a \TeX{} file,
@@ -1049,12 +1126,12 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 %\fi
 % provided that expression |<A&B>| is well defined for \docstrip{}.
 %
-% While preparing \ngedtx{} we adopt the following conventions.  In
+% While preparing \ngefile{nge.dtx} we adopt the following conventions.  In
 % order to avoid inadvertent extraction of lines into multiple files,
 % \emph{all} \LaTeX{} code will be marked up with guards.  Most of the
 % quards will have mnemonic names, clearly relating them to the part
-% of \ngedtx{} they are guarding.  Here is, for example, the driver of
-% \ngedtx{} with appropriate guards incorporated
+% of \ngefile{nge.dtx} they are guarding.  Here is, for example, the driver of
+% \ngefile{nge.dtx} with appropriate guards incorporated
 % \VerbatimInput{driver-template.dtx}
 % Note that quards |<*driver>| and |</driver>| are not seen by
 % \LaTeX{}, since they are prepended by the comment sign |%|.  These
@@ -1144,7 +1221,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % signs.  This way they are processed correctly by both
 % \latexpackage{doc} package and \docstrip{}.  
 %
-% Guard |<hide>| will be used for marking up parts of \ngedtx{} which
+% Guard |<hide>| will be used for marking up parts of \ngefile{nge.dtx} which
 % are never to be extracted with \docstrip{}, with the explicit
 % assumption, that option |hide| will \emph{never} be given to
 % |\generate| command.  Guard |<hide>| is used in particular to
@@ -1191,13 +1268,13 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % This is how the example above with a hidden |<guard>| was
 % produced.
 %
-% The rest of the file \ngedtx{} consists of parts, marked up with the
+% The rest of the file \ngefile{nge.dtx} consists of parts, marked up with the
 % help of the techniques extensively discussed above.  In particular,
 % every subsection of section \ref{sec:code} is enclosed between a
 % pair of anchors, whose guard name is derived from the appropriate
 % class or style file, derived in this section.  For example, entire
 % subsection \ref{sec:code-ngemin} is enclosed between anchors
-% |<*ngemin>| and |</ngemin>|.  Similarly, the part of \ngedtx{} file,
+% |<*ngemin>| and |</ngemin>|.  Similarly, the part of \ngefile{nge.dtx} file,
 % which serves as the source for readme.txt file of \nged{}
 % distribution package is placed between anchors |<*readme>| and
 % |</readme>|, and so on\dots.  In addition to guard |<hide>|, which
@@ -1211,16 +1288,16 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \label{sec:dev-dtx-docstrip-extraction}
 %
 % At the end of section \ref{sec:dev-dtx-docstrip-markup} we have
-% discussed, how various pieces of \ngedtx{} may be marked up for
+% discussed, how various pieces of \ngefile{nge.dtx} may be marked up for
 % extraction with \docstrip{}.  Some of the extracted pieces are later
 % inserted in the documentation verbatim, next to the explanations of
-% their structure and purpose.  Other extracted pieces of \ngedtx{}
+% their structure and purpose.  Other extracted pieces of \ngefile{nge.dtx}
 % become part of \nged{} distribution package.
 %
 % We place \TeX{} commands, controlling the extraction, in the very
-% beginning of \ngedtx{}.  These are the first lines \LaTeX{} sees and
+% beginning of \ngefile{nge.dtx}.  These are the first lines \LaTeX{} sees and
 % processes even before seeing |\documentclass| command.  This way all
-% the parts of \ngedtx{} are extracted before they are needed for
+% the parts of \ngefile{nge.dtx} are extracted before they are needed for
 % quoting at later stages of processing.
 %
 % 
@@ -1233,10 +1310,10 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \VerbatimInput{ext-mock-config.dtx}
 % In order to conceal the extraction commands from \latexpackage{doc}
 % package, we need to place them between |%\iffalse| and |%\fi|
-% commands.  So the beginning of \ngedtx{} now takes the form
+% commands.  So the beginning of \ngefile{nge.dtx} now takes the form
 % \VerbatimInput{ext-skel.dtx}
 % Now it remains only to add file generation commands.  The code below
-% extracts pieces of \ngedtx{} for quoting them later in the
+% extracts pieces of \ngefile{nge.dtx} for quoting them later in the
 % documentation.
 % \VerbatimInput{ext-examples.dtx}
 % File \latexfile{canary.txt} checks for lines with \LaTeX{} commands
@@ -1246,12 +1323,12 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % In the same way one can add commands for generation other files in
 % \nged{} distribution package.
 %
-% \subsubsection{File \latexfile{nge.ins}}
+% \subsubsection{File \ngefile{nge.ins}}
 % \label{sec:dev-dtx-docstrip-ins}
 %
-% File \latexfile{nge.ins} is part of \nged{} distribution package.
+% File \ngefile{nge.ins} is part of \nged{} distribution package.
 % Its purpose is to generate all class and style files from
-% \ngedtx{}.  Its structure is similar to the structure of code at the
+% \ngefile{nge.dtx}.  Its structure is similar to the structure of code at the
 % end of section \ref{sec:dev-dtx-docstrip-extraction}.  But there
 % docstrip has different configuration in it. First of all\fixme[complete]
 % \VerbatimInput{ins-1.dtx}
@@ -1260,30 +1337,30 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % In addition, all the class and style files have license and
 % copyright notice inserted in them during the generation process.
 % This is achieved by supplying appropriate preamble in
-% \latexfile{nge.ins}:
+% \ngefile{nge.ins}:
 % \VerbatimInput{ins-preamble.dtx}
 % Then file generation commands are issued
 % \VerbatimInput{ins-body.dtx}
 % followed by installation message and ``end of job'' command
 % \VerbatimInput{ins-tail.dtx}
 % 
-% \subsubsection{Extracting everything from \ngedtx{}}
+% \subsubsection{Extracting everything from \ngefile{nge.dtx}}
 % \label{sec:dev-dtx-docstrip-all}
 %
-% Since the structure of \latexfile{nge.ins} is so similar to the
-% extraction code in the beginning of \ngedtx{}, quoted in section
+% Since the structure of \ngefile{nge.ins} is so similar to the
+% extraction code in the beginning of \ngefile{nge.dtx}, quoted in section
 % \ref{sec:dev-dtx-docstrip-extraction}, it is tempting to avoid
 % duplication of efforts and arrange file extraction commands in the
-% beginning of \ngedtx{} so that file \latexfile{nge.ins} is generated
+% beginning of \ngefile{nge.dtx} so that file \ngefile{nge.ins} is generated
 % automatically, with its preamble extracted from the part of
-% \ngedtx{}, which contains the text of copyright notice and license.
+% \ngefile{nge.dtx}, which contains the text of copyright notice and license.
 %
 % This is achieved by interspersing \docstrip{} configuration and
-% extraction commands in the beginning of \ngedtx{} with the text of
+% extraction commands in the beginning of \ngefile{nge.dtx} with the text of
 % copyright notice and license, and marking them up appropriately with
 % various guards.  It is also possible to obtain the same result by
 % keeping docstrip commands and license text in separate parts of
-% \ngedtx, and generating \latexfile{nge.ins} with the help of several
+% \ngefile{nge.dtx}, and generating \ngefile{nge.ins} with the help of several
 % |\from| commands.  We do not use this approach for reasons which
 % will be given below.
 %
@@ -1293,38 +1370,40 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \VerbatimInput{ext-head.dtx}
 % Then we load docstrip and its configuration commands.
 % \VerbatimInput{ext-docstrip.dtx}
-% Since configuration commands for file extraction from \ngedtx{} and
-% \latexfile{nge.ins} differ from each other, some of them need to be
+% Since configuration commands for file extraction from \ngefile{nge.dtx} and
+% \ngefile{nge.ins} differ from each other, some of them need to be
 % concealed from \docstrip{}, while others have to be concealed from
 % \LaTeX{}.  This is achieved with the help of |<ins>| guard, marking
-% parts for extraction into \latexfile{nge.ins}.
+% parts for extraction into \ngefile{nge.ins}.
 % \VerbatimInput{ext-fullconfig.dtx}
 % In the same way we configure the preamble.  Different preambles a
 % needed for generation of class and style files, for package
 % distribution files and for code examples.  Therefore, next we place
-% in \ngedtx{} the text of license, marked up for extraction into
-% preamble of \latexfile{nge.ins} and also into a separate file.
+% in \ngefile{nge.dtx} the text of license, marked up for extraction into
+% preamble of \ngefile{nge.ins} and also into a separate file.
 % \VerbatimInput{ext-preamble.dtx}
 % Next we give file generation commands\footnote{File generation
 %   commands quoted here correspond to the development version of
-%   \ngedtx.  In the version of \ngedtx{}, distributed with \nged{}
-%   package some of these commands are commented out in order to avoid
-%   overwriting files, distributed with the package.}.
+%   \ngefile{nge.dtx}.  In the version of \ngefile{nge.dtx},
+%   distributed with \nged{} package some of these commands are
+%   commented out in order to avoid overwriting files, distributed
+%   with the package.}.
 % \VerbatimInput{ext-body.dtx}
 % Note that in the code above file generation commands for class and
 % style files come first.  Therefore the text of the license given in
 % preamble to these command applies to them.  The same preamble is
-% also extracted into \latexfile{nge.ins}, which makes class and style
+% also extracted into \ngefile{nge.ins}, which makes class and style
 % files, with the help of lines above, identical with class and style
-% files, extracted from \ngedtx{} with the help of file
-% \latexfile{nge.ins} given in section
+% files, extracted from \ngefile{nge.dtx} with the help of file
+% \ngefile{nge.ins} given in section
 % \ref{sec:dev-dtx-docstrip-ins}. Furthermore, the same preamble
-% applies to file \latexfile{nge.ins} itself, extracted from \ngedtx{}
-% by the code above.  It is precisely this ability to use the same
-% text of license several times which affected our decision to
-% intertwine \docstrip{} commands with license text in \ngedtx{}.
+% applies to file \ngefile{nge.ins} itself, extracted from
+% \ngefile{nge.dtx} by the code above.  It is precisely this ability
+% to use the same text of license several times which affected our
+% decision to intertwine \docstrip{} commands with license text in
+% \ngefile{nge.dtx}.
 %
-% Extraction commands are followed by the rest of \latexfile{nge.ins}
+% Extraction commands are followed by the rest of \ngefile{nge.ins}
 % contents, after which we close the \TeX{} group.
 % \VerbatimInput{ext-tail.dtx}
 % The |\ifx| conditional above checks whether accidentally or
@@ -1376,7 +1455,7 @@ This work consists of the file nge.dtx and the derived file nge.ins.
 % \item Is there a simple way to keep an up to date manifest.txt?
 % \item Is it possible to stop processing nge.dtx, if it is not
 %   processed with LateX, without generating any errors?
-% \item the package should not depend on files outside \texlive{}
+% \item the package should not depend on files outside \TeX{}\ Live
 %   distribution.
 % \item fix \verb|\showdirectory| call in \meta{ins} section.
 % \item Two possibilities --- all problems back to back, or each

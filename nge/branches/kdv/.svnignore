@@ -11,4 +11,4 @@ nged
 *.glo
 *.gls
 texput.*
-auto/*
+auto/nge.el

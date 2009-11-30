@@ -4,7 +4,7 @@
 # Copyright (C) 2009 Denis Kosygin <kosygin@courant.nyu.edu>
 #
 SHELL = /bin/sh
-export TEXINPUTS = ./texmf//:
+export TEXINPUTS = .:./texmf//:
 TEX = tex
 LATEX = latex
 MAKEINDEX = makeindex
@@ -23,17 +23,22 @@ all:
 	$(LATEX) $(name).dtx
 
 .PHONY: clean texclean distclean
-clean: texclean
-	-$(RM) *~
+tex_suffixes = log aux dvi toc tdo ins drv idx ilg ind glo gls
 texclean:
-	-$(RM) *.log *.aux *.dvi *.toc *.out *.tdo texput.*
-	-$(RM) *.ind *.idx *.ilg *.glo *.gls
-distclean: texclean
-	-$(RM) $(targets) $(name).pdf $(name).ps
+	-$(RM) $(patsubst %, ${name}.%, ${tex_suffixes})
 	-$(RM) driver* ext* ins*
 	-$(RM) checksum.dtx stopeventually.dtx nge-1.dtx hide-example.dtx
 	-$(RM) ngedoc.dtx
-	-$(RM) $(name).drv canary.txt
+	-$(RM) canary.txt
+	-$(RM) $(targets)
+	-$(RM) texput.*
+
+clean: texclean
+	-$(RM) *~ style/*~
+
+distclean: texclean
+	-$(RM) $(targets) $(name).pdf $(name).ps
+
 
 ### Maintainers' and developers' section
 svnroot = https://subversive.cims.nyu.edu/mathclinical
@@ -67,3 +72,6 @@ maintainer-clean:
 	-$(RM) ChangeLog.bak ChangeLog.tmp
 
 cleanall: clean distclean maintainer-clean
+
+.PHONY: test
+

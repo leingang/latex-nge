@@ -526,28 +526,77 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % with the help of \nged.  All other classes in this package
 % load it and add their own changes to document appearence.
 %    \begin{macrocode}
-\RequirePackage{ifthen}
+%^^A\RequirePackage{ifthen}
 %    \end{macrocode}
 % It is derived from \LaTeX{} class \latexfile{article.cls}
 % to which we pass all the unknown options
 %    \begin{macrocode}
-\DeclareOption*{\PassOptionToClass{\CurrentOption}{article}}
+%^^A\DeclareOption*{\PassOptionToClass{\CurrentOption}{article}}
 %    \end{macrocode}
 % Now it is time to load the class and process all options given to it
 %    \begin{macrocode}
+%^^A\ProcessOptions
+%    \end{macrocode}
+%    \begin{macrocode}
 \LoadClass{article}
+\RequirePackage{fancyhdr}
 %    \end{macrocode}
+% For the moment we'll do quick mockup of some features, without
+% paying attention to cleanness of implementation and detail.  We'll
+% polish the code later.
+%
+% First let's introduce some basic course information and then we'll
+% deal with appearances.
+% |\NGEcourse| sets the course name and short course name to be used
+% in the header.
 %    \begin{macrocode}
-\ProcessOptions
-%    \end{macrocode}
-%    \begin{macrocode}
-\newcommand{\course}{}
-\newcommand{\coursename}{}
-\newcommand{\shortcoursename}{}
-\newcommand{\courseid}{}
+\newcommand{\NGEshortcoursename}{\relax}
+\newcommand{\NGEcoursename}{\relax}
+\newcommand{\NGEcourse}{\@dblarg\NGE@@course}
+\def\NGE@@course[#1]#2{
+\renewcommand{\NGEshortcoursename}{#1}
+\renewcommand{\NGEcoursename}{#2}}
+%^^A\newcommand{\coursename}{}
+%^^A\newcommand{\shortcoursename}{}
+%^^A\newcommand{\courseid}{}
 %^^A\newcommand{\courseinstructor}{}
 %^^A\newcommand{\institution}{}
 %\newcommand{\courseterm}
+%    \end{macrocode}
+% Page style with namehead
+%    \begin{macrocode}
+\newcommand{\ps@NGEnamehead}{%
+  \renewcommand{\@oddhead}{%
+    \begin{minipage}{\textwidth}
+      \normalfont
+      Name: \hrulefill\
+      Section:  \rule{0.5in}{0.4pt}
+      \\ \\
+      \noindent
+      Student Id: \rule{1.5in}{0.4pt}\
+      Email: \hrulefille
+    \end{minipage}}
+  \renewcommand{\@evenhead}{\@oddhead}
+  \renewcommand{\@oddfoot}{%
+    Signature: \hrulefill}
+  \renewcommand{\@evenfoot}{}}
+%    \end{macrocode}
+% renewing maketitle
+%    \begin{macrocode}
+\renewcommand{\maketitle}{%
+  \null\vfil
+  \vskip 60\p@
+  \begin{center}%
+    {\LARGE \@title \par}%
+    \vskip 3em%
+    {\large
+      \lineskip .75em%
+      \begin{tabular}[t]{c}%
+        \NGEcoursename
+      \end{tabular}\par}%
+    \vskip 1.5em%
+    {\large \@date \par}%
+  \end{center}\par\vfil\null}
 %    \end{macrocode}
 % 
 %\iffalse
@@ -950,7 +999,7 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %
 % In ordinary \TeX{} one could conceal parts of a source file from
 % reading by ``commenting out''.  If an unquoted \% sign occurs in a
-% line of a tex source file the first occurance of this sign together
+% line of a tex source file the first occurence of this sign together
 % with everything following it till the end of the line is considered
 % a comment and is skipped by \TeX{} during the processing.
 % Alternatively, we can tell \TeX{} to skip a block of lines by
@@ -1521,7 +1570,6 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % \item Add paragraph about making releases.
 % \item When nge.dtx is processed through latex, issue installation
 %   instructions in the end, not at the beginning.
-% \item Debug index generation
 % \item Add possibility to make todo and fixme notes right in the text
 % \item Mention in the manual packages which \nged{}uses and what is
 %   needed to compile documentation.
@@ -1536,8 +1584,6 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %   document. Use report class?  \textsf{Doc} package and docstrip?
 % \item ``postmortem'' command and environment.
 % \item Is there a simple way to keep an up to date manifest.txt?
-% \item Is it possible to stop processing nge.dtx, if it is not
-%   processed with LateX, without generating any errors?
 % \item the package should not depend on files outside \TeX{}\ Live
 %   distribution.
 % \item fix \verb|\showdirectory| call in \meta{ins} section.
@@ -1600,7 +1646,7 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % \item look at svn support in latex and emacs
 % \item Add discussion about file structure
 % \item write introduction about nged in broad view
-% \item produce reportsand assessments in doc style?
+% \item produce reports and assessments in doc style?
 % \item Is is possible to make releases with docstrip?
 % \item 2 rolling released branches --- stable and dev. also my
 %   private development branch kdv.
@@ -1663,11 +1709,6 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %<nge-1>%
 %<*finale>
 %\fi
-%^^A\newwrite\trtr
-%^^A\immediate\openout\trtr=trtr.tex
-%^^A\immediate\write\trtr{test1}
-%^^A\immediate\write\trtr{test2}
-%^^A\immediate\closeout\trtr
 %% \Finale
 %\iffalse
 %</finale>

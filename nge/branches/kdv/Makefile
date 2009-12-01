@@ -8,6 +8,12 @@ export TEXINPUTS = .:./texmf//:
 TEX = tex
 LATEX = latex
 MAKEINDEX = makeindex
+#texliveroot = ./texlive/2009
+$export TEXINPUTS = .:$(texliveroot)/texmf//:$(texliveroot)/texmf-var//:$(texliveroot)/texmf-dist//
+#texlive_bin = $(texliveroot)/bin/x86_64-linux
+#TEX = $(texlive_bin)/tex
+#LATEX = $(texlive_bin)/latex
+#MAKEINDEX = $(texlive-bin)/makeindex
 
 name = nge
 sources = $(name).dtx

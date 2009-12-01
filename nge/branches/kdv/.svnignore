@@ -12,3 +12,4 @@ nged
 *.gls
 texput.*
 auto/nge.el
+texlive

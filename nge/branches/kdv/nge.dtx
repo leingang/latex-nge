@@ -278,9 +278,9 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 \usepackage[dvistyle]{todonotes}
 \newcommand{\fixme}[1][]{\todo{FIX ME! #1}}
 
+\usepackage{svninfo}
 %</driver&packages>
 %<*driver&macros>
-%\renewcommand{\fileversion}{dev-kdv}
 %</driver&macros>
 %<*driver|driver-skel>
 \begin{document}
@@ -330,9 +330,18 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %\fi
 %^^A
 %^^A The actual code and documentation go below this line.
-% \title{\nged: A Next Generation Educational Bundle\\ version \fileversion}
+% \svnInfo $Id$ %^^A
+% \providecommand*{\filename}{}
+% \renewcommand{\filename}{\jobname.dtx}
+% \providecommand*{\filedate}{}
+% \renewcommand*{\filedate}{\svnYear/\svnMonth/\svnDate}
+% \providecommand*{\fileversion}{}
+% \renewcommand*{\fileversion}{development version, revision \svnInfoRevision}
+%^^A \ProvideFile{\filename}[\filedate\space\fileversion]
+% \title{\nged: A Next Generation Educational Bundle\\ \fileversion}
 % \author{Matthew Leingang\\leingang@courant.nyu.edu
 %   \and Denis Kosygin\\kosygin@courant.nyu.edu}
+% \renewcommand{\date}{\svnToday}
 % \maketitle
 % \begin{abstract}
 %   The \nged{} bundle is a set of \LaTeXe classes and packages,
@@ -467,12 +476,18 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 %<ngemin>\ProvidesClass{ngemin}
+%<ngeunit>\ProvidesPackage{ngeunit}
+%<ngetest>\ProvidesClass{ngetest}
 %<ngeexam>\ProvidesClass{ngeexam}
+%<ngequiz>\ProvidesClass{ngequiz}
 %<ngeprob>\ProvidesPackage{ngeprob}
-  [\filedate \fileversion \filedescription]
+%<ngeproblem>\ProvidesPackage{ngeproblem}
+%<def>\ProvidesFile{nge.def}
+%^^A  [\filedate \fileversion \filedescription]
 %    \end{macrocode}
 % We reserve prefix |NGE@| for internal commands in \nged{} classes
 % and styles.
+% 
 %\iffalse
 %</code>
 %\fi
@@ -510,15 +525,29 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % This class defines the common theme for all the documents produced
 % with the help of \nged.  All other classes in this package
 % load it and add their own changes to document appearence.
+%    \begin{macrocode}
+\RequirePackage{ifthen}
+%    \end{macrocode}
 % It is derived from \LaTeX{} class \latexfile{article.cls}
+% to which we pass all the unknown options
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionToClass{\CurrentOption}{article}}
+%    \end{macrocode}
+% Now it is time to load the class and process all options given to it
 %    \begin{macrocode}
 \LoadClass{article}
 %    \end{macrocode}
-% to which we pass all the unknown options\todo{can we load class
-% before passing all options to it?}
 %    \begin{macrocode}
-\DeclareOption*{\PassOptionToClass{\CurrentOption}{article}}
-\ProcessOptions\relax
+\ProcessOptions
+%    \end{macrocode}
+%    \begin{macrocode}
+\newcommand{\course}{}
+\newcommand{\coursename}{}
+\newcommand{\shortcoursename}{}
+\newcommand{\courseid}{}
+%^^A\newcommand{\courseinstructor}{}
+%^^A\newcommand{\institution}{}
+%\newcommand{\courseterm}
 %    \end{macrocode}
 % 
 %\iffalse
@@ -555,8 +584,17 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %\iffalse
 %<*ngetest>
 %\fi
-%
-%
+%    \begin{macrocode}
+\DeclareOption{pages}
+\DeclareOption{bluebook}
+%    \end{macrocode}
+%    \begin{macrocode}
+\RequirePackage{ngeproblem}
+%    \end{macrocode}
+%    
+%    \begin{macrocode}
+\newcommand{\testname}{Test}
+%    \end{macrocode}
 %
 %
 %
@@ -1439,6 +1477,25 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % (presumably \LaTeX{} or its relative) proceeds to read and interpret
 % the driver.
 %
+% \subsection{Configuring packages}
+% \label{sec:dev-dtx-packages}
+%
+% \subsubsection{Subversion support}
+% \label{sec:dev-dtx-packages-svn}
+%
+% We use \latexpackage{svninfo}.  Here is the information available to
+% us:\\ \svnId\\
+% It is accessible through the following commands\\
+% |\svnInfoFile| \svnInfoFile\\
+% |\svnInfoRevision| \svnInfoRevision\\
+% |\svnInfoDate| \svnInfoDate\\
+% |\svnInfoTime| \svnInfoTime\\
+% |\svnInfoOwner| \svnInfoOwner\\
+% |\svnInfoYear| \svnInfoYear\\
+% |\svnInfoMonth| \svnInfoMonth\\
+% |\svnInfoDay| \svnInfoDay\\
+% |\svnInfoLongDate| \svnInfoLongDate\\
+% |\svnToday| \svnToday
 %
 % \section{Misc unprocessed}
 % \label{sec:misc}
@@ -1606,6 +1663,11 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %<nge-1>%
 %<*finale>
 %\fi
+%^^A\newwrite\trtr
+%^^A\immediate\openout\trtr=trtr.tex
+%^^A\immediate\write\trtr{test1}
+%^^A\immediate\write\trtr{test2}
+%^^A\immediate\closeout\trtr
 %% \Finale
 %\iffalse
 %</finale>

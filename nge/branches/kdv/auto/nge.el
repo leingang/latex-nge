@@ -11,12 +11,21 @@
      "latexclass"
      "docstrip"
      "nged"
-     "filedescription")
+     "filedescription"
+     "course"
+     "coursename"
+     "shortcoursename"
+     "courseid"
+     "testname")
     (TeX-run-style-hooks
+     "pgfkeys"
      "ngemin10"
      "ngemin"
+     "ngeproblem"
      "art10"
      "article"
+     "ifthen"
+     "svninfo"
      "todonotes"
      "dvistyle"
      "url"

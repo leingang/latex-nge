@@ -20,15 +20,13 @@
 	      '("latexfile" t)
 	      '("latexpackage" t)
 	      '("texcatalogueentry" t)
-	      '("ctanpackage" t)
-	      )
+	      '("ctanpackage" t)))))
 ;; (TeX-add-style-hook
 ;;  "nge"
 ;;  (function (lambda () (TeX-add-symbols
 ;; 		       '("useenumi" "Abbreviation"))
 ;; 		      (setq TeX-auto-save t
 ;; 			    TeX-parse-self t
-;; ;;;			    LaTeX-font-list (quote ((1 "" "" "\\mathcal{" "}") (2 "\\textbf{" "}" "\\mathbf{" "}") (3 "\\textsc{" "}") (5 "\\emph{" "}") (6 "\\textsf{" "}" "\\mathsf{" "}") (9 "\\textit{" "}" "\\mathit{" "}") (13 "\\textmd{" "}") (14 "\\textnormal{" "}" "\\mathnormal{" "}") (18 "\\textrm{" "}" "\\mathrm{" "}") (19 "\\textsl{" "}") (20 "\\texttt{" "}" "\\mathtt{" "}") (21 "\\textup{" "}") (4 "" "" t) (11 "" "" "\\mathfrak{" "}")))
 ;; 			    reftex-enable-partial-scans t
 ;; 			    reftex-save-parse-info t
 ;; 			    reftex-use-multiple-selection-buffers t
@@ -60,8 +58,6 @@
 ;; 			 ("problem" ?z "prob:"  "~\ref{%s}" t nil -3)
 ;; 			 ("examples" ?x "ex:"  "~\ref{%s}" t nil -3)
 ;; 			 ("example" ?x "ex:"  "~\ref{%s}" t nil -3))))))
-;; ;;		      (setq LaTeX-font-list (append LaTeX-font-list
-;; ;;						    '((?\C-k "" "" "\\mathfrak{" "}")))))))
 
 
 ;; (defun LaTeX-env-proof (environment &optional ignore ignore)

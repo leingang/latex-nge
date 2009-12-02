@@ -531,11 +531,12 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % It is derived from \LaTeX{} class \latexfile{article.cls}
 % to which we pass all the unknown options
 %    \begin{macrocode}
-%^^A\DeclareOption*{\PassOptionToClass{\CurrentOption}{article}}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 %    \end{macrocode}
 % Now it is time to load the class and process all options given to it
 %    \begin{macrocode}
-%^^A\ProcessOptions
+\ExecuteOptions{}
+\ProcessOptions
 %    \end{macrocode}
 %    \begin{macrocode}
 \LoadClass{article}

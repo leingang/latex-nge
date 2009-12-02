@@ -1,30 +1,54 @@
+2009-12-02 18:31  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Cleaned up options processing.
+
+2009-12-01 22:18  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Introduced course information macros.
+
+2009-12-01 15:58  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Added Subversion information macros.
+
+2009-11-30 21:46  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Cosmetic changes.
+
+2009-11-30 12:53  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Cleaned up the documentation structure. Started
+	  outlining package structure.
+
+2009-11-29 04:34  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Finished structuring the source and documentation.
+	  Adding to it should not be difficult now.
+
 2009-11-27 23:56  Denis Kosygin <kosygin@courant.nyu.edu>
 
-	* .svnignore, Makefile, nge.dtx, style/nge.el: Started package
-	development documentation. Documented driver, doc and docstrip
-	conventions.  Fixed docstrip mark up.
+	* nge.dtx: Started package development documentation. Documented
+	driver, doc and docstrip conventions.  Fixed docstrip mark up.
 
 2009-11-24 16:10  Denis Kosygin <kosygin@courant.nyu.edu>
 
-	* auto/nge.el, nge.dtx: Rewrote driver documentation.
+	* nge.dtx: Rewrote driver documentation.
 
 2009-11-19 15:03  Denis Kosygin <kosygin@courant.nyu.edu>
 
-	* ., .svnignore, auto/nge.el, nge.dtx: Started documenting nge.dtx
-	  structure.
-	  Need to think through the organization of docstrip markup.
-	  It is broken right now.
+	* nge.dtx: Started documenting nge.dtx structure.  Need to think
+	  through the organization of docstrip markup.  It is broken right
+	  now.
 
 2009-11-18 21:56  Denis Kosygin <kosygin@courant.nyu.edu>
 
-	* ., .svnignore, Makefile, auto, auto/nge.el, nge.dtx, reference,
-	  reference/dtx, style, style/nge.el: Added todo notes.
+	* nge.dtx: Added todo notes.
 
 2009-11-18 08:18  Denis Kosygin <kosygin@courant.nyu.edu>
 
-	* ., .svnignore, ChangeLog, Makefile, nge.dtx: Added .:texmf// for
-	  latex and friends search paths.
+	* Makefile, nge.dtx: Added .:texmf// for latex and friends search
+	  paths.
 
+	
 2009-11-18 03:23  Denis Kosygin <kosygin@courant.nyu.edu>
 
 	* nge.dtx: Added more ideas to be processed later.

@@ -29,15 +29,15 @@ all:
 	$(LATEX) $(name).dtx
 
 .PHONY: clean texclean distclean
-tex_suffixes = log aux dvi toc tdo ins drv idx ilg ind glo gls
+tex_suffixes = log aux dvi toc tdo ins drv def idx ilg ind glo gls
 texclean:
 	-$(RM) $(patsubst %, ${name}.%, ${tex_suffixes})
 	-$(RM) driver* ext* ins*
 	-$(RM) checksum.dtx stopeventually.dtx nge-1.dtx hide-example.dtx
-	-$(RM) ngedoc.dtx
+	-$(RM) ngedoc.dtx 
 	-$(RM) canary.txt
 	-$(RM) $(targets)
-	-$(RM) texput.*
+	-$(RM) texput.* *.log
 
 clean: texclean
 	-$(RM) *~ style/*~

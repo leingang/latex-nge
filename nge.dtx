@@ -526,7 +526,7 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % with the help of \nged.  All other classes in this package
 % load it and add their own changes to document appearence.
 %    \begin{macrocode}
-%^^A\RequirePackage{ifthen}
+\RequirePackage{ifthen}
 %    \end{macrocode}
 % It is derived from \LaTeX{} class \latexfile{article.cls}
 % to which we pass all the unknown options
@@ -551,12 +551,12 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % |\NGEcourse| sets the course name and short course name to be used
 % in the header.
 %    \begin{macrocode}
-\newcommand{\NGEshortcoursename}{\relax}
-\newcommand{\NGEcoursename}{\relax}
+\newcommand{\NGE@shortcoursename}{\relax}
+\newcommand{\NGE@coursename}{\relax}
 \newcommand{\NGEcourse}{\@dblarg\NGE@@course}
 \def\NGE@@course[#1]#2{
-\renewcommand{\NGEshortcoursename}{#1}
-\renewcommand{\NGEcoursename}{#2}}
+\renewcommand{\NGE@shortcoursename}{#1}
+\renewcommand{\NGE@coursename}{#2}}
 %^^A\newcommand{\coursename}{}
 %^^A\newcommand{\shortcoursename}{}
 %^^A\newcommand{\courseid}{}
@@ -582,24 +582,82 @@ Move all .cls and .sty files to a directory, where TeX can find them.
     Signature: \hrulefill}
   \renewcommand{\@evenfoot}{}}
 %    \end{macrocode}
-% renewing maketitle
+% \begin{macro}{maketitle}
+%   We have to refedefine |\maketitle| command in order to incorporate
+%   course information into it.
+% The definition depends on whether a separate title page is
+% produces (this is the default for exams).  We use the switch
+% |@titlepage| defined in \latexclass{article} class and reproduce
+% most of the code from \latexfile{article.cls} verbatim, in
+% particular preserving commands |\thanks| for footnotes\fixme{verify,
+% that this is indeed in article.cls}.
 %    \begin{macrocode}
-\renewcommand{\maketitle}{%
-  \null\vfil
-  \vskip 60\p@
-  \begin{center}%
-    {\LARGE \@title \par}%
-    \vskip 3em%
-    {\large
-      \lineskip .75em%
-      \begin{tabular}[t]{c}%
-        \NGEcoursename
-      \end{tabular}\par}%
-    \vskip 1.5em%
-    {\large \@date \par}%
-  \end{center}\par\vfil\null}
+\ifthenelse{\boolean{@titlepage}}
 %    \end{macrocode}
-% 
+% we are in the title page.
+%    \begin{macrocode}
+{\renewcommand{\maketitle}{\begin{titlepage}%
+\let\footnotesize\small
+\let\footnoterule\relax
+\let \footnote \relax
+%    \end{macrocode}
+% The next part typesets the title.
+%    \begin{macrocode}
+\null\vfil
+\vskip 60\p@
+\begin{center}%
+  {\LARGE \@title \par}%
+  \vskip 3em%
+  {\large
+    \lineskip .75em%
+    \begin{tabular}[t]{c}%
+      \NGE@coursename\\\@author
+    \end{tabular}\par}%
+  \vskip 1.5em%
+  {\large \@date \par}%
+\end{center}\par
+\@thanks\vfil\null
+\end{titlepage}
+\setcounter{footnote}{0}
+\global\let\thanks\relax
+\global\let\maketitle\relax
+\global\let\@thanks\@empty
+\global\let\@author\@empty
+\global\let\@date\@empty
+\global\let\@title\@empty
+\global\let\title\relax
+\global\let\author\relax
+\global\let\date\relax
+\global\let\and\relax}}
+%    \end{macrocode}
+% here we are not in the title page.  Since the actuall typesetting is
+% done by |\@maketitle|, we just redefine it.
+%    \begin{macrocode}
+{\renewcommand{\@maketitle}{%
+ \newpage
+ \null
+ \vskip 2em%
+ \begin{center}%
+ \let \footnote \thanks
+   {\LARGE \@title \par}%
+   \vskip 1.5em%
+   {\Large \NGE@coursename \par}%
+   \vskip 1em%
+   {\large
+     \lineskip .5em%
+     \begin{tabular}[t]{c}%
+       \@author
+     \end{tabular}\par}%
+   \vskip 1em%
+   {\large \@date}%  
+ \end{center}%
+ \par
+\vskip 1.5em}}
+%    \end{macrocode}
+
+%^^A    \end{macrocode}
+%    
+% \end{macro}
 %\iffalse
 %</ngemin>
 %\fi

@@ -1,7 +1,14 @@
 (TeX-add-style-hook "nge"
  (lambda ()
+    (LaTeX-add-environments
+     "NGE"
+     "problem"
+     "solution")
     (TeX-add-symbols
      '("fixme" ["argument"] 0)
+     '("NGEerror" 1)
+     '("NGEDefineError" 3)
+     '("DeclareNGEBooleanOption" 2)
      '("ngefile" 1)
      '("latexfile" 1)
      '("latexpackage" 1)
@@ -16,7 +23,7 @@
      "NGE"
      "NGEcourse"
      "noauthor"
-     "testname"
+     "tableofproblems"
      "footnotesize"
      "footnoterule"
      "thanks"
@@ -26,10 +33,13 @@
      "date"
      "and")
     (TeX-run-style-hooks
+     "amsthm"
+     "amsmath"
      "pgfkeys"
-     "ngemin10"
-     "ngemin"
+     "ngetest10"
+     "ngetest"
      "ngeproblem"
+     "ifoption"
      "fancyhdr"
      "art10"
      "article"

@@ -104,8 +104,12 @@ nge.ins,... (for complete list see file manifest.txt)
 %<*ins|ins-body>
 %^^A All generation commands for class and style files go here.
   \file{ngemin.cls}{\from{\jobname.dtx}{code,code-cls,ngemin}}
+  \file{ngetest.cls}{\from{\jobname.dtx}{code,code-cls,ngetest}}
   \file{ngeexam.cls}{\from{\jobname.dtx}{code,code-cls,ngeexam}}
   \file{ngeprob.sty}{\from{\jobname.dtx}{code,code-sty,ngeprob}}
+  \file{ngeproblem.sty}{\from{\jobname.dtx}{code,code-sty,ngeproblem}}
+  \file{ngeinit.sty}{\from{\jobname.dtx}{code,code-sty,ngeinit}}
+  \file{ngekeys.sty}{\from{\jobname.dtx}{code,code-sty,ngekeys}}
 %</ins|ins-body>
 %<ext-body>%</ins>
 %<ext-body>%<*dist>
@@ -476,14 +480,21 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 %<ngemin>\ProvidesClass{ngemin}
+%<ngeinit>\ProvidesPackage{ngeinit}
 %<ngeunit>\ProvidesPackage{ngeunit}
 %<ngetest>\ProvidesClass{ngetest}
 %<ngeexam>\ProvidesClass{ngeexam}
 %<ngequiz>\ProvidesClass{ngequiz}
 %<ngeprob>\ProvidesPackage{ngeprob}
 %<ngeproblem>\ProvidesPackage{ngeproblem}
+%<ngekeys>\ProvidesPackage{ngekeys}
 %<def>\ProvidesFile{nge.def}
 %^^A  [\filedate \fileversion \filedescription]
+%    \end{macrocode}
+% The following package contains definitions, necessary for common
+% options' declaration in \nged.
+%    \begin{macrocode}
+%<!ngeinit>\RequirePackage{ngeinit}
 %    \end{macrocode}
 % We reserve prefix |NGE@| for internal commands in \nged{} classes
 % and styles.
@@ -498,7 +509,7 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % \iffalse
 %<*def>
 % \fi
-% This file contain information, common for all the files in \nged{}
+% This file contains information, common for all the files in \nged{}
 % package.  First we introduce necessary commands, in case they are
 % not defined yet.
 %    \begin{macrocode}
@@ -516,6 +527,25 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % \iffalse
 %</def>
 % \fi
+% \subsection{File \ngefile{ngeinit.sty}}
+% \label{sec:code-ngemin}
+%
+% \iffalse
+%<*ngeinit>
+% \fi
+% This is the internal package for \nged, which makes sure, that
+% everything needed for correct declaration of options is defined and
+% defined only once.
+% 
+% Switches for boolean options.
+%    \begin{macrocode}
+\RequirePackage{ifthen}
+\newboolean{points}
+%    \end{macrocode}
+% 
+%\iffalse
+%</ngeinit>
+%\fi
 % \subsection{File \ngefile{ngemin.cls}}
 % \label{sec:code-ngemin}
 %
@@ -747,17 +777,143 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %\iffalse
 %<*ngetest>
 %\fi
+% 
+% This is the internal package, where all the necessary definitions
+% are given.  The derived classes, such as \ngefile{ngeexam} and
+% \ngefile{ngequiz}, just set appropriate defaults before loading this
+% class.
+%
+% We use package \latexpackage{ifoption} from \latexpackage{amsrefs}
+% collection.  This package provides useful command |\IfOption| and
+% also makes handling of mutually exclusive options more consistent.
 %    \begin{macrocode}
-\DeclareOption{pages}
-\DeclareOption{bluebook}
+\RequirePackage{ifoption}
 %    \end{macrocode}
+% 
+%
+%    \begin{macrocode}
+\DeclareExclusiveOptions{pages,bluebook}
+%    \end{macrocode}
+% Options below are not really boolean options.  It would be more
+% appropriately to call them \emph{extensions}.  Their purpose is to
+% extend the functionality of the package by adding and modifying
+% various macros, but once they are processed it is not easy to undo
+% their effect.  But since it is possible to test whether such an
+% option was given to the class, it is possible to emulate boolean
+% switches with their help too.
+%    \begin{macrocode}
+\DeclareBooleanOption{solutions}
+\DeclareBooleanOption{rubrics}
+%    \end{macrocode}
+% We also define a genuine boolean switch, which makes it possible to
+% turn processing points on and off explicitely.  Emulating it with
+% extension switch would be awkward, since the default is to assign
+% points to problems.
+%    \begin{macrocode}
+\DeclareOption{points}{\setboolean{points}{true}%
+  \PassOptionToPackage{\CurrentOption}{ngeproblem}}
+\DeclareOption{nopoints}{\setboolean{points}{false}%
+  \PassOptionToPackage{\CurrentOption}{ngeproblem}}
+%    \end{macrocode}
+% All unknown options are passed to class \latexpackage{article}.
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionToClass{\CurrentOption}{article}}
+%    \end{macrocode}
+% By default points are assigned to each problem
+%    \begin{macrocode}
+\ExecuteOptions{points}
+\ProcessOptions\relax
+\LoadClass{article}
+%    \end{macrocode}
+%    \begin{macrocode}
+\ProcessExclusiveOptions\relax
+%    \end{macrocode}
+%    \begin{macrocode}
+\IfOPtion{bluebook}{}{}
+%    \end{macrocode}
+%    \begin{macrocode}
+\IfOPtion{pages}{}{}
+%    \end{macrocode}
+%    \begin{macrocode}
+\IfOPtion{solutions}{}{}
+%    \end{macrocode}
+% Here we need to consider too possibilities: whether solutions to the
+% test are provided or not.
+%    \begin{macrocode}
+\IfOPtion{rubrics}{%
+  \IfOption{solutions}{}{}}{}
+%    \end{macrocode}
+% Finally we load package \ngefile{ngeproblem} which inherits the
+% options from \ngefile{ngetest}.
 %    \begin{macrocode}
 \RequirePackage{ngeproblem}
 %    \end{macrocode}
-%    
+% \subsubsection{Table of problems}
+% \label{sec:code-ngetest-top}
+%
+% \begin{macro}{\tableofproblems}
+%  This is done like a table of contents with |\@starttoc| command.
 %    \begin{macrocode}
-\newcommand{\testname}{Test}
+\newcounter{totalpoints}
+\newcommand{\tableofproblems}{\@starttoc{top}}
 %    \end{macrocode}
+% Internal environment |\NGE@tableofproblems| generates the top and
+% the bottom of the table of problems.
+%    \begin{macrocode}
+\newenvironment{NGE@tableofproblems}{%
+  \setcounter{totalpoints}{0}
+  \begin{center}
+    \begin{tabular}{|c|c|c|}\hline
+      Problem& Possible & Points\\
+      Number & Points & Earned\\\hline
+    }{%
+      \hline
+      \NGE@problemstrut
+      Total &\arabic{totalpoints}&\\\hline
+      \end{tabular}
+\end{center}}
+%    \end{macrocode}
+% This internal macro generates a line of the table of problems
+%    \begin{macrocode}
+\newcommand{\NGE@problem}[2]{%
+  \addtocounter{totalpoints}{#2}
+  \NGE@problemstrut
+  #1 & #2 & \\\hline
+}      
+%    \end{macrocode}
+% To make the table large enought to write in with red pen, this
+% internal macro genrates some vertical space
+%    \begin{macrocode}
+\pgfqkeys{/NGE/table of problems}{row height/.initial=5ex,
+row depth/.initial=2ex}
+\newcommand{\NGE@problemstrut}{%
+\rule[-\pgfkeysvalueof{/NGE/tableofproblems/row depth}]{0pt}%
+{\pgfkeysvalueof{/NGE/tableofproblems/row height}}}
+%    \end{macrocode}
+% \todo{It might be nicer to specify the \emph{total} height of the
+% row, with the problem number centered in the row.}
+%
+% Now we add hooks to |\begin{document}| and |\end{document}| to open
+% the table of problems file, write the top, write the bottom and
+% close it.
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \addtocontents{top}{\protect\begin{NGE@tableofproblems}}}
+%    \end{macrocode}
+% For the end hook we'd like to do
+% \begin{Verbatim}
+%   \addtocontents{top}{\protect\end{NGE@tableofproblems}}
+% \end{Verbatim}
+% but for some reason that does not do anything.  So we go one step
+% deeper in the abstraction and copy the definition of |\addtocontents|
+%    \begin{macrocode}
+\AtEndDocument{%
+  \immediate\write\@auxout{\string\@writefile{top}%
+  {\string\end{NGE@tableofproblems}}}}
+%    \end{macrocode}
+% 
+% \end{macro}
+% 
 %
 %
 %
@@ -778,8 +934,18 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %\iffalse
 %<*ngeexam>
 %\fi
+% 
+% Class \ngefile{ngeexam} does little other than selecting
+% appropriated defaults and loading other packages.
 %    \begin{macrocode}
-\LoadClass{ngemin}
+\DeclareOption*{\PassOptionToClass{\CurrentOption}{ngetest}}
+%    \end{macrocode}
+% 
+%
+%    \begin{macrocode}
+\ExecuteOptions{pages}
+\ProcessOptions\relax
+\LoadClass{ngetest}
 %    \end{macrocode}
 %\iffalse
 %</ngeexam>
@@ -792,7 +958,10 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 %<*ngeprob>
 %\fi
 %
-%
+%    \begin{macrocode}
+\ExecuteOptions{}
+\ProcessOptions
+%    \end{macrocode}
 %
 %
 %
@@ -816,18 +985,166 @@ Move all .cls and .sty files to a directory, where TeX can find them.
 % \nged{} package.
 %
 %    \begin{macrocode}
-\RequirePackage{ifthen}
-\RequirePackage{pgfkeys}
-%\RequirePackage{pgfopts}
+\RequirePackage{ifoption}
+%%\RequirePackage{pgfopts}
+%    \end{macrocode}
+%    \begin{macrocode}
+\DeclareOption{points}{\setboolean{points}{true}}
+\DeclareOption{nopoints}{\setboolean{points}{false}}
 %    \end{macrocode}
 %
+%    \begin{macrocode}
+\DeclareBooleanOption{solutions}
+\DeclareBooleanOption{rubrics}
+%    \end{macrocode}
+
+%    \begin{macrocode}
+\ExecuteOptions{points}
+\ProcessOptions\relax
+\ProcessExclusiveOptions\relax
+%    \end{macrocode}
 %
-%
-%
-%
-%
+% \subsubsection{Problems, solutions and hints}
+% \label{sec:code-ngeproblem-problems}
+%    \begin{macrocode}
+\RequirePackage{pgfkeys}
+\RequirePackage{ifthen}
+%    \end{macrocode}
+% The documentation for \latexpackage{amsthm} says that it should be
+% loaded \emph{after} \latexpackage{amsmath} is loaded.  So we
+%    \begin{macrocode}
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+%    \end{macrocode}
+% Define few common environments.  User can redefine them later.
+% \begin{macro}{problem}
+%    \begin{macrocode}
+\newcounter{problem}
+\ifthenelse{\boolean{points}}{%
+\newcounter{problempoints}
+%   \newtheoremstyle{problemwithpoints}
+%   {}
+%   {}
+%   {}
+%   {}
+%   {}
+%   {}
+%   {}
+%   {}
+%   \theoremstyle{problemwithpoints}}{\theoremstyle{plain}}
+}{}
+%    \end{macrocode}
+%    \begin{macrocode}
+\theoremstyle{plain}
+\newtheorem{NGE@problem}{Problem}
+%    \end{macrocode}
+%    \begin{macrocode}
+\newenvironment{problem}[1][]{\begin{NGE@problem}[#1]}{\end{NGE@problem}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\newcommand{\NGE@processproblempoints}[1][0]{%
+  \setcounter{problempoints}{#1}%
+ #1 point\ifthenelse{\value{problempoints} = 1}{}{s}}
+\ifthenelse{\boolean{points}}{%
+  \renewenvironment{problem}[1][]{%
+    \begin{NGE@problem}[\NGE@processproblempoints{#1}]}
+    {\end{NGE@problem}}}{}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{remark}
+%    \begin{macrocode}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{note}{Note}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{solution}
+%    \begin{macrocode}
+\newenvironment{solution}[1][Solution]{\begin{proof}[#1]}{\end{proof}}
+% \end{macro}
+% \begin{macro}{answer}
+%    \begin{macrocode}
+\theoremstyle{remark}
+\newtheorem*{answer}{Answer}
+% \end{macro}
+% 
+% Switch back to default theorem style
+%    \begin{macrocode}
+\theoremstyle{plain}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\IfOption{solutions}{}{}
+%    \end{macrocode}
+%    \begin{macrocode}
+\IfOption{rubrics}{}{}
+%    \end{macrocode}
 %\iffalse
 %</ngeproblem>
+%\fi
+%
+% \subsection{Package \latexclass{ngekeys}}
+% \label{sec:code-ngekeys}
+%
+%\iffalse
+%<*ngekeys>
+%\fi
+%
+% This package supplies the interface for keys processing with the   
+% help of \latexpackage{pgfkeys}.
+%    \begin{macrocode}
+\RequirePackage{pgfkeys}
+%    \end{macrocode}
+% \nged{} package reserves the tree of names with root |/NGE|.
+% Subtree |/NGE/options| provides support for various package options,
+% subtree |/NGE/errors| holds error messages.
+%
+% \subsubsection{Options support}
+% \label{sec:code-ngekeys-options}
+%
+% \begin{macro}{\DeclareNGEBooleanOption}
+\newboolean{testboolean}
+\pgfkeys{/test/boolean key/.is if=testboolean}
+\pgfkeys{/test/boolean key=true}
+\newcommand{\DeclareNGEBooleanOption}[2]{%
+  \newboolean{NGE@#1}
+  \pgfkeys{
+    /NGE/#2/#1/key/.is if=NGE@#1,
+    /NGE/#2/#1/.is choice,
+    /NGE/#2/#1/.default=true,
+    /NGE/#2/#1/.cd,
+    true/.code={\setboolean{#1}{true}},
+    yes/.code={\setboolean{#1}{true}},
+    false/.code={\setboolean{#1}{false}},
+    no/.code={\setboolean{#1}{false}},
+    /NGE/#2/no#1/.code={\setboolean{#1}{false}}
+}}
+% \end{macro}
+%
+% \subsubsection{Error messages}
+% \label{sec:code-ngekeys-errors}
+%
+% \begin{macro}{NGEerror}
+% Command |\NGEDefineError|
+% defines an error  and stores error message 
+%    \begin{macrocode}
+\newcommand{\NGEDefineError}[3]{%
+  \pgfqkeys{/NGE/errors/#1}{.initial=#2,help message=#3}
+}
+%    \end{macrocode}
+% We define common handler for all errors
+%    \begin{macrocode}
+\pgfkeys{/handlers/.NGEerror/.code
+  =\PackageError{NGEd}{%
+    \pgfkeysvalueof{/NGE/errors/\pgfkeyscurrentname}}{%
+    \pgfkeysvalueof{/NGE/errors/\pgfkeyscurrentname/help message}}}}
+\newcommand{\NGEerror}[1]{\pgfkeys{/NGE/errors/#1}}
+%    \end{macrocode}
+%    
+% \end{macro}
+%\iffalse
+%</ngekeys>
 %\fi
 %
 % \section{Source}

@@ -1016,41 +1016,86 @@ row depth/.initial=2ex}
 \RequirePackage{amsmath}
 \RequirePackage{amsthm}
 %    \end{macrocode}
-% Define few common environments.  User can redefine them later.
+% Initially we define just one environment |problem| and also provide
+% for user options to adjust its behaviour as desired.
 % \begin{macro}{problem}
+% Problem number is kept track of in counter |problem|, counter
+% |problempoints| contains the number of points assigned to the
+% problem.  Default value is 0.
 %    \begin{macrocode}
 \newcounter{problem}
-\ifthenelse{\boolean{points}}{%
 \newcounter{problempoints}
-%   \newtheoremstyle{problemwithpoints}
-%   {}
-%   {}
-%   {}
-%   {}
-%   {}
-%   {}
-%   {}
-%   {}
-%   \theoremstyle{problemwithpoints}}{\theoremstyle{plain}}
-}{}
 %    \end{macrocode}
+% The problem itself is setup with the help of \latexpackage{asmthm}
+% package.  \fixme{provide user command to change it!}.
 %    \begin{macrocode}
+\pgfkeys{/NGE/problem/.cd,
+body font/.initial=\normalfont,
+header font/.initial=\bfseries}
+\newcommand{\NGE@problembodyfont}{\normalfont}
+\newcommand{\NGE@problemheaderfont}{\bfseries}
+\newtheoremstyle{NGE@problem}
+{}% Space above
+{}% Space below
+{\NGE@problembodyfont}% problem body font
+{}% indent amount (empty=no indent, \parindent = normal paragraph indent)
+{\NGE@problemheaderfont}% problem header font
+{.}% Punctuation after theorem head
+{ }% Space after theorem head
+% ({ }=normal interword space, \newline=line break).
+{}% Head specification (empty means normal
+\newcommand{\NGE@problemname}{Problem}
+\theoremstyle{NGE@problem}
+\newtheorem{NGE@problem}[problem]{\NGE@problemname}
 \theoremstyle{plain}
-\newtheorem{NGE@problem}{Problem}
+%    \end{macrocode}
+% Now to the the working horse: environment |problem|.  Initially it
+% does very little.  It takes one optional argument --- a number of
+% points for the problem, and, depending on the setting of the switch
+% |points| it passes it to |NGE@problem| or merely swallows it.  
+%    \begin{macrocode}
+\newenvironment{problem}[1][]
+%    \end{macrocode}
+% First we process all given options in order they were given.
+%    \begin{macrocode}
+{\setcounter{problempoints}{0}
+  \pgfqkeys{/NGE/problem/options}{#1}
+  \ifthenelse{\boolean{points}}{\begin{NGE@problem}[\theproblempoints]}
+    {\begin{NGE@problem}}}
+{\end{NGE@problem}}
+%    \end{macrocode}
+% Redefine macro |\theproblempoints| to expand number n to ``n points''.
+%    \begin{macrocode}
+\renewcommand{\theproblempoints}{%
+\arabic{problempoints} point\ifthenelse{\value{problempoints} = 1}{}{s}}
 %    \end{macrocode}
 %    \begin{macrocode}
-\newenvironment{problem}[1][]{\begin{NGE@problem}[#1]}{\end{NGE@problem}}
-%    \end{macrocode}
-%    \begin{macrocode}
-\newcommand{\NGE@processproblempoints}[1][0]{%
-  \setcounter{problempoints}{#1}%
- #1 point\ifthenelse{\value{problempoints} = 1}{}{s}}
-\ifthenelse{\boolean{points}}{%
-  \renewenvironment{problem}[1][]{%
-    \begin{NGE@problem}[\NGE@processproblempoints{#1}]}
-    {\end{NGE@problem}}}{}
+\pgfkeys{/NGE/problem/options/points/.cd,
+  .value required, .code=\setcounter{problempoints}{#1}}
 %    \end{macrocode}
 % \end{macro}
+% Option |nopoints| disables points showing.  It accepts one optional
+% argument to allow to comment out assignment |points=10| as
+% |nopoints=10|, which then is ignored.
+%    \begin{macrocode}
+\pgfkeys{/NGE/problem/options/nopoints/.code=\setboolean{points}{false}}
+%    \end{macrocode}
+% Notice that option assignment |20,nopoints| still locally sets the
+% counter |problempoints| to 20, but no points values is typeset in
+% problem header.  Right now I have no idea if such behaviour is
+% useful for anything, but who knows, may be some hack later on will
+% justify it.
+%
+% Finally, in order to give ability to turn on point typesetting on
+% per problem basis, we provide boolean option |problemwithpoints|,
+% which locally sets the boolean switch |points| in each problem.
+% Now let's deal with unknown options.  For the moment we assume that
+% any unknown option is a nonegative number, and interpret it as the
+% desired number of points for this problem.
+%    \begin{macrocode}
+\pgfkeys{/NGE/problem/options/.unknown/.code
+    = \setcounter{problempoints}{\pgfkeyscurrentname}}
+%    \end{macrocode}
 % 
 % \begin{macro}{remark}
 %    \begin{macrocode}
@@ -1109,11 +1154,10 @@ row depth/.initial=2ex}
 \pgfkeys{/test/boolean key=true}
 \newcommand{\DeclareNGEBooleanOption}[2]{%
   \newboolean{NGE@#1}
-  \pgfkeys{
-    /NGE/#2/#1/key/.is if=NGE@#1,
+  \pgfkeys{/NGE/#2/#1/key/.is if=NGE@#1,
+    /NGE/#2/#1/.cd,
     /NGE/#2/#1/.is choice,
     /NGE/#2/#1/.default=true,
-    /NGE/#2/#1/.cd,
     true/.code={\setboolean{#1}{true}},
     yes/.code={\setboolean{#1}{true}},
     false/.code={\setboolean{#1}{false}},

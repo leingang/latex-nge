@@ -18,7 +18,8 @@ $export TEXINPUTS = .:$(texliveroot)/texmf//:$(texliveroot)/texmf-var//:$(texliv
 name = nge
 sources = $(name).dtx
 targets = $(name).ins readme.txt install.txt license.txt \
-          ngemin.cls ngeexam.cls ngeprob.sty
+          ngemin.cls ngeexam.cls ngeprob.sty ngeinit.sty \
+	  ngekeys.sty ngetest.cls ngeproblem.sty
 
 .PHONY: all doc dvi pdf ps
 all:
@@ -34,7 +35,7 @@ texclean:
 	-$(RM) $(patsubst %, ${name}.%, ${tex_suffixes})
 	-$(RM) driver* ext* ins*
 	-$(RM) checksum.dtx stopeventually.dtx nge-1.dtx hide-example.dtx
-	-$(RM) ngedoc.dtx 
+#	-$(RM) ngedoc.dtx 
 	-$(RM) canary.txt
 	-$(RM) $(targets)
 	-$(RM) texput.* *.log

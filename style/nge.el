@@ -6,7 +6,7 @@
   (function (lambda ()
 	      (setq TeX-auto-save t
 	       TeX-parse-self t
-	       LaTeX-command "TEXINPUTS=\".:texmf//:\" latex"
+;;	       LaTeX-command "TEXINPUTS=\".:texmf//:\" latex"
  		   reftex-enable-partial-scans t
   			    reftex-save-parse-info t
  			    reftex-use-multiple-selection-buffers t

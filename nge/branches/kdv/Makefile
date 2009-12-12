@@ -57,13 +57,17 @@ export SVN_EDITOR = emacs -nw
 SVN2CL = bin/svn2cl.sh
 SVN2CL_OPTS = --authors .svn2cl_authors
 
-.PHONY: checkout changelog 
+.PHONY: checkout changelog nged
 checkout:
 	$(SVN) checkout $(svn_url) $(checkoutdir)
 	@echo '\nsources from '$(svn_url)' \nare placed in '$(checkoutdir)
 
-commit: cleanall
+commit: cleanall svnignore
 	$(SVN) commit
+
+svnignore: 
+	$(SVN) propset svn:ignore -F .svnignore .
+
 changelog:
 	if [ -f ChangeLog ]; \
         then cp ChangeLog ChangeLog.bak; \
@@ -71,6 +75,13 @@ changelog:
              -r HEAD:\{`head -1 ChangeLog | awk '{print $$1}'`\} \
              && cat ChangeLog.tmp ChangeLog.bak >ChangeLog; \
         else echo '\nWarning: ChangeLog not found.\nPerform svn update.'; fi
+
+# Sources just before the beginning of the development.
+# Directory nged is added to .svnignore, so that its contents
+# is not overwritten accidentally during an update
+nged:
+	[ -d nged ] || mkdir nged
+	$(SVN) checkout -r 600 $(svnroot)/$(name)/branches/3.0-dev1 nged
 
 .PHONY: maintainer-clean cleanall
 maintainer-clean:

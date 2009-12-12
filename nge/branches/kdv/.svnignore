@@ -1,7 +1,5 @@
 .nfs*
-ChangeLog.bak
-ChangeLog.tmp
-nged
+ChangeLog.*
 *.log
 *.aux
 *.dvi
@@ -11,6 +9,9 @@ nged
 *.glo
 *.gls
 texput.*
-auto/nge.el
+auto
+nged
 texlive
 test
+lib
+old

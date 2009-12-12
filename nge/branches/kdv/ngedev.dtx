@@ -1,0 +1,2194 @@
+%^^A nge.dtx --- the source file for NGEd package
+%^^A $Id: nge.dtx 637 2009-12-11 16:32:44Z kosygin $
+%^^A
+%^^A File nge.dtx is the single source file for the entire NGEd
+%^^A package: all the LaTeX classes and styles, all the supporting
+%^^A files, and all the documentation is generated from it.  The file
+%^^A is structured so that each part in it generates some file or a
+%^^A group of files related to each  other in the package, while
+%^^A comments in that part provide the documentation.
+%^^A
+%^^A For general description of the package see section README below, for
+%^^A installation instructions see section INSTALL, for license and
+%^^A copyright notice see section LICENSE.  Alternatively, processing
+%^^A this file through TeX, i.e. running the command 
+%^^A       tex nge.dtx
+%^^A will extract the content of these sections into files readme.txt,
+%^^A install.txt and license.txt, respectively, which can be then
+%^^A inspected separately.  This command will also generate other
+%^^A files, for details please consult the documentation.
+%^^A
+%^^A
+%^^A
+% \iffalse ^^A   SOURCES FOR NGE.INS AND LICENSE.TXT
+%^^A The following lines are not part of nge.ins.  They provide
+%^^A building blocks for examples, quoted in the documentation,
+%^^A explaining the structure of file nge.ins and the part of the
+%^^A nge.dtx, controlling extraction of all the pieces. 
+%<ext-skel|ext-head>%\iffalse
+%<ext-skel>
+%^^A
+%<*ext-head>
+\begingroup
+%</ext-head>
+%<*ins|ext-docstrip|ext-skel|ext-mock>
+\input docstrip.tex
+%</ins|ext-docstrip|ext-skel|ext-mock>
+%<ext-fullconfig>%<*ins>
+%<*ins|ins-config|ext-config|ext-skel|ext-mock>
+\keepsilent
+%</ins|ins-config|ext-config|ext-skel|ext-mock>
+%<ext-fullconfig>%</ins>
+%<*ext-config|ext-skel|ext-mock>
+\askforoverwritefalse
+%</ext-config|ext-skel|ext-mock>
+%<ext-fullconfig>%<*ins>
+%<*ins|ins-texlive|ext-fullconfig>
+\usedir{tex/latex/nge}
+%^^A\showdirectory
+%</ins|ins-texlive|ext-fullconfig>
+%<ext-fullconfig>%</ins>
+%<ext-mock-config|ext-skel|ext-mock>\nopreamble\nopostamble
+%<ext-preamble>%<*ins>
+%<*ins|ins-preamble>
+\preamble
+
+%^^A The line above is intentionally left blank for formatting purposes.
+%</ins|ins-preamble>
+%<ext-preamble>%</ins>
+%<ext-preamble>%<*license|ins>
+%<*license|ins> ^^A LICENSE and COPYRIGHT NOTICE
+Copyright (C) 2003--2009 Matthew Leingang <leingang@courant.nyu.edu>
+Copyright (C) 2009 Denis Kosygin <kosygin@courant.nyu.edu>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License, either version 1.3
+of this license or (at your option) any later version.
+The latest version of this license is in:
+
+   http://www.latex-project.org/lppl.txt
+
+and version 1.3 or later is part of all distributions of LaTeX 
+version 2005/12/01 or later.
+
+This work has LPPL maintenance status `maintained'.
+
+The Current Maintainer of this work is M. Leingang.
+
+%^^A Add to the line below the names of all generated files or give
+%^^A reference to manifest.txt
+This work consists of the file nge.dtx and derived files
+nge.ins,... (for complete list see file manifest.txt)
+%</license|ins>
+%<ext-preamble>%</license|ins>
+%<ext-preamble>%<*ins>
+%<*ins|ins-preamble>
+%^^A The line below is intentionally left blank for formatting purposes.
+
+\endpreamble
+%</ins|ins-preamble>
+%<ext-preamble>%</ins>
+%<*ins>
+%% Some parts of the source file nge.dtx are concealed from this
+%% generation script with the help of <hide> guard.  The correct
+%% generation of all the files with the help of docstrip utility
+%% relies on the assumption that option `hide' is never issued in
+%% generating commands below.
+%</ins>
+%^^A The next line is added for formatting purposes
+%<ext-skel|ext-mock>
+%<ext-body>%<*ins>
+%<*ins|ins-body|ext-skel|ext-mock>
+\generate{
+%</ins|ins-body|ext-skel|ext-mock>
+%<*ins|ins-body>
+%^^A All generation commands for class and style files go here.
+  \file{ngemin.cls}{\from{\jobname.dtx}{code,code-cls,ngemin}}
+  \file{ngetest.cls}{\from{\jobname.dtx}{code,code-cls,ngetest}}
+  \file{ngeexam.cls}{\from{\jobname.dtx}{code,code-cls,ngeexam}}
+  \file{ngeprob.sty}{\from{\jobname.dtx}{code,code-sty,ngeprob}}
+  \file{ngeproblem.sty}{\from{\jobname.dtx}{code,code-sty,ngeproblem}}
+  \file{ngeinit.sty}{\from{\jobname.dtx}{code,code-sty,ngeinit}}
+  \file{ngekeys.sty}{\from{\jobname.dtx}{code,code-sty,ngekeys}}
+%</ins|ins-body>
+%<ext-body>%</ins>
+%<ext-body>%<*dist>
+%<*dist>
+%^^A Generation commands for files in NGEd distribution package,
+%^^A including nge.ins, go here.  This block is not included in
+%^^A nge.ins
+  \file{\jobname.def}{\from{\jobname.dtx}{def}}
+  \nopostamble
+  \file{\jobname.ins}{\from{\jobname.dtx}{ins,license}}
+  \nopreamble\nopostamble
+  \file{license.txt}{\from{\jobname.dtx}{license}}
+  \file{readme.txt}{\from{\jobname.dtx}{readme}}
+  \file{install.txt}{\from{\jobname.dtx}{install}}
+%</dist>
+%<ext-body>%</dist>
+%<ext-body>%<*examples>
+%<*examples>
+%^^A Files below are not needed for NGEd distribution package.
+%^^A They are used as examples in package documentation for
+%^^A developers.
+  \file{driver-skel.tex}{\from{\jobname.dtx}{driver-skel}}
+  \file{driver-body.tex}{\from{\jobname.dtx}{driver-body}}
+  \file{driver-2.dtx}{\from{\jobname.dtx}{driver-skel,driver-body}}
+  \file{driver-3.dtx}{\from{\jobname.dtx}{driver-skel,driver-body,driver-3}}
+  \file{driver-4.dtx}{\from{\jobname.dtx}{driver-skel,driver-body,driver-4}}
+  \file{driver-config.tex}{\from{\jobname.dtx}{driver-config}}
+  \file{driver-template.dtx}{\from{\jobname.dtx}{driver-skel,driver-config,driver-body,driver-template}}
+  \file{driver.dtx}{\from{\jobname.dtx}{driver}}
+  \file{\jobname.drv}{\from{\jobname.dtx}{driver,packages,macros}}
+  \file{checksum.dtx}{\from{\jobname.dtx}{checksum}}
+  \file{stopeventually.dtx}{\from{\jobname.dtx}{stopeventually}}
+  \file{nge-1.dtx}{\from{\jobname.dtx}{driver,nge-1,checksum,stopeventually,finale}}
+  \file{ngedoc.dtx}{\from{\jobname.dtx}{ngedoc}}
+  \file{hide-example.dtx}{\from{\jobname.dtx}{hide-example}}
+  \file{ext-docstrip.dtx}{\from{\jobname.dtx}{ext-docstrip}}
+  \file{ext-mock-config.dtx}{\from{\jobname.dtx}{ext-config,ext-mock-config}}
+  \file{ext-skel.dtx}{\from{\jobname.dtx}{ext-skel}}
+  \file{ext-examples.dtx}{\from{\jobname.dtx}{ext-mock,examples}}
+  \file{ins-1.dtx}{\from{\jobname.dtx}{ext-docstrip,ins-config}}
+  \file{ins-texlive.dtx}{\from{\jobname.dtx}{ins-texlive}}
+  \file{ins-preamble.dtx}{\from{\jobname.dtx}{ins-preamble,license}}
+  \file{ins-body.dtx}{\from{\jobname.dtx}{ins-body}}
+  \file{ins-tail.dtx}{\from{\jobname.dtx}{ins-tail}}
+  \file{ext-head.dtx}{\from{\jobname.dtx}{ext-head}}
+  \file{ext-fullconfig.dtx}{\from{\jobname.dtx}{ext-config,ins-config,ext-fullconfig}}
+  \file{ext-preamble.dtx}{\from{\jobname.dtx}{ext-preamble,ins-preamble,license}}
+  \file{ext-body.dtx}{\from{\jobname.dtx}{ext-body,ins-body,dist,examples}}
+  \file{ext-tail.dtx}{\from{\jobname.dtx}{ext-tail,ins-tail}}
+%^^A file canary.txt checks for docstrip leaks.
+  \file{canary.txt}{\from{\jobname.dtx}{}}
+%</examples>
+%<ext-body>%</examples>
+%<ext-body>%<*ins>
+%<*ins|ins-body|ext-skel|ext-mock>
+}
+%</ins|ins-body|ext-skel|ext-mock>
+%<ext-body>%</ins>
+%<ext-tail>%<*ins>
+%<*ins|ins-tail>
+\obeyspaces
+\Msg{***************************************************************}
+\Msg{*                                                             *}
+\Msg{* To finish the installation you have to move all .cls and    *}
+\Msg{* .sty files into a directory searched by TeX.                *}
+\Msg{*                                                             *}
+\Msg{* To produce the documentation run the file nge.dtx           *}
+\Msg{* through LaTeX.  For details see file install.txt.           *}
+\Msg{*                                                             *}
+\Msg{* Happy TeXing                                                *}
+\Msg{*                                                             *}
+\Msg{***************************************************************}
+%^^A The next line is inserted for formatting purposes
+
+%</ins|ins-tail>
+%<ext-tail>%</ins>
+%<ins|(ins-tail&!ext-tail)>\endbatchfile
+%<ext-tail>%<ins>\endbatchfile
+%^^A The next line is inserted for formatting purposes.
+%<ext-tail>
+%<*ext-tail>
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</ext-tail>
+%^^A The following lines are not part of nge.ins.  They provide
+%^^A building blocks for examples, quoted in the documentation,
+%^^A explaining the structure of file nge.ins and the part of the
+%^^A nge.dtx, controlling extraction of all the pieces. 
+%<ext-skel>
+%<ext-skel|ext-tail>% \fi
+% \fi
+% \iffalse
+%<*hide>
+\iffalse %^^A SOURCES for TEXT FILES
+%</hide>
+%^^A
+%^^A
+%<*readme> %^^A README
+This is file readme.txt for NGEd package.
+
+Installation instructions:
+(a copy of these instructions may be found in file instal.txt)
+%</readme>
+%<install>This is file install.txt with installation instructions for NGEd package.
+%<*install|readme> %^^A INSTALL
+%^^A the next line is left blank for formatting purposes
+
+To generate the entire package run `tex nge.dtx'
+To generate all the class and style files only, run `tex nge.ins'
+To generate the documentation run the following commands:
+	latex nge.dtx
+	makeindex -s gind.ist nge
+	makeindex -s gglo.ist -o nge.gls nge.glo
+	latex nge.dtx
+	latex nge.dtx
+Move all .cls and .sty files to a directory, where TeX can find them.
+%</install|readme>
+%<*hide>
+\fi
+%</hide>
+% \fi
+% \iffalse
+%^^A
+%^^A
+% \fi
+% \iffalse ^^A     DRIVER
+%^^A The following lines form the driver preamble.  They are not part
+%^^A of  the driver itself, instead serve as building blocks for
+%^^A driver examples, quoted in documentation.
+%<driver-4|driver-template>%\iffalse
+%<driver-template>%<*driver>
+%<driver-3>\iffalse
+%^^A Begin driver
+%<*driver|driver-skel>
+\documentclass{ltxdoc}
+%</driver|driver-skel>
+%^^A The next line is inserted for formatting purposes
+%<driver-skel>
+%<*driver|driver-config>
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+%</driver|driver-config>
+%^^A The next line is inserted for formatting purposes
+%<driver|driver-template|nge-1>
+%<*driver&packages>
+%^^A Draft options
+\usepackage{showkeys}
+%^^A End of draft options
+
+\usepackage{fancyvrb}
+
+%^^A \usepackage{hyperref}
+\usepackage{url}
+\newcommand{\texcatalogueentry}[1]%
+{\url{http://www.ctan.org/tex-archive/help/Catalogue/entries/#1.html}}
+\newcommand{\ctanpackage}[1]%
+  {\url{http://mirror.hmc.edu/ctan/macros/latex/contrib/#1}}
+\newcommand{\ngedsvnroot}{\url{https://subversive.cims.nyu.edu/mathclinical/}}
+\newcommand{\latexpackage}[1]{\textsf{#1}}
+\newcommand{\latexclass}{\latexpackage}
+\newcommand{\latexfile}[1]{\textsf{#1}}
+\newcommand{\docstrip}{\latexpackage{DocStrip}}
+\newcommand{\ngefile}[1]{\latexfile{#1}}
+\newcommand{\nged}{\latexpackage{NGEd}}
+
+\usepackage[dvistyle]{todonotes}
+\newcommand{\fixme}[1][]{\todo{FIX ME! #1}}
+
+\usepackage{svninfo}
+%</driver&packages>
+%<*driver&macros>
+%</driver&macros>
+%<*driver|driver-skel>
+\begin{document}
+%</driver|driver-skel>
+%^^A The next line is inserted for formatting purposes
+%<driver-skel&!driver-body>
+%<*driver|driver-body>
+  \DocInput{\jobname.dtx}
+%</driver|driver-body>
+%<*driver|driver-skel>
+\end{document}
+%</driver|driver-skel>
+%^^A End driver
+%^^A
+%^^A The following lines form the driver postamble.  They are not part
+%^^A of  the driver itself, instead serve as building blocks for
+%^^A driver examples, quoted in documentation.  In particular, they
+%^^A provide matching \fi's for each \iffalse, placed in drivers'
+%^^A preamble. 
+%<driver-3>\fi
+%<driver-template>%</driver>
+%<driver-4|driver-template>%\fi
+% \fi
+%\iffalse  ^^A CHECKSUM
+%<*checksum>
+%^^A The next line is inserted for formatting purposes
+%<nge-1>%
+%\fi
+%% \CheckSum{0}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%\iffalse
+%</checksum>
+%\fi
+%^^A
+%^^A The actual code and documentation go below this line.
+% \svnInfo $Id: nge.dtx 637 2009-12-11 16:32:44Z kosygin $ %^^A
+% \providecommand*{\filename}{}
+% \renewcommand{\filename}{\jobname.dtx}
+% \providecommand*{\filedate}{}
+% \renewcommand*{\filedate}{\svnYear/\svnMonth/\svnDate}
+% \providecommand*{\fileversion}{}
+% \renewcommand*{\fileversion}{development version, revision \svnInfoRevision}
+%^^A \ProvideFile{\filename}[\filedate\space\fileversion]
+% \title{\nged: A Next Generation Educational Bundle\\ \fileversion}
+% \author{Matthew Leingang\\leingang@courant.nyu.edu
+%   \and Denis Kosygin\\kosygin@courant.nyu.edu}
+% \renewcommand{\date}{\svnToday}
+% \maketitle
+% \begin{abstract}
+%   The \nged{} bundle is a set of \LaTeXe classes and packages,
+%   providing a unified typographic support for the entire line of
+%   educational materials: from tests and solutions to course
+%   assessments.  Its naturally oriented toward mathematics courses
+%   but it is not specific to them.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \section{Introduction}
+%
+%
+% \subsection{Goals}
+%\todo{Rewrite!}
+% The \nged{}bundle classes and packages should be
+%
+% \begin{itemize}
+%   \item \emph{beautiful}
+%   \item \emph{useful} 
+%   \item \emph{flexible} items should be configurable
+%   \item \emph{modular} This is why the several different packages for different uses
+%   \item \emph{lazy} We will use other packages when they are useful
+% \end{itemize}
+%
+% \subsection{Other classes which do this kind of thing}
+%\todo{Expand!}
+% Look at examdesign, mathexam, and exam.
+% 
+% \subsection*{Introduction}
+%
+% \subsubsection*{Conventions, adopted in is this manual}
+% The word ``package'' is ambiguous and its meaning varies with the
+% context.  In this manual it may mean any of the following:
+% \begin{description}
+% \item[\LaTeX{} package:] a collection of \LaTeX{} styles and classes,
+%   designed to work well together and which may depend on each other.
+%   Files, comprising a \LaTeX{} package are usually located in a
+%   common directory of a \LaTeX{} distribution tree.  In particular,
+%   all files of \LaTeX{} package \nged, described in this
+%   manual share are located in directory \ngefile{nge}.
+% \item[Distribution package:] a \LaTeX{} package together with its
+%   documentation and other supporting files (e.g. a list of files
+%   with their md5 checksums).  Distribution packages are frequently
+%   taylored to one of popular \TeX{} distributions, such as teTeX or
+%   liveTeX and most of them are available for download in archived
+%   forms at large Internet repositories, such as CTAN.\fixme{CTAN address here}
+% ^^A When this package is released and accepted to CTAN, uncommment
+% ^^A the following lines and insert the appropriate address.
+% \iffalse (this is meta-comment)
+%  In particular, the current version of \nged, documented in
+%  this manual, is available for download on CTAN
+%  and various CTAN mirrors (see \ctanpackage{}).
+%   This distribution package does not actually contain any \LaTeX{} class or
+%   style files, they are generated automatically during package installation.
+% \fi
+% \item[Source package:] a collection of files and tools necessary for
+%   the production and further development of the corresponding
+%   \LaTeX{} package together with its supporting materials.  Source
+%   package may also include various configuration files for tools,
+%   package maintainers and developers use during the development process.
+% \end{description}
+% Most of the time this ambiguity does not lead to confusion, since
+% the intented meaning of word ``package'' is clear from the context.
+% In section \ref{sec:user} ``package'' usually means the \LaTeX{}
+% \nged{} package and in section \ref{sec:admin} ``package''
+% usually means the distribution package \ngefile{nge}.
+%
+% \subsection{History and changes}
+%
+% M.\ Leingang first wrote the exam class in 2003 and has developed it
+% in stages since then.  Other pieces have been developed along the
+% way, too.  In 2009 D.\ Kosygin refactored the package and its
+% documentation.  Version 3.0 has been released to public and uploaded
+% on CTAN on\fixme{date here}
+%^^A insert date here!
+%
+%
+% \section{Using \nged}
+% \label{sec:user}
+% 
+% \subsection{Regenerating user manual}
+% \label{sec:user-manual}
+%
+% 
+% \subsection{Class \ngefile{ngemin.cls}}
+% \label{sec:user-ngemin}
+%
+% This class defines the common theme for all the documents produced
+% with the help of \nged.  All other classes in this package
+% load it and add their own changes to document appearence.
+%
+% \section{Administration of \nged}
+% \label{sec:admin}
+%
+% This section discusses \nged{} distribution package as
+% described in the introduction of this manual.  The structure of this
+% package follows popular conventions, adopted in most of \LaTeX{}
+% packages of \TeX{}\ Live distribution.  \LaTeX{} code for the entire
+% package together with examples and supporting documentation is
+% contained in a single file \ngefile{nge.dtx}.
+%
+% \subsection{Installation}
+% \label{sec:admin-installation}
+%
+% \subsection{Regenerating manuals}
+% \label{sec:admin-installation-manuals}
+%
+% \subsection{Configuration}
+% \label{sec:admin-configuration}
+%
+%\iffalse
+%<*stopeventually>
+%^^A The next line is added for formatting purposes
+%<nge-1>%
+%\fi
+%% \StopEventually{\PrintChanges\PrintIndex}
+%\iffalse
+%</stopeventually>
+%\fi
+%
+%
+% \section{\LaTeX{} code}
+% \label{sec:code}
+%
+%\iffalse
+%<*code>
+%\fi
+% All the classes and styles in this package rely on \LaTeXe.  No
+% support for earlier versions of \LaTeX{} is provided.
+%    \begin{macrocode}
+\NeedsTeXFormat{LaTeX2e}
+%<ngemin>\ProvidesClass{ngemin}
+%<ngeinit>\ProvidesPackage{ngeinit}
+%<ngeunit>\ProvidesPackage{ngeunit}
+%<ngetest>\ProvidesClass{ngetest}
+%<ngeexam>\ProvidesClass{ngeexam}
+%<ngequiz>\ProvidesClass{ngequiz}
+%<ngeprob>\ProvidesPackage{ngeprob}
+%<ngeproblem>\ProvidesPackage{ngeproblem}
+%<ngekeys>\ProvidesPackage{ngekeys}
+%<def>\ProvidesFile{nge.def}
+%^^A  [\filedate \fileversion \filedescription]
+%    \end{macrocode}
+% The following package contains definitions, necessary for common
+% options' declaration in \nged.
+%    \begin{macrocode}
+%<!ngeinit>\RequirePackage{ngeinit}
+%    \end{macrocode}
+% We reserve prefix |NGE@| for internal commands in \nged{} classes
+% and styles.
+% 
+%\iffalse
+%</code>
+%\fi
+%
+% \subsection{File \ngefile{nge.def}}
+% \label{sec:code-def}
+%
+% \iffalse
+%<*def>
+% \fi
+% This file contains information, common for all the files in \nged{}
+% package.  First we introduce necessary commands, in case they are
+% not defined yet.
+%    \begin{macrocode}
+\providecommand*{\fileversion}{--}
+\providecommand*{\filedate}{--}
+\providecommand*{\filedescription}{--}
+%    \end{macrocode}
+% Now let us supply the values.
+%    \begin{macrocode}
+\renewcommand*{\fileversion}{--}
+\renewcommand*{\filedate}{--}
+%    \end{macrocode}
+% File description requires more care.
+%
+% \iffalse
+%</def>
+% \fi
+% \subsection{File \ngefile{ngeinit.sty}}
+% \label{sec:code-ngemin}
+%
+% \iffalse
+%<*ngeinit>
+% \fi
+% This is the internal package for \nged, which makes sure, that
+% everything needed for correct declaration of options is defined and
+% defined only once.
+% 
+% Switches for boolean options.
+%    \begin{macrocode}
+\RequirePackage{ifthen}
+\newboolean{points}
+%    \end{macrocode}
+% 
+%\iffalse
+%</ngeinit>
+%\fi
+% \subsection{File \ngefile{ngemin.cls}}
+% \label{sec:code-ngemin}
+%
+%\iffalse
+%<*ngemin>
+%\fi
+% This class defines the common theme for all the documents produced
+% with the help of \nged.  All other classes in this package
+% load it and add their own changes to document appearence.
+%    \begin{macrocode}
+\RequirePackage{ifthen}
+%    \end{macrocode}
+% It is derived from \LaTeX{} class \latexfile{article.cls}
+% to which we pass all the unknown options
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+%    \end{macrocode}
+% Now it is time to load the class and process all options given to it
+%    \begin{macrocode}
+\ExecuteOptions{}
+\ProcessOptions
+%    \end{macrocode}
+%    \begin{macrocode}
+\LoadClass{article}
+\RequirePackage{fancyhdr}
+%^^A\RequirePackage{titling}
+%    \end{macrocode}
+% For the moment we'll do quick mockup of some features, without
+% paying attention to cleanness of implementation and detail.  We'll
+% polish the code later.
+%
+% Page style with namehead
+%    \begin{macrocode}
+\newcommand{\ps@NGEnamehead}{%
+  \renewcommand{\@oddhead}{%
+    \begin{minipage}{\textwidth}
+      \normalfont
+      Name: \hrulefill\
+      Section:  \rule{0.5in}{0.4pt}
+      \\ \\
+      \noindent
+      Student Id: \rule{1.5in}{0.4pt}\
+      Email: \hrulefille
+    \end{minipage}}
+  \renewcommand{\@evenhead}{\@oddhead}
+  \renewcommand{\@oddfoot}{%
+    Signature: \hrulefill}
+  \renewcommand{\@evenfoot}{}}
+%    \end{macrocode}
+
+% First let's introduce some basic course information and then we'll
+% deal with appearances.
+% |\NGEcourse| sets the course name and short course name to be used
+% in the header.
+%    \begin{macrocode}
+\newcommand{\NGE@shortcoursename}{}
+\newcommand{\NGE@coursename}{}
+\newcommand{\NGE@course}{}
+\newcommand{\NGEcourse}{\@dblarg\NGE@@course}
+\def\NGE@@course[#1]#2{
+  \renewcommand{\NGE@shortcoursename}{#1}
+  \renewcommand{\NGE@coursename}{#2}
+  \renewcommand{\NGE@course}{%
+    \Large%
+    \begin{tabular}[t]{c}%
+      \NGE@coursename%
+    \end{tabular}%
+    \par\vskip 0.75em}}
+%    \end{macrocode}
+% \begin{macro}{NGE@author}
+% Provide for possibility when author is not given
+%    \begin{macrocode}
+\newcommand{\NGE@author}{}
+\newcommand{\noauthor}{\renewcommand{\NGE@author}{}}
+\let \NGE@oldauthor \author
+\renewcommand{\author}[1]{
+ \NGE@oldauthor{#1}
+ \renewcommand{\NGE@author}{\vskip 1.5em%
+   {\large%
+     \lineskip .75em%
+     \begin{tabular}[t]{c}%
+       \@author%
+     \end{tabular}\par}}}
+%    \end{macrocode}
+% \end{macro}
+% Let us deal with the titling commands.
+% \begin{macro}{maketitle}
+% Here we reimplement |\maketitle| command from
+% \latexclass{article.cls} by making it accept and typeset course
+% information.  Could have used package \latexpackage{titling}, but
+% right now it has a bug I'd rather wait until it is fixed.  However
+% we shall use try to use notations, consistent with it.
+%    
+% We have to redefine |\maketitle| command in order to incorporate
+% course information into it.  The definition depends on whether a
+% separate title page is produced (this is the default for exams).  We
+% use the switch |@titlepage| defined in \latexclass{article} class
+% and reproduce most of the code from \latexfile{article.cls}
+% verbatim.
+%    \begin{macrocode}
+\newlength{\NGE@pretitleskip}
+\newlength{\NGElowertitle}
+\setlength{\NGElowertitle}{0em}
+%    \end{macrocode}
+%    \begin{macrocode}
+\ifthenelse{\boolean{@titlepage}}
+%    \end{macrocode}
+% we are in the title page.
+%    \begin{macrocode}
+{\renewcommand{\maketitle}{\begin{titlepage}%
+  \let\footnotesize\small
+  \let\footnoterule\relax
+  \let \footnote \thanks
+  \setlength{\NGE@pretitleskip}{60\p@}
+  \addtolength{\NGE@pretitleskip}{\NGElowertitle}
+  \null\vfil
+  \vskip \NGE@pretitleskip%
+  \begin{center}%
+    {\LARGE \@title \par}%
+    \vskip 3em%
+    {\large
+     \lineskip .75em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+      \vskip 1.5em%
+    {\large \@date \par}%       % Set date in \large size.
+  \end{center}\par
+  \@thanks
+  \vfil\null
+  \end{titlepage}%
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax}}
+{\renewcommand{\maketitle}{\par
+  \begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\parindent 1em\noindent
+            \hb@xt@1.8em{%
+                \hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+    \if@twocolumn
+      \ifnum \col@number=\@ne
+        \@maketitle
+      \else
+        \twocolumn[\@maketitle]%
+      \fi
+    \else
+      \newpage
+      \global\@topnum\z@   % Prevents figures from going at top of page.
+      \@maketitle
+    \fi
+    \thispagestyle{plain}\@thanks
+  \endgroup
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax}}
+%    \end{macrocode}
+% here we are not in the title page.  Since the actuall typesetting is
+% done by |\@maketitle|, we just redefine it.
+%    \begin{macrocode}
+\def\@maketitle{%
+  \setlength{\NGE@pretitleskip}{2em}
+  \addtolength{\NGE@pretitleskip}{\NGElowertitle}
+  \newpage
+  \null
+  \vskip \NGE@pretitleskip%
+  \begin{center}%
+    \let \footnote \thanks
+    \NGE@course%
+    {\LARGE \@title \par}%
+    \NGE@author%
+    \vskip 1em%
+    {\large \@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em}
+%    \end{macrocode}
+% \end{macro}
+%
+%\iffalse
+%</ngemin>
+%\fi
+%
+% \subsection{Package \latexclass{ngeunit}}
+% \label{sec:code-ngeunit}
+%
+%\iffalse
+%<*ngeunit>
+%\fi
+%
+% This package supplies the logical structure and the common theme for
+% all other classes.
+%
+% The entire \nged{} package is centered around the concept of a
+% course as the single unit.  This package defines various commands
+% for specifying and accessing various course properties.
+%
+%
+%
+%
+%
+%
+%\iffalse
+%</ngeunit>
+%\fi
+%
+% \subsection{Class \latexclass{ngetest} and its derivatives}
+% \label{sec:code-ngetest}
+%
+%
+%\iffalse
+%<*ngetest>
+%\fi
+% 
+% This is the internal package, where all the necessary definitions
+% are given.  The derived classes, such as \ngefile{ngeexam} and
+% \ngefile{ngequiz}, just set appropriate defaults before loading this
+% class.
+%
+% We use package \latexpackage{ifoption} from \latexpackage{amsrefs}
+% collection.  This package provides useful command |\IfOption| and
+% also makes handling of mutually exclusive options more consistent.
+%    \begin{macrocode}
+\RequirePackage{ifoption}
+%    \end{macrocode}
+% 
+%
+%    \begin{macrocode}
+\DeclareExclusiveOptions{pages,bluebook}
+%    \end{macrocode}
+% Options below are not really boolean options.  It would be more
+% appropriately to call them \emph{extensions}.  Their purpose is to
+% extend the functionality of the package by adding and modifying
+% various macros, but once they are processed it is not easy to undo
+% their effect.  But since it is possible to test whether such an
+% option was given to the class, it is possible to emulate boolean
+% switches with their help too.
+%    \begin{macrocode}
+\DeclareBooleanOption{solutions}
+\DeclareBooleanOption{rubrics}
+%    \end{macrocode}
+% We also define a genuine boolean switch, which makes it possible to
+% turn processing points on and off explicitely.  Emulating it with
+% extension switch would be awkward, since the default is to assign
+% points to problems.
+%    \begin{macrocode}
+\DeclareOption{points}{\setboolean{points}{true}%
+  \PassOptionToPackage{\CurrentOption}{ngeproblem}}
+\DeclareOption{nopoints}{\setboolean{points}{false}%
+  \PassOptionToPackage{\CurrentOption}{ngeproblem}}
+%    \end{macrocode}
+% All unknown options are passed to class \latexpackage{article}.
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionToClass{\CurrentOption}{article}}
+%    \end{macrocode}
+% By default points are assigned to each problem
+%    \begin{macrocode}
+\ExecuteOptions{points}
+\ProcessOptions\relax
+\LoadClass{article}
+%    \end{macrocode}
+%    \begin{macrocode}
+\ProcessExclusiveOptions\relax
+%    \end{macrocode}
+%    \begin{macrocode}
+\IfOPtion{bluebook}{}{}
+%    \end{macrocode}
+%    \begin{macrocode}
+\IfOPtion{pages}{}{}
+%    \end{macrocode}
+%    \begin{macrocode}
+\IfOPtion{solutions}{}{}
+%    \end{macrocode}
+% Here we need to consider too possibilities: whether solutions to the
+% test are provided or not.
+%    \begin{macrocode}
+\IfOPtion{rubrics}{%
+  \IfOption{solutions}{}{}}{}
+%    \end{macrocode}
+% Finally we load package \ngefile{ngeproblem} which inherits the
+% options from \ngefile{ngetest}.
+%    \begin{macrocode}
+\RequirePackage{ngeproblem}
+%    \end{macrocode}
+% \subsubsection{Table of problems}
+% \label{sec:code-ngetest-top}
+%
+% \begin{macro}{\tableofproblems}
+%  This is done like a table of contents with |\@starttoc| command.
+%    \begin{macrocode}
+\newcounter{totalpoints}
+\newcommand{\tableofproblems}{\@starttoc{top}}
+%    \end{macrocode}
+% Internal environment |\NGE@tableofproblems| generates the top and
+% the bottom of the table of problems.
+%    \begin{macrocode}
+\newenvironment{NGE@tableofproblems}{%
+  \setcounter{totalpoints}{0}
+  \begin{center}
+    \begin{tabular}{|c|c|c|}\hline
+      Problem& Possible & Points\\
+      Number & Points & Earned\\\hline
+    }{%
+      \hline
+      \NGE@problemstrut
+      Total &\arabic{totalpoints}&\\\hline
+      \end{tabular}
+\end{center}}
+%    \end{macrocode}
+% This internal macro generates a line of the table of problems
+%    \begin{macrocode}
+\newcommand{\NGE@problem}[2]{%
+  \addtocounter{totalpoints}{#2}
+  \NGE@problemstrut
+  #1 & #2 & \\\hline
+}      
+%    \end{macrocode}
+% To make the table large enought to write in with red pen, this
+% internal macro genrates some vertical space
+%    \begin{macrocode}
+\pgfqkeys{/NGE/table of problems}{row height/.initial=5ex,
+row depth/.initial=2ex}
+\newcommand{\NGE@problemstrut}{%
+\rule[-\pgfkeysvalueof{/NGE/tableofproblems/row depth}]{0pt}%
+{\pgfkeysvalueof{/NGE/tableofproblems/row height}}}
+%    \end{macrocode}
+% \todo{It might be nicer to specify the \emph{total} height of the
+% row, with the problem number centered in the row.}
+%
+% Now we add hooks to |\begin{document}| and |\end{document}| to open
+% the table of problems file, write the top, write the bottom and
+% close it.
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \addtocontents{top}{\protect\begin{NGE@tableofproblems}}}
+%    \end{macrocode}
+% For the end hook we'd like to do
+% \begin{Verbatim}
+%   \addtocontents{top}{\protect\end{NGE@tableofproblems}}
+% \end{Verbatim}
+% but for some reason that does not do anything.  So we go one step
+% deeper in the abstraction and copy the definition of |\addtocontents|
+%    \begin{macrocode}
+\AtEndDocument{%
+  \immediate\write\@auxout{\string\@writefile{top}%
+  {\string\end{NGE@tableofproblems}}}}
+%    \end{macrocode}
+% 
+% \end{macro}
+% 
+%
+%
+%
+%
+%
+%
+%
+%\iffalse
+%</ngetest>
+%\fi
+%
+% Classes \latexclass{ngeexam} and \latexclass{ngequiz} do little
+% other than selecting appropriate defaults.
+%
+% \subsection{File \ngefile{ngeexam.cls}}
+% \label{sec:code-ngeexam}
+%
+%\iffalse
+%<*ngeexam>
+%\fi
+% 
+% Class \ngefile{ngeexam} does little other than selecting
+% appropriated defaults and loading other packages.
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionToClass{\CurrentOption}{ngetest}}
+%    \end{macrocode}
+% 
+%
+%    \begin{macrocode}
+\ExecuteOptions{pages}
+\ProcessOptions\relax
+\LoadClass{ngetest}
+%    \end{macrocode}
+%\iffalse
+%</ngeexam>
+%\fi
+%
+% \subsection{File \ngefile{ngeprob.sty}}
+% \label{sec:code-ngeprob}
+%
+%\iffalse
+%<*ngeprob>
+%\fi
+%
+%    \begin{macrocode}
+\ExecuteOptions{}
+\ProcessOptions
+%    \end{macrocode}
+%
+%
+%
+%
+%
+%
+%
+%\iffalse
+%</ngeprob>
+%\fi
+%
+%
+% \subsection{File \ngefile{ngeproblem.sty}}
+% \label{sec:code-ngeproblem}
+%
+%\iffalse
+%<*ngeproblem>
+%\fi
+% This package provides tools for |problem| environment.  It is
+% designed to that it could be used separately from the rest of
+% \nged{} package.
+%
+%    \begin{macrocode}
+\RequirePackage{ifoption}
+%%\RequirePackage{pgfopts}
+%    \end{macrocode}
+%    \begin{macrocode}
+\DeclareOption{points}{\setboolean{points}{true}}
+\DeclareOption{nopoints}{\setboolean{points}{false}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\DeclareBooleanOption{solutions}
+\DeclareBooleanOption{rubrics}
+%    \end{macrocode}
+
+%    \begin{macrocode}
+\ExecuteOptions{points}
+\ProcessOptions\relax
+\ProcessExclusiveOptions\relax
+%    \end{macrocode}
+%
+% \subsubsection{Problems, solutions and hints}
+% \label{sec:code-ngeproblem-problems}
+%    \begin{macrocode}
+\RequirePackage{pgfkeys}
+\RequirePackage{ifthen}
+%    \end{macrocode}
+% The documentation for \latexpackage{amsthm} says that it should be
+% loaded \emph{after} \latexpackage{amsmath} is loaded.  So we
+%    \begin{macrocode}
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+%    \end{macrocode}
+% Initially we define just one environment |problem| and also provide
+% for user options to adjust its behaviour as desired.
+% \begin{macro}{problem}
+% Problem number is kept track of in counter |problem|, counter
+% |problempoints| contains the number of points assigned to the
+% problem.  Default value is 0.
+%    \begin{macrocode}
+\newcounter{problem}
+\newcounter{problempoints}
+%    \end{macrocode}
+% The problem itself is setup with the help of \latexpackage{asmthm}
+% package.  \fixme{provide user command to change it!}.
+%    \begin{macrocode}
+\pgfkeys{/NGE/problem/.cd,
+body font/.initial=\normalfont,
+header font/.initial=\bfseries}
+\newcommand{\NGE@problembodyfont}{\normalfont}
+\newcommand{\NGE@problemheaderfont}{\bfseries}
+\newtheoremstyle{NGE@problem}
+{}% Space above
+{}% Space below
+{\NGE@problembodyfont}% problem body font
+{}% indent amount (empty=no indent, \parindent = normal paragraph indent)
+{\NGE@problemheaderfont}% problem header font
+{.}% Punctuation after theorem head
+{ }% Space after theorem head
+% ({ }=normal interword space, \newline=line break).
+{}% Head specification (empty means normal
+\newcommand{\NGE@problemname}{Problem}
+\theoremstyle{NGE@problem}
+\newtheorem{NGE@problem}[problem]{\NGE@problemname}
+\theoremstyle{plain}
+%    \end{macrocode}
+% Now to the the working horse: environment |problem|.  Initially it
+% does very little.  It takes one optional argument --- a number of
+% points for the problem, and, depending on the setting of the switch
+% |points| it passes it to |NGE@problem| or merely swallows it.  
+%    \begin{macrocode}
+\newenvironment{problem}[1][]
+%    \end{macrocode}
+% First we process all given options in order they were given.
+%    \begin{macrocode}
+{\setcounter{problempoints}{0}
+  \pgfqkeys{/NGE/problem/options}{#1}
+  \ifthenelse{\boolean{points}}{\begin{NGE@problem}[\theproblempoints]}
+    {\begin{NGE@problem}}}
+{\end{NGE@problem}}
+%    \end{macrocode}
+% Redefine macro |\theproblempoints| to expand number n to ``n points''.
+%    \begin{macrocode}
+\renewcommand{\theproblempoints}{%
+\arabic{problempoints} point\ifthenelse{\value{problempoints} = 1}{}{s}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\pgfkeys{/NGE/problem/options/points/.cd,
+  .value required, .code=\setcounter{problempoints}{#1}}
+%    \end{macrocode}
+% \end{macro}
+% Option |nopoints| disables points showing.  It accepts one optional
+% argument to allow to comment out assignment |points=10| as
+% |nopoints=10|, which then is ignored.
+%    \begin{macrocode}
+\pgfkeys{/NGE/problem/options/nopoints/.code=\setboolean{points}{false}}
+%    \end{macrocode}
+% Notice that option assignment |20,nopoints| still locally sets the
+% counter |problempoints| to 20, but no points values is typeset in
+% problem header.  Right now I have no idea if such behaviour is
+% useful for anything, but who knows, may be some hack later on will
+% justify it.
+%
+% Finally, in order to give ability to turn on point typesetting on
+% per problem basis, we provide boolean option |problemwithpoints|,
+% which locally sets the boolean switch |points| in each problem.
+% Now let's deal with unknown options.  For the moment we assume that
+% any unknown option is a nonegative number, and interpret it as the
+% desired number of points for this problem.
+%    \begin{macrocode}
+\pgfkeys{/NGE/problem/options/.unknown/.code
+    = \setcounter{problempoints}{\pgfkeyscurrentname}}
+%    \end{macrocode}
+% 
+% \begin{macro}{remark}
+%    \begin{macrocode}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{note}{Note}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{solution}
+%    \begin{macrocode}
+\newenvironment{solution}[1][Solution]{\begin{proof}[#1]}{\end{proof}}
+% \end{macro}
+% \begin{macro}{answer}
+%    \begin{macrocode}
+\theoremstyle{remark}
+\newtheorem*{answer}{Answer}
+% \end{macro}
+% 
+% Switch back to default theorem style
+%    \begin{macrocode}
+\theoremstyle{plain}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\IfOption{solutions}{}{}
+%    \end{macrocode}
+%    \begin{macrocode}
+\IfOption{rubrics}{}{}
+%    \end{macrocode}
+%\iffalse
+%</ngeproblem>
+%\fi
+%
+% \subsection{Package \latexclass{ngekeys}}
+% \label{sec:code-ngekeys}
+%
+%\iffalse
+%<*ngekeys>
+%\fi
+%
+% This package supplies the interface for keys processing with the   
+% help of \latexpackage{pgfkeys}.
+%    \begin{macrocode}
+\RequirePackage{pgfkeys}
+%    \end{macrocode}
+% \nged{} package reserves the tree of names with root |/NGE|.
+% Subtree |/NGE/options| provides support for various package options,
+% subtree |/NGE/errors| holds error messages.
+%
+% \subsubsection{Options support}
+% \label{sec:code-ngekeys-options}
+%
+% \begin{macro}{\DeclareNGEBooleanOption}
+\newboolean{testboolean}
+\pgfkeys{/test/boolean key/.is if=testboolean}
+\pgfkeys{/test/boolean key=true}
+\newcommand{\DeclareNGEBooleanOption}[2]{%
+  \newboolean{NGE@#1}
+  \pgfkeys{/NGE/#2/#1/key/.is if=NGE@#1,
+    /NGE/#2/#1/.cd,
+    /NGE/#2/#1/.is choice,
+    /NGE/#2/#1/.default=true,
+    true/.code={\setboolean{#1}{true}},
+    yes/.code={\setboolean{#1}{true}},
+    false/.code={\setboolean{#1}{false}},
+    no/.code={\setboolean{#1}{false}},
+    /NGE/#2/no#1/.code={\setboolean{#1}{false}}
+}}
+% \end{macro}
+%
+% \subsubsection{Error messages}
+% \label{sec:code-ngekeys-errors}
+%
+% \begin{macro}{NGEerror}
+% Command |\NGEDefineError|
+% defines an error  and stores error message 
+%    \begin{macrocode}
+\newcommand{\NGEDefineError}[3]{%
+  \pgfqkeys{/NGE/errors/#1}{.initial=#2,help message=#3}
+}
+%    \end{macrocode}
+% We define common handler for all errors
+%    \begin{macrocode}
+\pgfkeys{/handlers/.NGEerror/.code
+  =\PackageError{NGEd}{%
+    \pgfkeysvalueof{/NGE/errors/\pgfkeyscurrentname}}{%
+    \pgfkeysvalueof{/NGE/errors/\pgfkeyscurrentname/help message}}}}
+\newcommand{\NGEerror}[1]{\pgfkeys{/NGE/errors/#1}}
+%    \end{macrocode}
+%    
+% \end{macro}
+%\iffalse
+%</ngekeys>
+%\fi
+%
+% \section{Source}
+% \label{sec:source}
+% 
+% This section discusses the collection of files and tools used in
+% generation and development of \nged{} bundle, that is, in
+% terms of conventions in the beginning of this manual, the
+% \emph{source package} \nged.  We shall refer to files in
+% \nged{} source package as \nged{} \emph{sources} or
+% simply \emph{the sources}.
+%
+% \subsection{Main source file: \ngefile{nge.dtx}}
+% \label{sec:source-dtx}
+%
+% 
+% File \ngefile{nge.dtx} is the single source file for the entire
+% \nged{} package: all the \LaTeX{} classes and styles, all the
+% supporting files, and all of the documentation is generated from it.
+% The consists mostly of \LaTeX{} code together with copious comments
+% which provide the source for the documentation.  The file is
+% structured so that each part in it generates some file or a group of
+% files related to each other in the package.
+%
+%
+%
+% \subsection{Generation of \LaTeX{} files and other files:
+%   \ngefile{nge.ins}}
+% \label{sec:source-ins}
+%
+% In order to avoid duplication of effort, most of the package files
+% are generated from \ngefile{nge.dtx} by running various programs on
+% it. In particular, running \TeX{} on \ngefile{nge.dtx} generates
+% \ngefile{nge.sty} and all the class and style files.  Similarly,
+% running \TeX{} on \ngefile{nge.ins} generates all the class and
+% style files, but not \ngefile{nge.ins} itself, in order to avoid
+% vicious loops.  Setting the appropriate file structure takes some
+% effort, but once it is in place, adding to it is not very difficult.
+%
+%
+% \subsection{Documentation}
+% \label{sec:source-documentation}
+%
+% \LaTeX{} code for each class and style file must be placed in a
+% separate subsection of section \ref{sec:code} together with detailed
+% explanations of its structure.  The title of this section is just
+% the name of this class or style file.  In addition there must be a
+% subsection of section \ref{sec:user} with the same title, discussing
+% with examples how to use it.
+%
+% \section{Development notes and history}
+% \label{sec:dev}
+%
+% Understanding the structure of a mature
+% software package frequently is not an easy task.
+% This section documents the entire design of \nged{} package and the
+% history of its development.   After
+% several cycles of development such a package may consist of several,
+% (sometimes many) sophisticated parts interacting is subtle and
+% complex.  I\footnote[1]{\label{footnote:1}DK} find it helpful to
+% document the entire process of development from the scratch, stage
+% by stage, introducing components of the design and implementation
+% one by one.  This way it is easier to comprehend (or recall after
+% prolonged interruption) the underlying structure of the package and
+% the logic of its evolution.  This section is written for my own
+% benefit in the first place and bearing in mind a possibility that
+% someone else may find it useful too.  The exposition here is akin to
+% an exposition of a physical theory.  It does not reflect the
+% chronological order of development of ideas and tools, but instead
+% offers a coherent path, leading from one idea to another.
+%
+% \subsection{The purpose of \nged}
+% \label{sec:dev-overview}
+%
+% I\footnotemark[1]\fixme view \nged{} as a tool of teacher's personal
+% toolkit in an environment where teaching happens on an industrial
+% scale: a large school, a college with large classes, etc\dots.  This
+% tool provides typographic support for the entire lifetime of a
+% course taught, from its development stage through periodic
+% assesments to a complete bank of materials: assignments, tests,
+% handouts for students, notes for teachers and internal
+% documentation.  In an ideal teaching environment \nged{} will be
+% complemented by a database with a bank of questions, problems,
+% tasks, and other materials, crossreferenced by subjects, topics,
+% keywords, difficulty level and so on, and teaching support system,
+% which automates as much as possible daily routine tasks such as
+% distribution and administration of tests, grade processing and
+% anything else which which may be reliably delegated to machines and
+% computers.
+%
+% \nged{} should make it possible to concentrate on development of
+% course structure, preparation of its materials without worrying too
+% much about uniformity and consistency of the appearence of all the
+% documents.  For example, preparation of exams, their solutions for
+% students, rubric notes for graders, postmortem discussions for
+% instructors and assessments for course designers could be possible
+% with selection of a few virtual switches applied to the contents of
+% the course, which integrates the printed output with other course
+% materials under the same typographic theme.
+%
+% On the other hand \nged{} must be flexible enough to allow
+% customization of such themes sa desired.  In addition the package
+% should provide a set of sensible defaults which work well out of the
+% box and supply an easily extensible theme, which may serve as a
+% basis for derivation of other themes, taylored to particular needs
+% of course designer.
+%
+% \subsection{Design and implementation decisions}
+% \label{sec:dev-design}
+%
+% \nged{} grew naturally out of design of tests and course materials
+% in mathematical courses, and there is a widely followed tradition of
+% using \LaTeX{} and other \TeX{}-derived programs for typesetting
+% mathematics.  It is then a straightforward decision to develop
+% \nged{} as a \LaTeX{} package at the same time keeping an eye for a
+% possibility of extending it later to other \TeX-breeds, such as
+% ConTeXt.  
+%
+% Package \nged{} will be developed following standards and
+% conventions of \TeX{}\ Live
+% distribution\footnote{\url{http://www.tug.org/texlive/}} with the
+% ultimate goal of making it available for public download on the
+% Comprehensive TeX Archive Network\footnote{CTAN,
+%   \url{http://www.ctan.org}}.  \nged{} should integrate well with
+% \TeX{}\ Live distribution.  In particular \nged{} in its default
+% configuration must not rely on any package outside for this
+% distribution neither in application of its classes and style files,
+% nor in generation of package documentation.
+% 
+% The released version of \emph{\nged{} distribution package},
+% intended for upload on CTAN, should consist of two main files:
+% \ngefile{nge.dtx} and \ngefile{nge.ins}, supplemented with user
+% documentation in PDF and other supporting files.  File
+% \ngefile{nge.dtx} will contain the \LaTeX{} code of all class and
+% style files in the package and file \ngefile{nge.ins} will be the
+% installation script, which extracts all the \LaTeX{} files from
+% \ngefile{nge.dtx} and installs them in the appropriate places of
+% \TeX{}\ Live distribution.  File \ngefile{nge.dtx} must also provide
+% sources for \nged{} user manual and possibly other documents related
+% to the package.
+% 
+% \nged{} development will follow the principle of creative lazyness:
+% no reinvention of wheels, if some task is done well by another
+% \TeX{}\ Live package, this task should be delegated to it.
+% Duplication of text will also be avoided as much as possible: the
+% best way to keep two blocks of text or code identical is to insert
+% the same source twice.  Finally, the best way to work rapidly is to
+% think slowly and provide plenty of explanations.  The package will
+% have documented as much as possible, even its own documentation.
+%
+% Thus \nged{} will be implemented as follows.  All the \LaTeX{}
+% sources together with their documentation and sources of all the
+% supporting files for distribution package will be contained in the
+% single source file \ngefile{nge.dtx}.  File \ngefile{nge.dtx} will
+% be structured so that all the parts of the distribution package for
+% upload on CTAN, including the installation script \ngefile{nge.ins}
+% will be extracted from \ngefile{nge.dtx} with the help of
+% \docstrip{} utility.  File \ngefile{nge.dtx} will also document its
+% own structure.  Thus \ngefile{nge.dtx} is the only source file of
+% \nged{} distribution package.
+% 
+% The generation and development of \nged{} package will be aided by a
+% make file \ngefile{Makefile}, which will be evolved in parallel with
+% \nged{}.  This makefile will not be a part of \nged{} distribution
+% package, but it will be a part of \nged{} source package.  Its
+% development will be also documented in appropriate detail in
+% \ngefile{nge.dtx}.  Thus \ngefile{nge.dtx} and \ngefile{Makefile}
+% are the only two files of \emph{\nged{} source package}.  These two
+% files together with \LaTeX{} packages, required for application of
+% all \nged{} class and style files and generation of all \nged{}
+% documentation form \emph{\nged{} development package}.
+%
+% \nged{} must provide three types of documentation: end user manual,
+% which discusses how to use \LaTeX{} package, administrator manual,
+% which deals with installation and configuration questions, and
+% developers manual, which discusses the maintenance and further
+% development of the package.  In addition, maintainers of \nged{} may
+% have their private documentation, which, for obvious reasons, is not
+% discussed here.
+% 
+% Documentation of \nged{} must provide for several entry points into
+% the package: a user, trying to decide whether the package could be
+% useful, may begin with reading the manual, available as a PDF file
+% on CTAN.  A system administrator may start with reading the file
+% \ngefile{README.txt} in the distribution package.  A \LaTeX{}
+% programmer may start reading the source file \ngefile{nge.dtx} directly.  In
+% all these cases clear and concise instructions must be placed near
+% the beginning telling where to find or how to build the complete
+% documentation.  Chains of references must be short and their length
+% should not exceed one in most of the cases and must never exceed
+% three.  It is better to tolerate some duplication of documentation,
+% than to force the user to chase one reference after another.
+% 
+% \nged{} development package will be placed under version control in
+% a Subversion repository at \ngedsvnroot.
+%
+% Other design decisions pertinent to particular features of \nged{}
+% will be made below as such a necessity arises.
+%
+% \subsection{Main source file: \ngefile{nge.dtx}}
+% \label{sec:dev-dtx}
+%
+% We begin with empty file \ngefile{nge.dtx} and introduce its structure step
+% by step adding more and more details.  Contrary to the common
+% approach, when \LaTeX{} code is developed by introducing more and more
+% parts of it which are finally extracted into a class or style file,
+% the exposition in this section is build around various pieces of
+% \emph{quoted} code, which were extracted from other parts of this
+% file.
+%
+% Let us summarize the requirements for \ngefile{nge.dtx} formulated in
+% section \ref{sec:dev-design}.  File \ngefile{nge.dtx} contains \LaTeX{} code
+% for all \nged{} class and style files together with their
+% documentation.  It also contains sources of all the supporting files
+% of \nged{} distribution package and their documentation.  And
+% finally, it contains its own documentation too, part of which is
+% provided by this section.  We shall adopt the following structure of
+% \ngefile{nge.dtx}.  The file will consist of two parts: head and body
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\meta{head}
+\meta{body}
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% Part \meta{head} contains the sources of all the supporting files,
+% while part \meta{body} contains all the \LaTeX{} sources for class
+% and style files, their documentation and the package documentation
+% too.
+%
+% In order to combine \LaTeX{} code and its documentation in one file
+% we shall use \LaTeX{} package
+% \latexpackage{doc}\footnote{\texcatalogueentry{doc}}.  The \LaTeX{}
+% code for \nged{} class and style files in file \ngefile{nge.dtx} is marked
+% up according to \latexpackage{doc} conventions and is interpspersed
+% with comments, which serve as \LaTeX{} source for documentation.
+% Actual \nged{} class and style files are extracted from \ngefile{nge.dtx} by
+% \docstrip{}\footnote{\texcatalogueentry{docstrip}} utility and the
+% package documentation produced by processing \ngefile{nge.dtx} with
+% \LaTeX{}.  Thus \ngefile{nge.dtx} has the form
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textit{sources for supporting files in \nged{} distribution package}
+\textit{\latexpackage{doc} configuration}
+\textit{latex code for classes and styles code with \docstrip{} markup}
+  \textit{and their documentation}
+\textit{\nged{} documentation source}
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% The detailed structure of each part is discussed in subsections
+% below.
+%
+% \subsubsection{The driver}
+% \label{sec:dev-dtx-driver}
+%
+% By convention, the part of file \ngefile{nge.dtx}, containing
+% \latexpackage{doc} configuration is called the \emph{driver}.  We
+% shall use in the driver \LaTeX{} class \latexclass{ltxdoc}, which
+% loads \latexpackage{doc} automatically.  Thus initially the driver
+% looks as follows
+% \VerbatimInput{driver-skel.tex}
+% The lines between |\begin{document}| and |\end{document}| contain
+% commands for \latexpackage{doc} to read and process files with the
+% code and documentation.  In our case there is only one file ---
+% \ngefile{nge.dtx} itself and we use command
+% \VerbatimInput{driver-body}
+% But running |latex| on file
+% \VerbatimInput{driver-2.dtx}
+% will produce an error, since after reading line
+% \VerbatimInput{driver-body}
+% \LaTeX{} will begin reading \ngefile{nge.dtx} from the beginning and during
+% the second processing of this file \LaTeX{} again sees
+% |\documentclass{ltxdoc}|.  In order to avoid this error everything
+% between |\documentclass{ltxdoc}| and |\end{document}| in \ngefile{nge.dtx}
+% needs to be concealed from \LaTeX{} on the second reading.  
+%
+% In ordinary \TeX{} one could conceal parts of a source file from
+% reading by ``commenting out''.  If an unquoted \% sign occurs in a
+% line of a tex source file the first occurence of this sign together
+% with everything following it till the end of the line is considered
+% a comment and is skipped by \TeX{} during the processing.
+% Alternatively, we can tell \TeX{} to skip a block of lines by
+% placing it inside a conditional statement whose condition is never
+% fulfilled, that is between |\iffalse| and |\fi| commands.  \LaTeX{}
+% follows the same conventions as \TeX{}.  But commenting out the
+% entire driver or placing it between |\iffalse| and |\fi| creates
+% another problem.  Lines
+% \VerbatimInput{driver-3.dtx}
+% are concealed from \LaTeX{} on the first run too and they are never
+% seen by \LaTeX{} at all.
+%
+% In order to make the driver visible to \LaTeX{} on the first run and
+% invisible on the second run, when the command |\DocInput{\jobname}|
+% is processed, we can use the fact, that package \latexpackage{doc}
+% changes the meaning of character \%.  With \latexpackage{doc} loaded
+% \% no longer indicates the beginning of a comment, it is treated by
+% \LaTeX{} in the same way a blank space is treated.  The driver
+% \VerbatimInput{driver-4.dtx}
+% is processed by \LaTeX{} correctly and produces no errors: it is
+% seen by \LaTeX{} on the initial pass over \ngefile{nge.dtx} and everything
+% between |%\iffalse| and |%\fi| is skipped on the second pass.
+%
+% \subsubsection{Use of comments}
+% \label{sec:dev-dtx-comments}
+%
+% In the section \ref{sec:dev-dtx-driver} we concealed the driver of
+% \ngefile{nge.dtx} from \latexpackage{doc} by placing it between commands
+% |%\iffalse| and |%\fi|. We shall use this method of commenting
+% systematically during the preparation of \ngefile{nge.dtx}.  Comments in
+% \ngefile{nge.dtx} are used mostly to conceal various parts of this file from
+% \LaTeX{} and not to provide detailed information about the file
+% structure.  The latter purpose is served by the document you are
+% currently reading.
+%
+% Every part of \ngefile{nge.dtx} which needs to be concealed from \LaTeX{}
+% will be either commented out with \% signs or placed between
+% |\iffalse| and |\fi| commands.  Similarly, every part which needs to
+% be concealed from \latexpackage{doc} package during the stage, when
+% will be placed between |%\iffalse| and |%\fi| commands.
+% With the help of these techniques it is possible to achieve all four
+% possible combinations of visibility and invisibility of a particular
+% part of \ngefile{nge.dtx} to \LaTeX{} on the first pass over \ngefile{nge.dtx} and
+% \LaTeX{} on the second pass with \latexpackage{doc} already
+% loaded.
+%
+% Beware, however that using |\iffalse| and |\fi| or |%\iffalse| and
+% |%\fi| for commenting purposes requires care, since \TeX{} still reads
+% everything following |\iffalse| in search of a matching |\fi|.  This
+% may lead to unexpected results, if \TeX, for example, encounters a
+% construct |\iffalse...\fi...\fi|.  The first |\fi| is not ignored,
+% instead it matches the preceding |\iffalse|, thus ending a comment.
+% When \TeX{} encounters the second |\fi|, this may result in an
+% error, if this |\fi| does not match any prior |\iffalse| or the
+% second |\fi| may match some prior |\iffalse| for which it was not
+% intended.
+% 
+% In addition \latexpackage{doc} recognises sequence of characters
+% |^^A| as the beginning of a comment and skips everything, following
+% the first occurence of this unquoted character string till the end
+% of the line.  This string has the same relation to the pair
+% |%\iffalse| and |%\fi| in \latexpackage{doc} package, as character
+% |%| to the pair |\iffalse| and |\fi|.  We conceal from
+% \latexpackage{doc} those parts of \ngefile{nge.dtx} which provide sources
+% for other files in \nged{} distribution package with the help of
+% |%\iffalse| and |%\fi|, and use |^^A| for short comments in
+% \ngefile{nge.dtx}, helping to separate one part of the file from another and
+% serving as reminders of various conventions adopted during the
+% development.
+% 
+% \subsubsection{Configuration of \latexpackage{doc} package}
+% \label{sec:dev-dtx-doc}
+% 
+% After the line |\documentclass{ltxdoc}| we add configuration
+% commands for \latexpackage{doc}
+% \VerbatimInput{driver-config.tex}
+% which turn on indexing of macros and refer to line numbers of code
+% where they were used.  We also tell \latexpackage{doc} to record
+% history of changes, made in the file.  These configuration commands
+% for \latexpackage{doc} are also supplemented by the command
+% \VerbatimInput{stopeventually.dtx}
+% telling \LaTeX{} to perform appropriate actions at the end of
+% typesetting.  Configuration of \latexpackage{doc} used in processing
+% \ngefile{nge.dtx} may by changed by the user with the help of 
+% configuration file \latexfile{ltxdoc.cfg}.  For details see
+% section \ref{sec:user-manual}.
+%
+% Later we shall add to \latexpackage{doc} configuration commands in
+% the preamble of the driver other commands, loading various \LaTeX{}
+% packages, configuring them, and defining custom macros.
+%
+% Right after the driver we also place commands
+% \VerbatimInput{checksum.dtx}
+% providing rudimentary error control for \ngefile{nge.dtx} during network
+% transmissions.  Thus the initial version of \ngefile{nge.dtx} takes the form
+% \VerbatimInput{nge-1.dtx}
+% User documentation will go before |\StopEventually| command and the
+% code and package documentation will follow this command.
+%
+% \subsubsection{\docstrip{} markup}
+% \label{sec:dev-dtx-docstrip-markup}
+%
+% \docstrip{} is used in \nged{} for two purposes.  All the class and
+% style files for \nged{} are extracted from \ngefile{nge.dtx} with the help
+% of \docstrip{} utility.  Other parts of \ngefile{nge.dtx} are extracted with
+% the help of \docstrip{} too.  Some of these extracted parts become
+% components of \nged{} distribution package, some are inserted
+% verbatim in the package documentation as quotations.  The latter
+% solves the consistency problem: it ensures that the quotation in the
+% documentation is indeed identical with the part of the code to which
+% it is referring.
+%
+% The extraction of parts is done with the help of \docstrip{}
+% |\generate| command.  The details are given in sections
+% \ref{sec:dev-dtx-docstrip-ins},
+% \ref{sec:dev-dtx-docstrip-extraction}.  In this section we shall
+% discuss the structure of \ngefile{nge.dtx} from the point of view of
+% \docstrip.
+%
+% In its default configuration \docstrip{}, when run on a \TeX{} file,
+% removes all the lines, which begin with a single |%| sign and
+% outputs other lines literally.  There is also an important
+% exception: lines beginning with |%%| are not stripped, they are also
+% output literally.  For other details see \docstrip{}
+% documentation\fixme[reference].
+%
+% In order to simplify generation of multiple files from a single
+% source, \docstrip{} makes possible conditional extraction of lines.
+% This is done by giving |\generate| command an options list with with
+% which the input file is processed 
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}[commandchars=\+\[\]]
+\generate{\file{+textit[file.out]}{\from{+textit[file.in]}{+textit[opt1,+dots,optn]}}} 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi Every line of \latexfile{file.in} is also supplied with a boolean
+% expression of options in disjunctive normal form.  Such expressions
+% are called by \docstrip{} authors \emph{guards}.  One may view
+% quards as boolean functions which depend on boolean variables
+% \textit{opt1}, \dots, \textit{optn} and may depend on other boolean
+% variables (options) too.  The list of options, given to |\generate|
+% command tells, which variables in \meta{guard} evaluate to |true|.
+% All other variables in the guard evaluate to |false|.  Then
+% \latexfile{file.in} is read line by line and the extraction decision
+% is made according to the following criteria\footnote{Warning: these
+%   conclusions are based on my understanding and interpretation of
+%   \docstrip{} manual.  I have not studied \docstrip{} code itself.
+%   In cases where there is any doubt about the accuracy of this
+%   description, it is strongly advised to try experiment with
+%   \docstrip{}.}.
+% \begin{enumerate}
+% \item A line is a \emph{comment line} if it begins with |%| which is
+%   not followed by a guard or another |%|.  All the comment lines are
+%   stripped.
+% \item If the line begins with a guard \meta{guard}, possibly
+%   prefixed with |%|, then boolean expression \meta{guard} is
+%   evaluated according to the standard rules of boolean logic.  All
+%   the boolean variables from the list of options \textit{opt1},
+%   \dots, \textit{optn} evaluate to |true|, any other boolean
+%   variables, occuring in \meta{guard} evaluate to |false|.  If
+%   boolean function $\meta{guard}$ evaluates to |true|, then
+%   everything following the guard to the end of the line is
+%   extracted.  Otherwise the line is skipped.
+% \item If the line is not a comment line and it has no guard, it is
+%   extracted unconditionally, that is \emph{always}
+%   extracted\footnote{This criterion is strikingly different from the
+%     usual treatment of disjunctive normal forms (DNFs) in
+%     mathematical logic, where an empty DNF always evaluates to
+%     |false|.  Interpreting the empty DNF as a constant boolean
+%     function with value |false| would mean that failing to provide a
+%     guard for a line would make this line effectively unextractable.
+%     Naturally, no matter how consistent it is with DNFs' notations,
+%     this is not the behaviour one expects from an extraction
+%     process.  Even when no options for extraction are specified we
+%     expect the line to be extracted unless it is a comment line.
+%     But it is precisely this deviation from the standard
+%     interpretation of DNFs, which makes creation of extraction rules
+%     harder than necessary.  A different set of defaults is forced
+%     upon the language of DNFs, which make me wonder, whether the
+%     initial choice of the language for boolean expressions was well
+%     thought through.  Conjunctive normal forms (CNFs) look like a
+%     more suitable alternative here, but dealing with CNFs is much
+%     harder for humans than dealing with DNFs.  Is there a better
+%     form of presenting options for extractions, which makes it easy
+%     to comprehend by humans and consistent with set-theoretic
+%     operations?}.
+% \item A line which begins with |%%| is considered a comment line,
+%   marked for extraction.  It is processed for extraction in the same
+%   way as a line with an empty guard: it is extracted entirely,
+%   together with the leading |%%|.
+% \end{enumerate}
+% If a block of contiguous lines has to be marked for extraction with
+% the same guard \meta{guard}, instead of marking each line with
+% \meta{guard}, one can enclose the entire block between two anchors
+% \meta{*guard} and \meta{/guard}, produced from \meta{guard} with
+% modifiers |*| and |/|.  Guard \meta{guard} with guard modifier |*|
+% marks the beginning of the block, marked with \meta{guard}, and
+% \meta{guard} with guard modifier |/| marks the end of this block.
+% Simple guards may be nested.  Constructs like
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+<*A>
+<B> some text   
+</A>
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% and
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+<*A>
+<*B>
+ some text
+</B>   
+</A>
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% are equivalent to 
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+<A&B> some text
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% provided that expression |<A&B>| is well defined for \docstrip{}.
+%
+% While preparing \ngefile{nge.dtx} we adopt the following conventions.  In
+% order to avoid inadvertent extraction of lines into multiple files,
+% \emph{all} \LaTeX{} code will be marked up with guards.  Most of the
+% quards will have mnemonic names, clearly relating them to the part
+% of \ngefile{nge.dtx} they are guarding.  Here is, for example, the driver of
+% \ngefile{nge.dtx} with appropriate guards incorporated
+% \VerbatimInput{driver-template.dtx}
+% Note that quards |<*driver>| and |</driver>| are not seen by
+% \LaTeX{}, since they are prepended by the comment sign |%|.  These
+% guards are not seen by \latexpackage{doc} package either, since the
+% entire driver is placed between |%\iffalse| and |%\fi|.
+%
+% Concealing guards from \latexpackage{doc} may require additional
+% care.  For example, the line
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%<guard> some text   
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi 
+% will be processed by \docstrip{} correctly: if option |<guard>| is
+% given, | some text| will be output, and the line will be ignored
+% otherwise.  Similarly, this line will be ignored by \LaTeX{},
+% because it begins with a comment character |%|.  But
+% \latexpackage{doc} will see this line and it will be typeset as\\
+% \leftline{<guard> some text}
+% which presumably was not our intention.  In order to conceal the
+% guard from \LaTeX{} and \latexpackage{doc} it has to be placed
+% between |%\iffalse| and |%\fi| commands.  Hence the correct way to
+% prepare the line above for typesetting by \LaTeX{} is
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%\iffalse
+%<*guard>
+%\fi
+ some text   
+%\iffalse
+%</guard>
+%\fi 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi 
+% If we want to conceal this line from \LaTeX{} and make it visible to
+% \latexpackage{doc} only, we can prepend | some text| with |%|.
+% \iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%\iffalse
+%<*guard>
+%\fi
+% some text   
+%\iffalse
+%</guard>
+%\fi 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi 
+% This does typeset the line above correctly, but produces another
+% problem: even with option |guard| given explicitely \docstrip{} will
+% view  line |% some text| as a comment line and it will strip it off.
+% If we still want this line to be in \docstrip{} output, we have to
+% prepend it not with one |%|, but with |%%|.  
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%\iffalse
+%<*guard>
+%\fi
+%% some text   
+%\iffalse
+%</guard>
+%\fi 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi 
+% This way, as explained above, \docstrip{}\footnote{provided that
+%   docstrip is in its default configuration} will consider line
+% |%% some text| as a comment,
+% intended for extraction and it will be extracted from the file.
+% That is why the lines for |\CheckSum|, |\CharacterTable|,
+% |\StopEventually| and |\Finale| in the examples in section
+% \ref{sec:dev-dtx-doc} were prepended not with one, but with two |%|
+% signs.  This way they are processed correctly by both
+% \latexpackage{doc} package and \docstrip{}.  
+%
+% Guard |<hide>| will be used for marking up parts of \ngefile{nge.dtx} which
+% are never to be extracted with \docstrip{}, with the explicit
+% assumption, that option |hide| will \emph{never} be given to
+% |\generate| command.  Guard |<hide>| is used in particular to
+% conceal lines containing |<guard>| in examples above.  Here is how
+% the source for the first of the three examples above looks like
+% \iffalse
+%<hide-example>%\iffalse
+%<hide-example>%<*hide>
+%<hide-example>%\fi
+%<hide-example>% \begin{Verbatim}
+%<hide-example>\iffalse
+%<hide-example><*guard>
+%<hide-example>\fi
+%<hide-example> some text   
+%<hide-example>\iffalse
+%<hide-example></guard>
+%<hide-example>\fi 
+%<hide-example>% \end{Verbatim}
+%<hide-example>%\iffalse
+%<hide-example>%</hide>
+%<hide-example>%\fi 
+% \fi
+% \VerbatimInput{hide-example.dtx}
+% There is also a simple way to place in docstrip output a line which
+% begins with exactly one |%| character, provided, that this line does
+% not need to be processed by \latexpackage{doc}.  For this it
+% suffices to place the line between |%\iffalse| and |%\fi| commands and
+%  prepend the entire line with an appropriate guard.
+%\iffalse
+%<*hide>
+%\fi
+% \begin{Verbatim}
+%\iffalse
+%<guard>% some text   
+%\fi 
+% \end{Verbatim}
+%\iffalse
+%</hide>
+%\fi
+% After running \docstrip{} with option |guard| on the source, line\\
+% |% some text|\\
+% will be extracted into another file, whose contents may be then
+% quoted verbatim with the help of |\VerbatimInput| command.
+% This is how the example above with a hidden |<guard>| was
+% produced.
+%
+% The rest of the file \ngefile{nge.dtx} consists of parts, marked up with the
+% help of the techniques extensively discussed above.  In particular,
+% every subsection of section \ref{sec:code} is enclosed between a
+% pair of anchors, whose guard name is derived from the appropriate
+% class or style file, derived in this section.  For example, entire
+% subsection \ref{sec:code-ngemin} is enclosed between anchors
+% |<*ngemin>| and |</ngemin>|.  Similarly, the part of \ngefile{nge.dtx} file,
+% which serves as the source for readme.txt file of \nged{}
+% distribution package is placed between anchors |<*readme>| and
+% |</readme>|, and so on\dots.  In addition to guard |<hide>|, which
+% is never issued as option to \docstrip{}, we also use several
+% guards, which are common for some groups of generated files.  For
+% example, guard |<code>| marks up the part, which is common for all
+% the \LaTeX{} class and style files.  It includes in particular
+% version information for each file.
+%
+% \subsubsection{Extracting parts of itself}
+% \label{sec:dev-dtx-docstrip-extraction}
+%
+% At the end of section \ref{sec:dev-dtx-docstrip-markup} we have
+% discussed, how various pieces of \ngefile{nge.dtx} may be marked up for
+% extraction with \docstrip{}.  Some of the extracted pieces are later
+% inserted in the documentation verbatim, next to the explanations of
+% their structure and purpose.  Other extracted pieces of \ngefile{nge.dtx}
+% become part of \nged{} distribution package.
+%
+% We place \TeX{} commands, controlling the extraction, in the very
+% beginning of \ngefile{nge.dtx}.  These are the first lines \LaTeX{} sees and
+% processes even before seeing |\documentclass| command.  This way all
+% the parts of \ngefile{nge.dtx} are extracted before they are needed for
+% quoting at later stages of processing.
+%
+% 
+% The extraction is done with the help of \docstrip{} utility, so we
+% load it first.
+% \VerbatimInput{ext-docstrip.dtx}
+% Then we configure \docstrip{} to extract files silently, overwriting them if
+% they necessary and tell it to prepend or  append nothing  to
+% extracted pieces.
+% \VerbatimInput{ext-mock-config.dtx}
+% In order to conceal the extraction commands from \latexpackage{doc}
+% package, we need to place them between |%\iffalse| and |%\fi|
+% commands.  So the beginning of \ngefile{nge.dtx} now takes the form
+% \VerbatimInput{ext-skel.dtx}
+% Now it remains only to add file generation commands.  The code below
+% extracts pieces of \ngefile{nge.dtx} for quoting them later in the
+% documentation.
+% \VerbatimInput{ext-examples.dtx}
+% File \latexfile{canary.txt} checks for lines with \LaTeX{} commands
+% without \docstrip{} guards.  If there are no such lines it will be
+% empty.
+%
+% In the same way one can add commands for generation other files in
+% \nged{} distribution package.
+%
+% \subsubsection{File \ngefile{nge.ins}}
+% \label{sec:dev-dtx-docstrip-ins}
+%
+% File \ngefile{nge.ins} is part of \nged{} distribution package.
+% Its purpose is to generate all class and style files from
+% \ngefile{nge.dtx}.  Its structure is similar to the structure of code at the
+% end of section \ref{sec:dev-dtx-docstrip-extraction}.  But there
+% docstrip has different configuration in it. First of all\fixme[complete]
+% \VerbatimInput{ins-1.dtx}
+% Furthermore \fixme[complete]
+% \VerbatimInput{ins-texlive.dtx}
+% In addition, all the class and style files have license and
+% copyright notice inserted in them during the generation process.
+% This is achieved by supplying appropriate preamble in
+% \ngefile{nge.ins}:
+% \VerbatimInput{ins-preamble.dtx}
+% Then file generation commands are issued
+% \VerbatimInput{ins-body.dtx}
+% followed by installation message and ``end of job'' command
+% \VerbatimInput{ins-tail.dtx}
+% 
+% \subsubsection{Extracting everything from \ngefile{nge.dtx}}
+% \label{sec:dev-dtx-docstrip-all}
+%
+% Since the structure of \ngefile{nge.ins} is so similar to the
+% extraction code in the beginning of \ngefile{nge.dtx}, quoted in section
+% \ref{sec:dev-dtx-docstrip-extraction}, it is tempting to avoid
+% duplication of efforts and arrange file extraction commands in the
+% beginning of \ngefile{nge.dtx} so that file \ngefile{nge.ins} is generated
+% automatically, with its preamble extracted from the part of
+% \ngefile{nge.dtx}, which contains the text of copyright notice and license.
+%
+% This is achieved by interspersing \docstrip{} configuration and
+% extraction commands in the beginning of \ngefile{nge.dtx} with the text of
+% copyright notice and license, and marking them up appropriately with
+% various guards.  It is also possible to obtain the same result by
+% keeping docstrip commands and license text in separate parts of
+% \ngefile{nge.dtx}, and generating \ngefile{nge.ins} with the help of several
+% |\from| commands.  We do not use this approach for reasons which
+% will be given below.
+%
+% First we begin by placing all the \docstrip{} configuration end extraction
+% commands  inside a \TeX{} group, in order to avoid interference of
+% \docstrip{} definitions with \LaTeX{} definitions, loaded later.
+% \VerbatimInput{ext-head.dtx}
+% Then we load docstrip and its configuration commands.
+% \VerbatimInput{ext-docstrip.dtx}
+% Since configuration commands for file extraction from \ngefile{nge.dtx} and
+% \ngefile{nge.ins} differ from each other, some of them need to be
+% concealed from \docstrip{}, while others have to be concealed from
+% \LaTeX{}.  This is achieved with the help of |<ins>| guard, marking
+% parts for extraction into \ngefile{nge.ins}.
+% \VerbatimInput{ext-fullconfig.dtx}
+% In the same way we configure the preamble.  Different preambles a
+% needed for generation of class and style files, for package
+% distribution files and for code examples.  Therefore, next we place
+% in \ngefile{nge.dtx} the text of license, marked up for extraction into
+% preamble of \ngefile{nge.ins} and also into a separate file.
+% \VerbatimInput{ext-preamble.dtx}
+% Next we give file generation commands\footnote{File generation
+%   commands quoted here correspond to the development version of
+%   \ngefile{nge.dtx}.  In the version of \ngefile{nge.dtx},
+%   distributed with \nged{} package some of these commands are
+%   commented out in order to avoid overwriting files, distributed
+%   with the package.}.
+% \VerbatimInput{ext-body.dtx}
+% Note that in the code above file generation commands for class and
+% style files come first.  Therefore the text of the license given in
+% preamble to these command applies to them.  The same preamble is
+% also extracted into \ngefile{nge.ins}, which makes class and style
+% files, with the help of lines above, identical with class and style
+% files, extracted from \ngefile{nge.dtx} with the help of file
+% \ngefile{nge.ins} given in section
+% \ref{sec:dev-dtx-docstrip-ins}. Furthermore, the same preamble
+% applies to file \ngefile{nge.ins} itself, extracted from
+% \ngefile{nge.dtx} by the code above.  It is precisely this ability
+% to use the same text of license several times which affected our
+% decision to intertwine \docstrip{} commands with license text in
+% \ngefile{nge.dtx}.
+%
+% Extraction commands are followed by the rest of \ngefile{nge.ins}
+% contents, after which we close the \TeX{} group.
+% \VerbatimInput{ext-tail.dtx}
+% The |\ifx| conditional above checks whether accidentally or
+% intentionally the file generation commands were processed with plain
+% \TeX{} and if this is the case, exits.  Otherwise, the \TeX{} group,
+% opened in the beginning of this section, is closed and the program
+% (presumably \LaTeX{} or its relative) proceeds to read and interpret
+% the driver.
+%
+% \subsection{Configuring packages}
+% \label{sec:dev-dtx-packages}
+%
+% \subsubsection{Subversion support}
+% \label{sec:dev-dtx-packages-svn}
+%
+% We use \latexpackage{svninfo}.  Here is the information available to
+% us:\\ \svnId\\
+% It is accessible through the following commands\\
+% |\svnInfoFile| \svnInfoFile\\
+% |\svnInfoRevision| \svnInfoRevision\\
+% |\svnInfoDate| \svnInfoDate\\
+% |\svnInfoTime| \svnInfoTime\\
+% |\svnInfoOwner| \svnInfoOwner\\
+% |\svnInfoYear| \svnInfoYear\\
+% |\svnInfoMonth| \svnInfoMonth\\
+% |\svnInfoDay| \svnInfoDay\\
+% |\svnInfoLongDate| \svnInfoLongDate\\
+% |\svnToday| \svnToday
+%
+% \section{Misc unprocessed}
+% \label{sec:misc}
+%
+% The rest of this section contains various bits and ends: ideas and
+% things to try, notes to self and other developers, lists of bugs,
+% etc.
+%
+% \subsection{Bugs}
+% \label{sec:dev-bugs}
+%
+% \subsection{Bits and ends}
+% \label{sec:dev-misc}
+% To be processed.
+% \begin{list}{}{Things to do and to think about}
+% \item Configure todos in this file
+% \item Use svn support too for tags and in latex
+% \item Think through font selection for package names, file names and
+%   commands issued.
+% \item Find a way to incorporate ChangeLog file.
+% \item Add style for url references.
+% \item Write about mirroring manual parts for user and developer.
+% \item Add paragraph about making releases.
+% \item When nge.dtx is processed through latex, issue installation
+%   instructions in the end, not at the beginning.
+% \item Add possibility to make todo and fixme notes right in the text
+% \item Mention in the manual packages which \nged{}uses and what is
+%   needed to compile documentation.
+% \item update message and sync it with installation instructions.
+% \item sync file list with license with what is generated by the
+%   package
+% \item make a list in the document of all the files, generated by it.
+% \item test nge.ins with local docstrip.cfg.
+% \item Think through typographic conventions: urls, package names,
+%   directories, files, what else?
+% \item Combining several documents (exams, quizzes, etc\dots) in one
+%   document. Use report class?  \textsf{Doc} package and docstrip?
+% \item ``postmortem'' command and environment.
+% \item Is there a simple way to keep an up to date manifest.txt?
+% \item the package should not depend on files outside \TeX{}\ Live
+%   distribution.
+% \item fix \verb|\showdirectory| call in \meta{ins} section.
+% \item Two possibilities --- all problems back to back, or each
+%   problem on a new page.  in the latter case an option to provide a
+%   space for the answer and option to provide place for a problem
+%   grade.
+% \item Compile list of problems with totals points in a table.
+%   options for placing this table on the front page, standalone table
+%   on the second page or on the last page.
+% \item multiple variants.  options for solutions, rubrics.  Notes to
+%   students and to graders. Assesment notes.
+% \item compilation of all course materials under the same title,
+%   similar to doc package.
+% \item configuration file, where a common theme may be configured.
+% \item Rudimentary control over vertical space for problems.
+% \item Localization.
+% \item Types of problems: multiple choice (circle, underline answer,
+%   fill in the blanks), true or false, problems with parts (one
+%   level).
+% \item examdesign produces multiple (randomized?) versions
+% \item Simultaneous generation of exams (with versions), solutions
+%   and rubrics in one batch, but in separate files.
+% \item most options (where it makes sense) should provide a
+%   possibility of manually overriding them, at least in principle.
+% \item Multiple instructors, multiple sections -- think what to do in
+%   that case.
+% \item Write about typographic conventions for the exam (e.g.
+%   display style formulas vs. inline style formulas).
+% \item in nyu classes may be it is possible to generate pages for
+%   scantrone?
+% \item partial grading tables?  Not sure whether it is a good idea
+% \item use hyperref in PDF mode
+% \item provide for bonus problems and points
+% \item write a manual with plenty of examples
+% \item I think automatic generation of dtx file for release is
+%   unavoidable.  But still I would like to break it apart as little
+%   as possible.  May be it is possible to keep everything in it and
+%   process it conditionally depending on whether it is a release
+%   version or a developlment version.  For now I am not going to
+%   worry about that.
+% \item Write a simple script which guards agains common typos
+%   (forgotten braces after macros like \verb|\LaTeX|, repeated words,
+%   etc.  Perhaps it should be written in perl.
+% \item In addition to system-wide configuration there must be a
+%   possibility to configure \nged{} in a single directory, so that it
+%   processes all the sources using the common theme, but which may be
+%   overriden in individual documents.
+% \item Review nged.dtx.  Separate cleanly style and logic.  Must have
+%   default behaviour similar to article.cls
+% \item Sensible sets of defaults?
+% \item Distinguish release package, release tools, release sources,
+%   development sources, development tools and personal development
+%   environment and structure Makefile accordingly.
+% \item Write a short manual for developing too
+% \item perhaps it is better to use group environment for sections
+%   included conditionally.
+% \item Try a docstrip.cfg, so that it is as silent as possible during
+%   development
+% \item look at svn support in latex and emacs
+% \item Add discussion about file structure
+% \item write introduction about nged in broad view
+% \item produce reports and assessments in doc style?
+% \item Is is possible to make releases with docstrip?
+% \item 2 rolling released branches --- stable and dev. also my
+%   private development branch kdv.
+% \item title pages are just special pages
+% \item course name macro, what shall it include?
+% \item course info: title, catalog number, timestamp (i.e. academic
+%   year, semester, etc, think of a better term in here).
+% \item If something is omitted, such as course title, author, etc, it
+%   should not be printed, and must not produce error.  The only
+%   exception is the title and \verb|maketitle| command.
+% \item pdf output may provide something which is not available in dvi
+%   format.
+% \item when releasing package update checksum
+% \item Do we need a bibliography with CTAN URLs for packages?
+% \item figure out a way to include draft options conditionally
+% \item option for grade table on the back of the last page
+% \item two modes for problems: ``exam'' mode and review mode (turn
+%   on/off grade totaling, provide or not provide space for marks,
+%   check of the problem has several parts on one line, so that there
+%   is no clutter, a column of grades for parts (even a little table).
+% \item files nge.cfg, ngecourse.def (or courseinfo.def) with sensible
+%   defaults, (also ngetheme.cfg?)
+% \item Do I need \latexpackage{url} if I already use
+%   \latexpackage{hyperref}?
+%  \end{list}
+%
+% Here is the list of todo notes located throughout the text.
+% \listoftodos 
+% \paragraph{Courses}
+% \nged{} is built around one logical entity -- a course.  All the
+% documents are unified under course theme.  It is also possible to
+% extend this to course sequence, but most of the time it's just one
+% course.
+% 
+% Each course usually has the following metadata associated with it
+% \begin{list}{}{course metadata}
+% \item Course name (also a short name)
+% \item Educational institution
+% \item Educational term and year (semester, quarter, trimester, period\dots)
+% \item Instructor or multiple instructors with sections.  Possible
+% recitations, precepts, problem sessions, labs, run by teaching
+% assistants.  There may be graders too.  There may be course
+% coordinator or some other administrative figure.  Do we really need
+% to provide for all this information?  Not clear.
+% \end{list}
+% Course documents may include tests (quizzes, exams\dots),
+% assignments (homeworks, projects\dots), handouts with various
+% information (syllabus, schedules, requirements, \dots). There also
+% may be problem solutions, various postmortems, section and
+% instructor assesments, course assesments.  All of these documents may
+% have titles, dates and authors as well.
+%
+%^^A \IfFileExists{ChangeLog}
+%^^A {\subsection{ChangeLog entries}\label{sec:dev-changelog}
+%^^A \VerbatimInput{ChangeLog}}
+%^^A {\relax}
+%
+%\iffalse
+%^^A The next line is added for formatting purposes
+%<nge-1>%
+%<*finale>
+%\fi
+%% \Finale
+%\iffalse
+%</finale>
+%\fi
+%
+%^^A Local Variables:
+%^^A TeX-master: t
+%^^A End:

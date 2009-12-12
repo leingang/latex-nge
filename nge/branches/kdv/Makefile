@@ -4,16 +4,10 @@
 # Copyright (C) 2009 Denis Kosygin <kosygin@courant.nyu.edu>
 #
 SHELL = /bin/sh
-export TEXINPUTS = .:./texmf//:
+export PATH = ./bin:$(HOME)/bin:/usr/local/bin:/usr/bin:/bin
 TEX = tex
 LATEX = latex
 MAKEINDEX = makeindex
-#texliveroot = ./texlive/2009
-$export TEXINPUTS = .:$(texliveroot)/texmf//:$(texliveroot)/texmf-var//:$(texliveroot)/texmf-dist//
-#texlive_bin = $(texliveroot)/bin/x86_64-linux
-#TEX = $(texlive_bin)/tex
-#LATEX = $(texlive_bin)/latex
-#MAKEINDEX = $(texlive-bin)/makeindex
 
 name = nge
 sources = $(name).dtx
@@ -35,13 +29,13 @@ texclean:
 	-$(RM) $(patsubst %, ${name}.%, ${tex_suffixes})
 	-$(RM) driver* ext* ins*
 	-$(RM) checksum.dtx stopeventually.dtx nge-1.dtx hide-example.dtx
-#	-$(RM) ngedoc.dtx 
 	-$(RM) canary.txt
 	-$(RM) $(targets)
 	-$(RM) texput.* *.log
+	-$(RM) test/*.aux test/*.dvi test/*.log
 
 clean: texclean
-	-$(RM) *~ style/*~
+	-$(RM) *~ style/*~ test/*~
 
 distclean: texclean
 	-$(RM) $(targets) $(name).pdf $(name).ps
@@ -76,9 +70,9 @@ changelog:
              && cat ChangeLog.tmp ChangeLog.bak >ChangeLog; \
         else echo '\nWarning: ChangeLog not found.\nPerform svn update.'; fi
 
-# Sources just before the beginning of the development.
-# Directory nged is added to .svnignore, so that its contents
-# is not overwritten accidentally during an update
+# Sources just before the beginning of the development.  Directory
+# nged is listed in .svnignore, so that its contents is not
+# overwritten accidentally during a `svn update'.
 nged:
 	[ -d nged ] || mkdir nged
 	$(SVN) checkout -r 600 $(svnroot)/$(name)/branches/3.0-dev1 nged

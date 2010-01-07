@@ -115,9 +115,82 @@
 \ExecuteOptions{}
 \ProcessOptions
 \LoadClass{article}
+\RequirePackage{versions}
+%    \end{macrocode}
+% 
+% \subsection{Answers and solutions}
+% \label{sec:code-ngetest-answers}
+%
+%
+% \begin{macro}{answer}
+% In test mode everything enclosed between |\begin{answer}| and
+% |\end{answer}| is skipped by \LaTeX.  In answers mode the actual job
+% of |answer| is done by environment |NGEanswer|.
+%    \begin{macrocode}
+\newenvironment{answer}{\begin{NGEanswer}}{\end{NGEanswer}}
+\ifthenelse{\boolean{NGEAnswersMode}}{}{\excludeversion{answer}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{NGEanswer} 
+% At the moment |NGEanswer| is very simple, but I still have defined
+% several components for the simplicity of customization.
+%    \begin{macrocode}
+\newcommand{\NGEanswermark}{\textbf{\NGEanswername}: }
+\newcommand{\NGEanswername}{Answer}
+\newenvironment{NGEanswer}{\NGEanswermark}{\par}
+%    \end{macrocode}
+% \end{macro}
+% In the same way one can define environments |solution| and |NGEsolution|.
+% \begin{macro}{solution}
+%
+%    \begin{macrocode}
+\newenvironment{solution}{\begin{NGEsolution}}{\end{NGEsolution}}
+\ifthenelse{\boolean{NGEAnswersMode}}{}{\excludeversion{solution}}
+%    \end{macrocode}   
+% \end{macro}
+% \begin{macro}{NGEsolution}
+%
+%    \begin{macrocode}
+\newenvironment{NGEsolution}{\NGEsolutionmark}{\par}
+\newcommand{\NGEsolutionmark}{\textit{\NGEsolutionname:} }
+\newcommand{\NGEsolutionname}{Solution}
+%    \end{macrocode}    
+% \end{macro}
+% In addition we enable instructor comments in answer mode, which are
+% excluded by default.
+% \begin{macro}{NGEcomment}
+%    \begin{macrocode}
+\newenvironment{NGEcomment}{\begingroup\NGEcommentfont}{\par\endgroup}
+\newcommand{\NGEcommentfont}{\slshape}
+%    \end{macrocode}
+% \end{macro}
+% 
+%    \begin{macrocode}
+\ifthenelse{\boolean{NGEAnswersMode}}{%
+  \includeversion{comment}
+  \renewenvironment{comment}{\begin{NGEcomment}}{\end{NGEcomment}}}{}
 %    \end{macrocode}
 % 
 %
+% \subsection{Marking guide}
+% \label{sec:code-ngetest-marking-guide}
+%
+% In the same way we define commands and environments for the marking
+% guide mode.
+%    \begin{macrocode}
+\newenvironment{NGEmarkingcomment}{\begingroup\NGEmarkingcommentfont}{\par\endgroup}
+\newcommand{\NGEmarkingcommentfont}{\sffamily}
+\newenvironment{markingcomment}{\begin{NGEmarkingcomment}}{\end{NGEmarkingcomment}}
+\ifthenelse{\boolean{NGEMarkingGuideMode}}{}{\excludeversion{markingcomment}}
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+%\newenvironment{rubrics}{\begin{NGErubrics}}{\end{NGErubrics}}
+%\newenvironment{NGErubrics}{}{}
+%\newcommand{rubric}[2]{}
+%\ifthenelse{\boolean{NGEMarkingGuideMode}}{}{\excludeversion{rubrics}}
+%    \end{macrocode}
+% 
 % \Finale
 %^^A Local Variables:
 %^^A TeX-master: t

@@ -16,12 +16,22 @@ targets = $(name).ins readme.txt install.txt license.txt \
 	  ngekeys.sty ngetest.cls ngeproblem.sty
 
 .PHONY: all doc dvi pdf ps
-all:
+all: $(targets) doc
 	$(LATEX) $(name).dtx
 	$(MAKEINDEX) -s gind.ist $(name)
 	$(MAKEINDEX) -s gglo.ist -o $(name).gls $(name).glo
 	$(LATEX) $(name).dtx
 	$(LATEX) $(name).dtx
+
+$(targets) $(name).drv: $(name).dtx
+	$(TEX) $(name).dtx
+
+doc: $(name).drv
+	$(LATEX) $(name).drv
+	$(MAKEINDEX) -s gind.ist $(name)
+	$(MAKEINDEX) -s gglo.ist -o $(name).gls $(name).glo
+	$(LATEX) $(name).drv
+	$(LATEX) $(name).drv
 
 .PHONY: clean texclean distclean
 tex_suffixes = log aux dvi toc tdo ins drv def idx ilg ind glo gls

@@ -15,7 +15,9 @@ targets = $(name).ins readme.txt install.txt license.txt \
           ngemin.cls ngeexam.cls ngeprob.sty ngeinit.sty \
 	  ngekeys.sty ngetest.cls ngeproblem.sty
 
-.PHONY: all doc dvi pdf ps
+targets_test = test.tex
+
+.PHONY: all doc dvi pdf ps test
 all: $(targets) doc
 	$(LATEX) $(name).dtx
 	$(MAKEINDEX) -s gind.ist $(name)
@@ -23,7 +25,7 @@ all: $(targets) doc
 	$(LATEX) $(name).dtx
 	$(LATEX) $(name).dtx
 
-$(targets) $(name).drv: $(name).dtx
+$(targets) $(name).drv $(targets_test): $(name).dtx
 	$(TEX) $(name).dtx
 
 doc: $(name).drv
@@ -33,6 +35,10 @@ doc: $(name).drv
 	$(LATEX) $(name).drv
 	$(LATEX) $(name).drv
 
+test: $(targets_test)
+	$(LATEX) test
+
+
 .PHONY: clean texclean distclean
 tex_suffixes = log aux dvi toc tdo ins drv def idx ilg ind glo gls
 texclean:
@@ -40,8 +46,8 @@ texclean:
 	-$(RM) driver* ext* ins*
 	-$(RM) checksum.dtx stopeventually.dtx nge-1.dtx hide-example.dtx
 	-$(RM) canary.txt
-	-$(RM) $(targets)
-	-$(RM) texput.* *.log
+	-$(RM) $(targets) $(targets_test) 
+	-$(RM) texput.* *.log *.aux *.dvi
 	-$(RM) test/*.aux test/*.dvi test/*.log
 
 clean: texclean

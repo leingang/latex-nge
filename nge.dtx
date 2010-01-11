@@ -56,6 +56,15 @@
 % \ProvidesFile{\svnInfoFile}[^^A
 % \svnInfoYear/\svnInfoMonth/\svnInfoDate\space\fileversion: NGEd source file.]
 %
+% \DoNotIndex{\RequirePackage,\LoadClass,\addtocounter,\arabic,\begin,
+%     \begingroup,\end,\endgroup,\bfseries,\boolean,\CurrentOption,
+%   \DeclareOption,\excludeversion,\ExecuteOptions,\ifthenelse,
+%   \includeversion,\item,\itshape,\NeedsTeXFormat,\newboolean,\newcommand,
+%   \newcounter,\newenvironment,\renewcommand,\renewenvironment,\normalfont,
+%   \or,\par,\PassOptionsToClass,\pgfkeys,\pgfqkeys,\ProcessOptions,
+%   \ProvidesClass,\ProvidesPackage,\refstepcounter,\setboolean,\setcounter,
+%   \sffamily,\slshape,\textbf,\textit,\value}
+%
 % \title{\nged: A Next Generation Educational Bundle\\ \fileversion}
 % \author{Matthew Leingang\\leingang@courant.nyu.edu
 %   \and Denis Kosygin\\kosygin@courant.nyu.edu}
@@ -109,14 +118,90 @@
   \setboolean{NGEMarkingGuideMode}{true}}
 %    \end{macrocode}
 % All other options are passed to the standard class
-% \latexclass{artcle} from which \latexclass{ngetest} is derived.
+% \latexclass{article} from which \latexclass{ngetest} is derived.
 %    \begin{macrocode}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ExecuteOptions{}
 \ProcessOptions
 \LoadClass{article}
 \RequirePackage{versions}
+\RequirePackage{pgfkeys}
 %    \end{macrocode}
+% 
+%
+% \subsection{Tasks}
+% \label{sec:code-ngetest-tasks}
+%
+%
+% In this section we define the generic environment for problems and
+% questions, and provide means for its customization.
+%
+%   By default all the tasks are numbered consecutively with the help of
+%   counter |NGEtask|.
+%    \begin{macrocode}
+\newcounter{NGEtask}
+%    \end{macrocode}
+% We also introduce counters for keeping track of number of points,
+% assigned to each task.
+%    \begin{macrocode}
+\newcounter{NGEtaskpoints}
+\newcounter{NGEpointstotal}
+%    \end{macrocode}
+% Redefine macro |\theNGEtaskpoints| to expand number n to ``n points''.
+%    \begin{macrocode}
+\renewcommand{\theNGEtaskpoints}{%
+\arabic{NGEtaskpoints} point\ifthenelse{\value{NGEtaskpoints} = 1}{}{s}}
+%    \end{macrocode}
+% Point processing is done with the help of \latexpackage{pgfkeys}
+% package.  Initially each task is assigned 0 points by default.  The
+% number of points, assigned to a particular task may be specified
+% with points option for |NGEtask| environment and the default
+% assignment may be changed with the help of |\NGEtasks| command.
+%    \begin{macrocode}
+\pgfqkeys{/NGE/task/points}{
+  .default=0,
+  .code=\setcounter{NGEtaskpoints}{#1}}
+%    \end{macrocode}
+% We also provide a quick way to turn off points counting temporarily
+% for a particular task.
+%    \begin{macrocode}
+\pgfkeys{/NGE/task/nopoints/.code=\setcounter{NGEtaskpoints}{0}}
+%    \end{macrocode}
+% In the same way we treat the task name.
+%    \begin{macrocode}
+\newcommand{\NGEtaskname}{}
+\pgfqkeys{/NGE/task/name}{.default=Question,.store in=\NGE@taskname}}
+%    \end{macrocode}
+% First we specify default settings for the task header.
+%    \begin{macrocode}
+\newcommand{\NGEtaskheader}{{\NGEtaskheaderfont\NGE@taskname{}
+    \theNGEtask} ({\NGEtaskpointsfont\theNGEtaskpoints}): }
+\newcommand{\NGEtaskheaderfont}{\bfseries}
+\newcommand{\NGEtaskpointsfont}{\itshape}
+%    \end{macrocode}
+% \begin{macro}{NGEtask}
+% Now we can define the environment itself.
+%    \begin{macrocode}
+\newenvironment{NGEtask}[1][]{%
+  \refstepcounter{tasknumber}%
+  \pgfqkeys{/NGE/task}{points,name}% Set defaults first,
+  \pgfqkeys{/NGE/task}{#1}% Then process local options.
+  \addtocounter{NGEpointstotal}{\value{NGEtaskpoints}}%
+  \begin{trivlist}\item[\NGEtaskheader]\NGEtaskfont}{\end{trivlist}}
+\newcommand{\NGEtaskfont}{}
+\ifthenelse{\boolean{NGEAnswersMode}\or\boolean{NGEMarkingGuideMode}}{%
+  \renewcommand{\NGEtaskfont}{\itshape}}%
+{\renewcommand{\NGEtaskfont}{\normalfont}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{NGEtasks}
+%   The command |\NGEtasks| sets default values for task options.
+%    \begin{macrocode}
+\newcommand{\NGEtasks}[1][]{\pgfqkeys{/NGE/tasks}{#1}}
+\pgfkeys{/NGE/tasks/.unknown/.code=%
+  \pgfkeys{/NGE/task/\pgfkeyscurrentname/.default=#1}}
+%    \end{macrocode}
+% \end{macro}
 % 
 % \subsection{Answers and solutions}
 % \label{sec:code-ngetest-answers}
@@ -186,8 +271,10 @@
 % 
 %    \begin{macrocode}
 %\newenvironment{rubrics}{\begin{NGErubrics}}{\end{NGErubrics}}
-%\newenvironment{NGErubrics}{}{}
-%\newcommand{rubric}[2]{}
+%\newcounter{NGEtmp}
+%\newenvironment{NGErubrics}{%
+%  \pgfqkeys{/NGE/rubrics/.cd}{#1}\begin{description}}{\end{description}}
+%\newcommand{\rubric}[1]{\setcounter{NGEtmp}{#1}\item[#1]}
 %\ifthenelse{\boolean{NGEMarkingGuideMode}}{}{\excludeversion{rubrics}}
 %    \end{macrocode}
 % 

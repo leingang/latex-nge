@@ -5,8 +5,9 @@
 \input docstrip.tex
 \keepsilent\askforoverwritefalse
 \nopreamble\nopostamble
-\generate{\file{ngetest.cls}{\from{\jobname.dtx}{}}
-  \file{nge.drv}{\from{\jobname.dtx}{driver}}
+\generate{\file{ngetest.cls}{\from{\jobname.dtx}{ngetest}}
+  \file{nge.drv}{\from{\jobname.dtx}{driver}
+  \file{test.tex}{\from{\jobname.dtx}{test}}}
 }
 \expandafter\endbatchfile
 \fi
@@ -76,6 +77,9 @@
 % \section{\LaTeX{} code}
 % \label{sec:code}
 %
+%\iffalse
+%<*ngetest>
+%\fi
 % 
 % All the classes and styles in this package rely on \LaTeXe.  No
 % support for earlier versions of \LaTeX{} is provided.
@@ -170,7 +174,7 @@
 % In the same way we treat the task name.
 %    \begin{macrocode}
 \newcommand{\NGEtaskname}{}
-\pgfqkeys{/NGE/task/name}{.default=Question,.store in=\NGE@taskname}}
+\pgfqkeys{/NGE/task/name}{.default=Question,.store in=\NGE@taskname}
 %    \end{macrocode}
 % First we specify default settings for the task header.
 %    \begin{macrocode}
@@ -183,7 +187,7 @@
 % Now we can define the environment itself.
 %    \begin{macrocode}
 \newenvironment{NGEtask}[1][]{%
-  \refstepcounter{tasknumber}%
+  \refstepcounter{NGEtask}%
   \pgfqkeys{/NGE/task}{points,name}% Set defaults first,
   \pgfqkeys{/NGE/task}{#1}% Then process local options.
   \addtocounter{NGEpointstotal}{\value{NGEtaskpoints}}%
@@ -278,7 +282,59 @@
 %\ifthenelse{\boolean{NGEMarkingGuideMode}}{}{\excludeversion{rubrics}}
 %    \end{macrocode}
 % 
+%\iffalse
+%</ngetest>
+%\fi
+%
 % \Finale
+% \iffalse
+%<*test>
+\documentclass{ngetest}
+\begin{document}
+This is a test file for class \texttt{ngetest}.  First we test default
+settings and main environments \texttt{NGEtest}, \texttt{solution},
+\texttt{answer}, \texttt{comment}, and \texttt{markingcomment}.
+\begin{NGEtask}
+  This is the first task with default settings.
+\end{NGEtask}
+\begin{markingcomment}
+  In marking guide mode solutions and answers are interspersed with
+  marking notes, which do not show in answers mode, or in test mode.
+\end{markingcomment}
+\begin{answer}
+  The answer must not show up in the task mode.
+\end{answer}
+\begin{comment}
+  Here is a comment to the answer.  It must not show up in the test
+  mode either, but it will show in other modes.
+\end{comment}
+\begin{NGEtask}[points=10]
+  This is the second task.  Ten points are assigned to it.
+\end{NGEtask}
+\begin{NGEtask}[points=50,name=Problem]
+  This task is a problem, it is 50 points worth.
+\end{NGEtask}
+\begin{solution}
+  Problems have both solution and
+\end{solution}
+\begin{answer}
+  answers
+\end{answer} Now we change the default name to ``Query'' and give each
+task 5 points by default.
+\NGEtasks[name=Query,points=5]
+\begin{NGEtask}
+  This is the task with the new default settings.
+\end{NGEtask}
+\begin{NGEtask}[points=15]
+  This task is worth 15 points.
+\end{NGEtask}
+\begin{NGEtask}[name=Practical task]
+  This task has modified name and default number of points.
+\end{NGEtask}
+
+\end{document}
+%</test>
+% \fi
 %^^A Local Variables:
 %^^A TeX-master: t
 %^^A End:

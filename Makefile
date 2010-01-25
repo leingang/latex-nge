@@ -15,7 +15,7 @@ targets = $(name).ins readme.txt install.txt license.txt \
           ngemin.cls ngeexam.cls ngeprob.sty ngeinit.sty \
 	  ngekeys.sty ngetest.cls ngeproblem.sty
 
-targets_test = test.tex
+targets_test = test.tex test-ans.tex test-key.tex
 
 .PHONY: all doc dvi pdf ps test
 all: $(targets) doc
@@ -37,6 +37,8 @@ doc: $(name).drv
 
 test: $(targets_test)
 	$(LATEX) test
+	$(LATEX) test-ans
+	$(LATEX) test-key
 
 
 .PHONY: clean texclean distclean

@@ -1,3 +1,66 @@
+2010-01-11 20:40  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* Makefile, nge.dtx: Debugged ngetest and added support for NGEd
+	  test files.
+
+2010-01-11 06:54  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Generic task environment with options.
+
+2010-01-07 09:23  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Switches for answers mode and marking guide mode.
+
+2010-01-07 04:04  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* Makefile, nge.dtx, ngefrozen.dtx: Started rewriting ngetest.cls
+	  from the scratch.
+
+2009-12-12 19:04  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ., .svnignore, Makefile, nge.dtx, style/nge.el: Placed the entire
+	  development tree in `texlive' sandbox.
+
+2009-12-12 18:41  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ., .svnignore, Makefile: Added `make' target for checking out
+	  nged sources just before the branching point.
+
+2009-12-12 17:49  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ., .svnignore, Makefile.dev, auto, bin, lib, ngedev.dtx,
+	  reference, texmf: Directory clean-up.
+
+2009-12-11 16:32  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* Makefile, nge.dtx: Problem points support.
+
+2009-12-10 16:22  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ., .svnignore, auto/nge.el, nge.dtx, texmf/tex/latex/pgfopts,
+	  texmf/tex/latex/pgfopts/pgfopts.sty: Problems and table of
+	  problems
+
+2009-12-04 16:03  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* auto/nge.el, nge.dtx: Maketitle prototype.
+
+2009-12-02 22:00  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ChangeLog, Makefile, auto/nge.el, nge.dtx: \maketitle
+
+2009-12-02 18:31  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx, texmf/tex/latex/svn-multi/svn-multi.log,
+	  texmf/tex/latex/svn-multi/svn-multi.pl,
+	  texmf/tex/latex/svn-multi/svn-multi.sty,
+	  texmf/tex/latex/svn-multi/svnkw.sty: Options processing.
+
+2009-12-01 22:18  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ., .svnignore, Makefile, auto/nge.el, nge.dtx: Introduces course
+	  information macros.
+
 2009-12-02 18:31  Denis Kosygin <kosygin@courant.nyu.edu>
 
 	* nge.dtx: Cleaned up options processing.

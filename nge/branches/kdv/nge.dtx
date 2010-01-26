@@ -185,12 +185,11 @@
 % given as an option.
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/mode}{%
-  .initial=guess,
   .value required,
   .is choice,
-  test/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{test},
-  answers/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{answers},
-  key/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{key},
+  test/.style={/NGE/test/options/mode/.initial=test},
+  answers/.style={/NGE/test/options/mode/.initial=answers},
+  key/.style={/NGE/test/options/mode/.initial=key},
   .unknown/.code=\ClassWarning{ngetest}{%
     Ignoring unknown mode '\pgfkeyscurrentname'}
 }
@@ -210,15 +209,6 @@
 % mode |answers| is set and for suffix |key| mode |key| is selected.
 % In all other cases, including the case when no suffix is present,
 % the mode is set to the default value: |test|.
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/options/mode/suffix}{%
-  .is choice, .default=no value,
-  ans/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{answers},
-  sol/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{answers},
-  key/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{key},
-  .unknown/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{test},
-}
-%    \end{macrocode}
 % If the mode is given explicitely, no guessing is performed.
 % 
 % The separator between \meta{root} and \meta{suffix} may be set to
@@ -232,121 +222,71 @@
 % filenames |exam.tex|, |exam-.tex|, and |exam--.tex| the suffix is empty. 
 % In the former case the mode will be set by the guessing function to
 % |answers| and in the latter the default mode, |test|, will be used.
-% 
+% The default value for \option{modesep} is |-|.
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/options/modesep}{%
+  .value required,
+  .store in=\NGE@modesep,
+  .convert/.is choice,
+  .convert/space/.code={\let\NGE@modesep=\space},
+  .convert/comma/.code={\def\NGE@modesep{,}},
+  .convert/underscore/.code={\edef\NGE@modesep{\string _}},
+  .convert/.unknown/.code,
+  .initial=-
+}
+\pgfkeys{/NGE/test/options/modesep=-}
+%    \begin{macrocode}
+\ProcessPgfOptions{/NGE/test/options}
+\ProcessOptions{}
+\LoadClass{article}
+%    \end{macrocode}
+% Package \latexpackage{version} is used to support modes and variants.
+%    \begin{macrocode}
+\RequirePackage{versions}
+%    \end{macrocode}
+%^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
+%    \begin{macrocode}
+\pgfkeysifdefined{/NGE/test/options/mode}{}{%
+  \pgfkeys{/NGE/test/options/.cd,
+    mode/.initial=test,
+    modesep/.convert/.expanded=\NGE@modesep,
+    /NGE/test/jobname/suffix/.cd,
+    .is choice,
+    ans/.style={/NGE/test/options/mode/.initial=answers},
+    sol/.style={/NGE/test/options/mode/.initial=answers},
+    key/.style={/NGE/test/options/mode/.initial=key},
+    .unknown/.style=}
+  \edef\NGE@modesep{\expandafter\strip@prefix\meaning\NGE@modesep}
+  \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}
+  \def\NGE@suffix{}
+  \def\NGE@StoreSuffix#1{%
+    \def\NGE@StoreSuffix##1{\def\NGE@suffix{##1}}}
+  \newcommand{\NGE@ProcessModesep}[1]{%
+    \def\NGE@last##1#1{%
+      \def\NGE@temp{##1}
+      \ifx\NGE@temp\@nnil\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}}
+  \expandafter\NGE@ProcessModesep\expandafter{\NGE@modesep}
+  \expandafter\NGE@last\NGE@jobname
+  \ifthenelse{\equal{\NGE@suffix}{}}{}{%
+    \pgfkeys{/NGE/test/jobname/suffix/.expanded=\NGE@suffix}}
+}
+%    \end{macrocode}
+%    
+%\iffalse
+%<*hide>
+%\fi
 % The code below  prepares  guessing functions to work with the
-% specified value of \option{modesep}, which, by default is |-|.
+% specified value of \option{modesep}.
 % The actual guessing is performed after all the class options have been
 % collected and processed.
 %
 % The following command converts all the letters in a given string to
 % category 12 (other) and stores the conversion in a PGF tree at given
 % address. 
-%^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
-%    \begin{macrocode}
-\newcommand\NGE@StringToOther[2]{%
-  \def\NGE@temp{#1}%
-  \edef\NGE@temp{\expandafter\strip@prefix\meaning\NGE@temp}
-  \pgfkeyslet{#2}{\NGE@temp}%
-}
-\NGE@StringToOther{ans}{/NGE/test/options/mode/suffix/ans/other}
-\NGE@StringToOther{sol}{/NGE/test/options/mode/suffix/sol/other}
-\NGE@StringToOther{key}{/NGE/test/options/mode/suffix/key/other}
-%    \end{macrocode}
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/options}{%
-  modesep/.code=\NGE@StringToOther{#1}{/NGE/test/options/modesep},
-  modesep=-
-}
-%    \end{macrocode}
 %
-%    \begin{macrocode}
-\ProcessPgfOptions{/NGE/test/options}
-\ProcessOptions{}
-\LoadClass{article}
-%    \end{macrocode}
 % I do not do it with \latexpackage{pgfkeys}, because parameter
 % passing in embedded |\def|'s are tricky enough, so it is better to
 % trace them explicitely.
-%    \begin{macrocode}
-\pgfkeys{/NGE/test/jobname/suffix/.initial={}}
-\newcommand{\NGE@suffix}{%
-  \pgfkeysgetvalue{/NGE/test/options/modesep}{\NGE@temp}
-  \expandafter\NGE@ProcessModesep\NGE@temp
-  \def\NGE@temp{}
-  \def\NGE@StoreSuffix##1{%
-    \def\NGE@StoreSuffix####1{%
-      \def\NGE@temp{####1}}}
-  \expandafter\NGE@last\NGE@jobname}%
-\newcommand{\NGE@ProcessModesep}[1]{%
-  \def\NGE@last##1#1{\ifx ##1\@nil%
-    \relax\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}%
-  \edef\NGE@jobname{\jobname#1\noexpand\@nil#1}}%
-\ifthenelse{\equal{\pgfkeysvalueof{/NGE/test/options/mode}}{guess}}{%
-  \NGE@suffix
-  \ifx\NGE@temp\@empty%
-  \pgfkeys{/NGE/test/jobname/suffix=\@empty,
-    /NGE/test/options/mode/suffix}
-  \else\pgfkeys{%
-    /NGE/test/jobname/suffix/.expanded=\NGE@temp,
-    /NGE/test/options/mode/suffix/.expanded=\NGE@temp}\fi
-}{}
-%    \end{macrocode}
-%    
-%\iffalse
-%<*hide>
-%\fi
-%
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/options/mode}{%
-  guess/.code=\expandafter\expandafter\expandafter\NGE@last\expandafter{\jobname}\pgfkeys{/NGE/test/options/mode/suffix=\pgfkeysgetvalueof{/NGE/test/options/mode/suffix}},
-  suffix/.is choice,
-%  suffix/ans/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{answers},
-%  suffix/sol/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{answers},
-%  suffix/key/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{key},
-  suffix/.unknown/.code=\pgfkeyssetvalue{/NGE/test/options/mode}{test},
-}
-\NGE@DeclareModeSuffix{answers}{ans}
-\NGE@DeclareModeSuffix{answers}{sol}
-\NGE@DeclareModeSuffix{key}{key}
-%    \end{macrocode}
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/options}{%
-  modesep/.code=%
-  \def\NGE@last##1{%
-    \pgfkeyssetvalue{/NGE/test/options/mode/suffix}{}%
-    \def\NGE@remember####1{%
-      \def\NGE@remember########1{%
-        \pgfkeyssetvalue{/NGE/test/options/mode/suffix}{########1}}}%
-    \NGE@@last ##1#1\noexpand\@nil#1}%
-  \def\NGE@@last##1#1{\ifx ##1\@nil%
-    \else\NGE@remember{##1}%
-    \expandafter\expandafter\expandafter\NGE@@last\fi},
-  modesep=-}
-%    \end{macrocode}
-%   
-%
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/options/modesep}{%
-  .value required,
-  .code=%
-  \typeout{Using modesep #1}%
-  \pgfkeyssetvalue{/NGE/test/options/modesep}{#1}%
-  \def\NGElast##1{%
-    \let\NGEtemp\@empty%
-    \NGE@last ##1#1\noexpand\@nil#1}%
-  \def\NGE@last##1#1{\ifx ##1\@nil%
-    \NGEtemp\let\NGEcontinue\relax\else\NGE@remember{##1}\fi%
-  \NGEcontinue}%
-}
-\def\NGE@remember#1{\let\NGE@remember\NGEremember}%
-\def\NGEremember#1{\def\NGEtemp{#1}}%
-\def\NGEcontinue{\expandafter\NGE@last}%
-\pgfkeys{/NGE/test/options/modesep=-}
-%    \end{macrocode}
-%    \begin{macrocode}
-%\pgfkeysifdefined{/NGE/test/options/mode}{}{%
-%  \pgfkeys{/NGE/test/options/mode=guess}}
-%    \end{macrocode}
 % Load a configuration file, if it is present
 %    \begin{macrocode}
 \InputIfFileExists{nge.cfg}{}{}
@@ -381,10 +321,6 @@
 % options to every package, loaded by \latexclass{ngetest}.  Each
 % package ignores all global options, which are unknown to it.
 %
-% Package \latexpackage{version} is used to support modes and variants.
-%    \begin{macrocode}
-%\RequirePackage{versions}
-%    \end{macrocode}
 %
 % \subsection{Tasks}
 % \label{sec:code-ngetest-tasks}
@@ -544,27 +480,17 @@
 % \iffalse
 %<*test>
 \documentclass[12pt]{ngetest}
-
+\makeatletter
 \begin{document}
 This is a test file for class \texttt{ngetest}.  First we test default
 settings and main environments \texttt{NGEtest}, \texttt{solution},
 \texttt{answer}, \texttt{comment}, and \texttt{markingcomment}.
-\makeatletter
 
-%\pgfkeys{/NGE/test/jobname/suffix/.get=\NGE@temp,
-%  /NGE/test/options/mode/suffix/.expanded=\NGE@temp}
-%\show\NGE@temp
-%Suffix is
-%\ifthenelse{\equal{\pgfkeysvalueof{/NGE/test/options/mode/suffix}}{}}{empty}{\pgfkeysvalueof{/NGE/test/options/mode/suffix}}
-Current mode is \pgfkeysvalueof{/NGE/test/options/mode}.
-Modesep value is \pgfkeysvalueof{/NGE/test/options/modesep}
+Current mode is \pgfkeysvalueof{/NGE/test/options/mode}
+and the suffix is
+\@ifundefined{NGE@suffix}{undefined}{%
+  \ifthenelse{\equal{\NGE@suffix}{}}{empty}{\NGE@suffix}}.
 
-Suffix is
-\ifthenelse{\equal{\pgfkeysvalueof{/NGE/test/jobname/suffix}}{}}{empty}{\pgfkeysvalueof{/NGE/test/jobname/suffix}}
-
-%\pgfkeysgetvalue{/NGE/test/jobname/suffix}{\test}
-%\edef{\key}{\test}
-%\pgfkeys{/test/\test/.initial=0}
 %<*hide>
 \begin{NGEtask}
   This is the first task with default settings.

@@ -14,17 +14,24 @@
 \expandafter\endbatchfile
 \fi
 %</ins>
+%<*hide>
+\documentclass[draft]{ltxdoc}
+%</hide>
 %<*driver>
-\documentclass{ltxdoc}
-\EnableCrossrefs
-\CodelineIndex
-\RecordChanges
-\MakeShortVerb{\|}
-
+%<driver>\documentclass[final]{ltxdoc}
+%\usepackage{ifthen}
+\usepackage{ifdraft}
+\usepackage[obeyDraft,dvistyle]{todonotes}
+\usepackage{showkeys}
 \usepackage{svninfo}
 \providecommand{\fileversion}{}
 \providecommand{\filename}{}
 \renewcommand{\filename}[1]{\texttt{#1}}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+
 \newcommand{\package}[1]{\textsf{#1}}
 \newcommand{\latexclass}[1]{\textsf{#1}}
 \newcommand{\latexpackage}[1]{\textsf{#1}}
@@ -33,7 +40,9 @@
 \newcommand{\mode}[1]{\textsl{#1}}
 \newcommand{\nged}{\package{NGEd}}
 \begin{document}
+  \MakeShortVerb{\|}
   \DocInput{\jobname.dtx}
+  \ifdraft{\listoftodos}{}
 \end{document}
 %</driver>
 % \fi
@@ -67,7 +76,11 @@
 %   \newcounter,\newenvironment,\renewcommand,\renewenvironment,\normalfont,
 %   \or,\par,\PassOptionsToClass,\pgfkeys,\pgfqkeys,\ProcessOptions,
 %   \ProvidesClass,\ProvidesPackage,\refstepcounter,\setboolean,\setcounter,
-%   \sffamily,\slshape,\textbf,\textit,\value}
+%   \sffamily,\slshape,\textbf,\textit,\value,\def,\edef,\if,\ifx,\else,\fi,
+%   \equal,\expandafter,\noexpand,\let,\jobname,\@nil,\@nnil,
+%   \InputIfFileExists,\meaning,\PassOptionsToPackage,\pgfkeysifdefined,
+%   \pgfkeyscurrentname,\relax,\space,\string,\ProcessPgfOptions,
+%   \ClassWarning}
 %
 % \title{\nged: A Next Generation Educational Bundle\\ \fileversion}
 % \author{Matthew Leingang\\leingang@courant.nyu.edu
@@ -159,6 +172,27 @@
 %
 % \subsection{Modes}
 % \label{sec:user-ngetest-modes}
+%\todo{Rewrite!}
+% Class \latexclass{ngetest} is the generic class for producing tests:
+% exams, quizzes, questionnaires, and so on\ldots.  From each source
+% file one can produce three types of documents: the test itself, the
+% test with solutions to problems and answers to questions, and
+% marking guide for the test with the answer key and marking rubrics.
+% Accordingly we distinguish three modes for the document processing:
+% \emph{test} mode, \emph{answers} mode, and \emph{marking key}
+% mode. Test and answers modes are mutually exclusive, the marking
+% guide mode is an extension to the answers mode.
+%
+% By default if class \latexclass{ngetest} is used without options, the
+% document is processed in test mode.  Option \option{answers}
+% switches to answers mode and option \option{markingguide} typesets
+% all solutions and answers together with marking rubrics.
+%
+% Mode may be specified explicitely as an option to
+% \latexclass{ngetest}.  Possible values are |test| (this is the
+% default), |answers| and |key|.
+%
+%
 % \section{\LaTeX{} code}
 % \label{sec:code}
 %
@@ -236,33 +270,7 @@
 % 
 % \paragraph{Modes}
 %
-% Class \latexclass{ngetest} is the generic class for producing tests:
-% exams, quizzes, questionnaires, and so on\ldots.  From each source
-% file one can produce three types of documents: the test itself, the
-% test with solutions to problems and answers to questions, and
-% marking guide for the test with the answer key and marking rubrics.
-% Accordingly we distinguish three modes for the document processing:
-% \emph{test} mode, \emph{answers} mode, and \emph{marking key}
-% mode. Test and answers modes are mutually exclusive, the marking
-% guide mode is an extension to the answers mode.
 %
-% By default if class \latexclass{ngetest} is used without options, the
-% document is processed in test mode.  Option \option{answers}
-% switches to answers mode and option \option{markingguide} typesets
-% all solutions and answers together with marking rubrics.
-%
-% We use boolean switches |NGEAnswersMode| and |NGEMarkingGuideMode| in
-% order to distinguish various combinations of these two options.
-%    \begin{macrocode}
-%\RequirePackage{ifthen}
-%\newboolean{NGEAnswersMode}
-%\newboolean{NGEMarkingGuideMode}
-%    \end{macrocode}
-% which by default evaluate to false.
-%
-% Mode may be specified explicitely as an option to
-% \latexclass{ngetest}.  Possible values are |test| (this is the
-% default), |answers| and |key|.
 %
 % First we define mode setting function when the mode is explicitely
 % given as an option.
@@ -318,6 +326,7 @@
   .initial=-
 }
 \pgfkeys{/NGE/test/options/modesep=-}
+%    \end{macrocode}
 %    \begin{macrocode}
 \ProcessPgfOptions{/NGE/test/options}
 \ProcessOptions{}
@@ -358,6 +367,7 @@
 %\iffalse
 %<*hide>
 %\fi
+%
 % The code below  prepares  guessing functions to work with the
 % specified value of \option{modesep}.
 % The actual guessing is performed after all the class options have been
@@ -553,7 +563,7 @@
 %\newcommand{\rubric}[1]{\setcounter{NGEtmp}{#1}\item[#1]}
 %\ifthenelse{\boolean{NGEMarkingGuideMode}}{}{\excludeversion{rubrics}}
 %    \end{macrocode}
-% 
+%
 %\iffalse
 %</hide>
 %</ngetest>

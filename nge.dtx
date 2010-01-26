@@ -29,6 +29,7 @@
 \newcommand{\latexclass}[1]{\textsf{#1}}
 \newcommand{\latexpackage}[1]{\textsf{#1}}
 \newcommand{\option}[1]{\textsl{#1}}
+\newcommand{\optionvalue}[1]{\texttt{#1}}
 \newcommand{\mode}[1]{\textsl{#1}}
 \newcommand{\nged}{\package{NGEd}}
 \begin{document}
@@ -76,6 +77,88 @@
 % \tableofcontents
 % \StopEventually{\PrintChanges\PrintIndex}
 %
+% \section{User manual}
+% \label{sec:user-ngetest}
+%
+% \subsection{Options}
+% \label{sec:user-ngetest-options}
+%
+% Class \latexclass{ngetest} is derived from the standard \LaTeX\
+% class \latexclass{article}.  It accepts all the options of
+% \latexclass{article} class:
+% \option{a4paper},
+% \option{a5paper},
+% \option{b5paper},
+% \option{letterpaper},
+% \option{legalpaper},
+% \option{executivepaper},
+% \option{landscape},
+% \option{10pt},
+% \option{11pt},
+% \option{12pt},
+% \option{oneside},
+% \option{twoside},
+% \option{draft},
+% \option{final},
+% \option{titlepage},
+% \option{notitlepage},
+% \option{onecolumn},
+% \option{twocolumn},
+% \option{leqno},
+% \option{fleqn}, and
+% \option{openbib}.
+% Most of these options have the same meaning in class
+% \latexclass{ngetest} as in \latexclass{article}.  All the
+% differences are explicitely specified below.
+% 
+% Class \latexclass{ngetest} uses package \latexpackage{versions} and
+% accepts options \option{nogroup} and \option{tracing}, which have
+% the same meaning in class \latexclass{ngetest} as in package
+% \latexpackage{versions}.
+%
+% In addition class \latexclass{ngetest} has its own options which are
+% described in the rest of this section.  As opposed to options for
+% standard \LaTeX{} classes most of \latexclass{ngetest} own options
+% may accept values.  Value \meta{value} may be given to
+% \latexclass{ngetest} option \meta{option} by specification
+% \meta{option}|=|\meta{value} in the options argument to
+% \latexclass{ngetest}.  For example, the line
+% \begin{verbatim}
+% \documentclass[12pt,mode=answers]{ngetest}
+% \end{verbatim}
+% specifies two options for \latexclass{ngetest}: option \option{12pt}
+% and \option{mode}.  Option \option{12pt} is the standard option for
+% \LaTeX\ class \latexclass{article} and it has the same effect in
+% \latexclass{ngetest}, it sets the font size to 12 points.  Option
+% \option{mode} is \latexclass{ngetest}'s own mode and the assignment
+% |mode=answers| above sets the document mode to |answers|.  Note that
+% no spaces are allowed in assignmens \meta{option}|=|\meta{value}.
+% If option \meta{option} accepts no value, it is specified in the
+% class' option list as \meta{option}.
+%  
+%
+% Here is the complete list of \latexclass{ngetest}'s own options
+% with the description of accepted values.
+% \begin{description}
+% \item[\option{mode}] determines which parts of the document are
+%   typeset. Accepts values \optionvalue{test}, \optionvalue{answers}
+%   and \optionvalue{key}.  If the mode is not specified
+%   \latexclass{ngetest} tries to guess the mode by inspecting the
+%   filename.  All the guessing is turned off if \option{mode} is
+%   assigned explicitely in |\documentclass| line.  For details see
+%   section \ref{sec:user-ngetest-modes}.
+% \item[\option{modesep}] specifies how the file name of latex job is
+%   split in parts, which are inspected to determine the mode.
+%   Accepts a nonempty string of characters which typically is a
+%   one-character string.  Default is \optionvalue{-}.  Since it may
+%   be difficult or impossible to set \option{modesep} explicitely to
+%   some characters in |\documentclass| line, keywords are reserved
+%   for underscore, comma and space characters as \option{modesep}
+%   values.  For details see section \ref{sec:user-ngetest-modes}.
+% \end{description}
+%
+% \subsection{Modes}
+% \label{sec:user-ngetest-modes}
 % \section{\LaTeX{} code}
 % \label{sec:code}
 %
@@ -479,7 +562,7 @@
 % \Finale
 % \iffalse
 %<*test>
-\documentclass[12pt]{ngetest}
+\documentclass[12pt, mode=test]{ngetest}
 \makeatletter
 \begin{document}
 This is a test file for class \texttt{ngetest}.  First we test default

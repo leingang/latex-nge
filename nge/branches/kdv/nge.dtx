@@ -42,7 +42,6 @@
 \begin{document}
   \MakeShortVerb{\|}
   \DocInput{\jobname.dtx}
-  \ifdraft{\listoftodos}{}
 \end{document}
 %</driver>
 % \fi
@@ -88,7 +87,7 @@
 % \renewcommand{\date}{\svnToday}
 % \maketitle
 % \tableofcontents
-% \StopEventually{\PrintChanges\PrintIndex}
+% \listoftodos
 %
 % \section{User manual}
 % \label{sec:user-ngetest}
@@ -193,6 +192,7 @@
 % default), |answers| and |key|.
 %
 %
+% \StopEventually{\PrintChanges\PrintIndex}
 % \section{\LaTeX{} code}
 % \label{sec:code}
 %
@@ -212,6 +212,8 @@
 % \subsection{Options and loaded packages}
 % \label{sec:code-ngetest-options}
 %
+% \todo[inline]{Think through the layout of initialization part and where to
+% input local cfg file.}
 % Package \latexpackage{ifthen} provides useful control structures.
 %    \begin{macrocode}
 \RequirePackage{ifthen}
@@ -292,6 +294,7 @@
 % the mode is set to \meta{name}.  Unknown mode names are ignored and
 % a warning is issued.
 %
+% \todo{Move this part to user guide}
 % If no mode is specified explicitely, class \latexpackage{ngetest}
 % tries to determine the mode by inspecting the file name.  If the
 % file name has the form \meta{root}-\meta{suffix}|.tex|, then
@@ -313,7 +316,8 @@
 % filenames |exam.tex|, |exam-.tex|, and |exam--.tex| the suffix is empty. 
 % In the former case the mode will be set by the guessing function to
 % |answers| and in the latter the default mode, |test|, will be used.
-% The default value for \option{modesep} is |-|.
+% The default value for \option{modesep} is |-|.\todo{Refactor
+% using kernel command \texttt{@sanitize}}
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/modesep}{%
   .value required,
@@ -332,11 +336,15 @@
 \ProcessOptions{}
 \LoadClass{article}
 %    \end{macrocode}
-% Package \latexpackage{version} is used to support modes and variants.
+% Package \latexpackage{version} is used to support modes and
+% variants.
+% \todo{Enable comments and redefine comment environment}
 %    \begin{macrocode}
 \RequirePackage{versions}
 %    \end{macrocode}
+%^^A Put this reference where it belongs
 %^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
+% \todo{Conversion should be done unconditionally, for variants}
 %    \begin{macrocode}
 \pgfkeysifdefined{/NGE/test/options/mode}{}{%
   \pgfkeys{/NGE/test/options/.cd,
@@ -363,7 +371,7 @@
     \pgfkeys{/NGE/test/jobname/suffix/.expanded=\NGE@suffix}}
 }
 %    \end{macrocode}
-%    
+%    \todo[inline]{add remark above why \texttt{NGE@ProcessModesep} and not \texttt{expandafter}}
 %\iffalse
 %<*hide>
 %\fi
@@ -380,10 +388,12 @@
 % I do not do it with \latexpackage{pgfkeys}, because parameter
 % passing in embedded |\def|'s are tricky enough, so it is better to
 % trace them explicitely.
-% Load a configuration file, if it is present
+% Load a configuration file, if it is present\todo{think where this
+% should go}
 %    \begin{macrocode}
 \InputIfFileExists{nge.cfg}{}{}
 %    \end{macrocode}
+% \todo[inline]{Refactor without boolean}
 %    \begin{macrocode}
 \DeclareOption{answers}{\def\NGEtestmode{answers}\setboolean{NGEAnswersMode}{true}}
 \DeclareOption{markingguide}{\setboolean{NGEAnswersMode}{true}%
@@ -392,33 +402,17 @@
 %    \end{macrocode}
 % 
 %
-% \subsection{Modes}
-% \label{sec:code-ngetest-modes}
 %    \begin{macrocode}
 %    \end{macrocode}
 %
 % 
-% \subsection{Loaded packages}
-% \label{sec:code-ngetest-packages}
-%
-% Class \latexclass{ngetest} is derived from the standard
-% \latexclass{article} class.  All options explicitely given to
-% \latexclass{ngetest} are passed to \latexclass{article}.
 %    \begin{macrocode}
-%\LoadClass{article}
 %    \end{macrocode}
-% All options, which are unknown to \latexclass{article} and these
-% packages are simply ignored.
-%
-% Options given to \latexclass{ngetest} are also passed as global
-% options to every package, loaded by \latexclass{ngetest}.  Each
-% package ignores all global options, which are unknown to it.
-%
 %
 % \subsection{Tasks}
 % \label{sec:code-ngetest-tasks}
 %
-%
+% \todo[inline]{Refactor with \latexpackage{pgfkeys}}
 % In this section we define the generic environment for problems and
 % questions, and provide means for its customization.
 %
@@ -442,7 +436,8 @@
 % package.  Initially each task is assigned 0 points by default.  The
 % number of points, assigned to a particular task may be specified
 % with points option for |NGEtask| environment and the default
-% assignment may be changed with the help of |\NGEtasks| command.
+% assignment may be changed with the help of |\NGEtasks|
+% command.\todo{Allow for nonnumeric argument (e.g. \texttt{parts} or \texttt{subparts}(?))}
 %    \begin{macrocode}
 \pgfqkeys{/NGE/task/points}{
   .default=0,
@@ -568,7 +563,14 @@
 %</hide>
 %</ngetest>
 %\fi
-%
+% 
+% \todo[inline]{Add to index references to \latexpackage{pgfkeys} tree used}
+% \todo[inline]{Look up indexing commands for \latexpackage{doc}}
+%^^A \todo[inline]{}
+%^^A \todo[inline]{}
+%^^A \todo[inline]{}
+%^^A \todo[inline]{}
+%^^A \todo[inline]{}
 % \Finale
 % \iffalse
 %<*test>

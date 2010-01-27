@@ -261,11 +261,12 @@
 \DeclareOption{nogroup}{\PassOptionsToPackage{nogroup}{versions}}
 \DeclareOption{tracing}{\PassOptionsToPackage{tracing}{versions}}
 %    \end{macrocode}
-% Everything else, not recognized as an option, is handled by
-% \latexpackage{pgfopts} package.  Here we suppress warnings about
-% unused options.
+% Everything else given on |\documentclass| line is considered
+% undeclared option and is passed for handling to
+% \latexpackage{pgfopts} package.  The line below suppresses ``unused
+% option'' warnings for unrecognized options.
 %    \begin{macrocode}
-\DeclareOption*{\relax}
+\DeclareOption*{\OptionNotUsed}
 %    \end{macrocode}
 %
 %
@@ -278,7 +279,7 @@
 % given as an option.
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/mode}{%
-  .value required,
+  .value required, .default=test,
   .is choice,
   test/.style={/NGE/test/options/mode/.initial=test},
   answers/.style={/NGE/test/options/mode/.initial=answers},
@@ -320,27 +321,28 @@
 % using kernel command \texttt{@sanitize}}
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/modesep}{%
-  .value required,
+  .value required, .default=-,
   .store in=\NGE@modesep,
   .convert/.is choice,
   .convert/space/.code={\let\NGE@modesep=\space},
   .convert/comma/.code={\def\NGE@modesep{,}},
   .convert/underscore/.code={\edef\NGE@modesep{\string _}},
   .convert/.unknown/.code,
-  .initial=-
 }
-\pgfkeys{/NGE/test/options/modesep=-}
 %    \end{macrocode}
 %    \begin{macrocode}
-\ProcessPgfOptions{/NGE/test/options}
-\ProcessOptions{}
-\LoadClass{article}
+\InputIfFileExists{nge.cfg}{}{}%
+\pgfkeys{/NGE/test/options/modesep}%
+\ExecuteOptions{}%
+\ProcessPgfOptions{/NGE/test/options}%
+\ProcessOptions%
+\LoadClass{article}%
 %    \end{macrocode}
 % Package \latexpackage{version} is used to support modes and
 % variants.
 % \todo{Enable comments and redefine comment environment}
 %    \begin{macrocode}
-\RequirePackage{versions}
+\RequirePackage{versions}%
 %    \end{macrocode}
 %^^A Put this reference where it belongs
 %^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
@@ -348,13 +350,13 @@
 %    \begin{macrocode}
 \pgfkeysifdefined{/NGE/test/options/mode}{}{%
   \pgfkeys{/NGE/test/options/.cd,
-    mode/.initial=test,
+    mode,
     modesep/.convert/.expanded=\NGE@modesep,
     /NGE/test/jobname/suffix/.cd,
     .is choice,
-    ans/.style={/NGE/test/options/mode/.initial=answers},
-    sol/.style={/NGE/test/options/mode/.initial=answers},
-    key/.style={/NGE/test/options/mode/.initial=key},
+    ans/.style={/NGE/test/options/mode=answers},
+    sol/.style={/NGE/test/options/mode=answers},
+    key/.style={/NGE/test/options/mode=key},
     .unknown/.style=}
   \edef\NGE@modesep{\expandafter\strip@prefix\meaning\NGE@modesep}
   \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}
@@ -388,10 +390,7 @@
 % I do not do it with \latexpackage{pgfkeys}, because parameter
 % passing in embedded |\def|'s are tricky enough, so it is better to
 % trace them explicitely.
-% Load a configuration file, if it is present\todo{think where this
-% should go}
 %    \begin{macrocode}
-\InputIfFileExists{nge.cfg}{}{}
 %    \end{macrocode}
 % \todo[inline]{Refactor without boolean}
 %    \begin{macrocode}
@@ -574,7 +573,7 @@
 % \Finale
 % \iffalse
 %<*test>
-\documentclass[12pt, mode=test]{ngetest}
+\documentclass[12pt]{ngetest}
 \makeatletter
 \begin{document}
 This is a test file for class \texttt{ngetest}.  First we test default

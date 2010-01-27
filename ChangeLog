@@ -1,3 +1,22 @@
+2010-01-26 22:26  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Added packages ifdraft, todonotes and showkeys to
+	  documentation source for better support of draft option.
+
+2010-01-26 13:57  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: User documentation for mode and modesep options.
+
+2010-01-26 07:23  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* nge.dtx: Cleaned up options processing. Now commas, underscores
+	  and spaces as suffix separators. More can be added if necessary.
+
+2010-01-25 04:07  Denis Kosygin <kosygin@courant.nyu.edu>
+
+	* ChangeLog, Makefile, nge.dtx: Now the mode is also determined by
+	  file name inspection.
+
 2010-01-11 20:40  Denis Kosygin <kosygin@courant.nyu.edu>
 
 	* Makefile, nge.dtx: Debugged ngetest and added support for NGEd

@@ -7,9 +7,18 @@
 \nopreamble\nopostamble
 \generate{\file{ngetest.cls}{\from{\jobname.dtx}{ngetest}}
   \file{nge.drv}{\from{\jobname.dtx}{driver}}
-  \file{test.tex}{\from{\jobname.dtx}{test}}
-  \file{test-ans.tex}{\from{\jobname.dtx}{test}}
-  \file{test-key.tex}{\from{\jobname.dtx}{test}}
+  \file{test.tex}{\from{\jobname.dtx}{test,default}}
+  \file{test-ans.tex}{\from{\jobname.dtx}{test,default}}
+  \file{test-key.tex}{\from{\jobname.dtx}{test,default}}
+  \file{test_.tex}{\from{\jobname.dtx}{test,underscore}}
+  \file{test_ans.tex}{\from{\jobname.dtx}{test,underscore}}
+  \file{test_key.tex}{\from{\jobname.dtx}{test,underscore}}
+%  \file{test\space.tex}{\from{\jobname.dtx}{test,space}}
+%  \file{test{ }ans.tex}{\from{\jobname.dtx}{test,space}}
+%  \file{test{ }key.tex}{\from{\jobname.dtx}{test,space}}
+  \file{test,.tex}{\from{\jobname.dtx}{test,comma}}
+  \file{test,ans.tex}{\from{\jobname.dtx}{test,comma}}
+  \file{test,key.tex}{\from{\jobname.dtx}{test,comma}}
 }
 \expandafter\endbatchfile
 \fi
@@ -266,7 +275,7 @@
 % \latexpackage{pgfopts} package.  The line below suppresses ``unused
 % option'' warnings for unrecognized options.
 %    \begin{macrocode}
-\DeclareOption*{\OptionNotUsed}
+\DeclareOption*{\relax}
 %    \end{macrocode}
 %
 %
@@ -279,15 +288,30 @@
 % given as an option.
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/mode}{%
-  .value required, .default=test,
+  .default=test,
   .is choice,
-  test/.style={/NGE/test/options/mode/.initial=test},
-  answers/.style={/NGE/test/options/mode/.initial=answers},
-  key/.style={/NGE/test/options/mode/.initial=key},
   .unknown/.code=\ClassWarning{ngetest}{%
-    Ignoring unknown mode '\pgfkeyscurrentname'}
+    Ignoring unknown mode '\pgfkeyscurrentname'}}
+\newcommand\NGE@DeclareMode[1]{%
+  \pgfkeys{%
+    /NGE/test/options/mode/#1/.style={/NGE/test/options/mode/.initial=#1}}%
 }
+\NGE@DeclareMode{test}
+\NGE@DeclareMode{answers}
+\NGE@DeclareMode{key}
 %    \end{macrocode}
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/jobname/suffix}{%
+  .is choice,
+  .unknown/.style=}
+\newcommand{\NGE@DeclareModeSuffix}[2]{%
+  \pgfkeys{%
+    /NGE/test/jobname/suffix/#2/.style={/NGE/test/options/mode=#1}}}
+\NGE@DeclareModeSuffix{answers}{ans}
+\NGE@DeclareModeSuffix{answers}{sol}
+\NGE@DeclareModeSuffix{key}{key}
+%    \end{macrocode}
+%    
 % The code above accounts for possibility that mode may be specified
 % more than once in the list of class options and processes settings
 % consecutively.  For each setting |mode=|\meta{name} the code checks
@@ -321,13 +345,11 @@
 % using kernel command \texttt{@sanitize}}
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/modesep}{%
-  .value required, .default=-,
-  .store in=\NGE@modesep,
-  .convert/.is choice,
-  .convert/space/.code={\let\NGE@modesep=\space},
-  .convert/comma/.code={\def\NGE@modesep{,}},
-  .convert/underscore/.code={\edef\NGE@modesep{\string _}},
-  .convert/.unknown/.code,
+  .is choice,
+  .default=-,
+  space/.code={\let\NGE@modesep=\space},
+  comma/.code={\def\NGE@modesep{,}},
+  .unknown/.code={\let\NGE@modesep=\pgfkeyscurrentname}
 }
 %    \end{macrocode}
 %    \begin{macrocode}
@@ -350,14 +372,8 @@
 %    \begin{macrocode}
 \pgfkeysifdefined{/NGE/test/options/mode}{}{%
   \pgfkeys{/NGE/test/options/.cd,
-    mode,
-    modesep/.convert/.expanded=\NGE@modesep,
-    /NGE/test/jobname/suffix/.cd,
-    .is choice,
-    ans/.style={/NGE/test/options/mode=answers},
-    sol/.style={/NGE/test/options/mode=answers},
-    key/.style={/NGE/test/options/mode=key},
-    .unknown/.style=}
+    mode}
+%    modesep/.convert/.expanded=\NGE@modesep}
   \edef\NGE@modesep{\expandafter\strip@prefix\meaning\NGE@modesep}
   \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}
   \def\NGE@suffix{}
@@ -573,13 +589,17 @@
 % \Finale
 % \iffalse
 %<*test>
-\documentclass[12pt]{ngetest}
+%<default>\documentclass[12pt]{ngetest}
+%<underscore>\documentclass[12pt,modesep=_]{ngetest}
+%<comma>\documentclass[12pt,modesep=comma]{ngetest}
+%<space>\documentclass[12pt,modesep=space]{ngetest}
 \makeatletter
 \begin{document}
+%<*hide>
 This is a test file for class \texttt{ngetest}.  First we test default
 settings and main environments \texttt{NGEtest}, \texttt{solution},
 \texttt{answer}, \texttt{comment}, and \texttt{markingcomment}.
-
+%</hide>
 Current mode is \pgfkeysvalueof{/NGE/test/options/mode}
 and the suffix is
 \@ifundefined{NGE@suffix}{undefined}{%

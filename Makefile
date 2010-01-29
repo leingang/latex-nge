@@ -8,6 +8,7 @@ export PATH = ./bin:$(HOME)/bin:/usr/local/bin:/usr/bin:/bin
 TEX = tex
 LATEX = latex
 MAKEINDEX = makeindex
+MV=/bin/mv
 
 name = nge
 sources = $(name).dtx
@@ -16,8 +17,13 @@ targets = $(name).ins readme.txt install.txt license.txt \
 	  ngekeys.sty ngetest.cls ngeproblem.sty
 
 targets_test = test.tex test-ans.tex test-key.tex
+targets_test_modesep= test+space.tex test+space+ans.tex test+space+key.tex \
+               test_underscore.tex test_underscore_ans.tex \
+               test_underscore_key.tex \
+               test,comma.tex test,comma,ans.tex test,comma,key.tex
 
-.PHONY: all doc dvi pdf ps test
+
+.PHONY: all doc dvi pdf ps
 all: $(targets) doc
 	$(LATEX) $(name).dtx
 	$(MAKEINDEX) -s gind.ist $(name)
@@ -25,8 +31,14 @@ all: $(targets) doc
 	$(LATEX) $(name).dtx
 	$(LATEX) $(name).dtx
 
-$(targets) $(name).drv $(targets_test): $(name).dtx
+$(targets) $(name).drv $(targets_test) $(targets_test_modesep): $(name).dtx
 	$(TEX) $(name).dtx
+test\ space.tex: test+space.tex
+	$(MV) test+space.tex test\ space.tex
+test\ space\ ans.tex: test+space+ans.tex
+	$(MV) test+space+ans.tex test\ space\ ans.tex
+test\ space\ key.tex: test+space+key.tex
+	$(MV) test+space+key.tex test\ space\ key.tex
 
 doc: $(name).drv
 	$(LATEX) $(name).drv
@@ -35,10 +47,21 @@ doc: $(name).drv
 	$(LATEX) $(name).drv
 	$(LATEX) $(name).drv
 
-test: $(targets_test)
+.PHONY: test test-modesep
+test: $(targets_test) 
 	$(LATEX) test
 	$(LATEX) test-ans
 	$(LATEX) test-key
+test-modesep: test $(targets_test_modesep) test\ space.tex test\ space\ ans.tex test\ space\ key.tex
+	$(LATEX) test_underscore
+	$(LATEX) test_underscore_ans
+	$(LATEX) test_underscore_key
+	$(LATEX) test\ space
+	$(LATEX) test\ space\ ans
+	$(LATEX) test\ space\ key
+	$(LATEX) test,comma
+	$(LATEX) test,comma,ans
+	$(LATEX) test,comma,key
 
 
 .PHONY: clean texclean distclean
@@ -48,7 +71,8 @@ texclean:
 	-$(RM) driver* ext* ins*
 	-$(RM) checksum.dtx stopeventually.dtx nge-1.dtx hide-example.dtx
 	-$(RM) canary.txt
-	-$(RM) $(targets) $(targets_test) 
+	-$(RM) $(targets) $(targets_test) $(targets_test_modesep)
+	-$(RM) test\ space.tex test\ space\ ans.tex test\ space\ key.tex
 	-$(RM) texput.* *.log *.aux *.dvi
 	-$(RM) test/*.aux test/*.dvi test/*.log
 

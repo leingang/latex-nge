@@ -10,15 +10,15 @@
   \file{test.tex}{\from{\jobname.dtx}{test,default}}
   \file{test-ans.tex}{\from{\jobname.dtx}{test,default}}
   \file{test-key.tex}{\from{\jobname.dtx}{test,default}}
-  \file{test_.tex}{\from{\jobname.dtx}{test,underscore}}
-  \file{test_ans.tex}{\from{\jobname.dtx}{test,underscore}}
-  \file{test_key.tex}{\from{\jobname.dtx}{test,underscore}}
-%  \file{test\space.tex}{\from{\jobname.dtx}{test,space}}
-%  \file{test{ }ans.tex}{\from{\jobname.dtx}{test,space}}
-%  \file{test{ }key.tex}{\from{\jobname.dtx}{test,space}}
-  \file{test,.tex}{\from{\jobname.dtx}{test,comma}}
-  \file{test,ans.tex}{\from{\jobname.dtx}{test,comma}}
-  \file{test,key.tex}{\from{\jobname.dtx}{test,comma}}
+  \file{test_underscore.tex}{\from{\jobname.dtx}{test,modesep,underscore}}
+  \file{test_underscore_ans.tex}{\from{\jobname.dtx}{test,modesep,underscore}}
+  \file{test_underscore_key.tex}{\from{\jobname.dtx}{test,modesep,underscore}}
+  \file{test+space.tex}{\from{\jobname.dtx}{test,modesep,space}}
+  \file{test+space+ans.tex}{\from{\jobname.dtx}{test,modesep,space}}
+  \file{test+space+key.tex}{\from{\jobname.dtx}{test,modesep,space}}
+  \file{test,comma.tex}{\from{\jobname.dtx}{test,modesep,comma}}
+  \file{test,comma,ans.tex}{\from{\jobname.dtx}{test,modesep,comma}}
+  \file{test,comma,key.tex}{\from{\jobname.dtx}{test,modesep,comma}}
 }
 \expandafter\endbatchfile
 \fi
@@ -302,8 +302,8 @@
 %    \end{macrocode}
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/jobname/suffix}{%
-  .is choice,
-  .unknown/.style=}
+  .is choice, .default=.unknown,
+  .unknown/.style={/NGE/test/options/mode}}
 \newcommand{\NGE@DeclareModeSuffix}[2]{%
   \pgfkeys{%
     /NGE/test/jobname/suffix/#2/.style={/NGE/test/options/mode=#1}}}
@@ -346,10 +346,23 @@
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/modesep}{%
   .is choice,
-  .default=-,
-  space/.code={\let\NGE@modesep=\space},
-  comma/.code={\def\NGE@modesep{,}},
-  .unknown/.code={\let\NGE@modesep=\pgfkeyscurrentname}
+  .default={-},
+  space/.code={%
+    \let\NGE@temp=\space%
+    \@onelevel@sanitize\NGE@temp%
+    \pgfkeyslet{/NGE/test/options/modesep}{\NGE@temp}},
+  comma/.code={%
+    \def\NGE@temp{,}%
+    \@onelevel@sanitize\NGE@temp%
+    \pgfkeyslet{/NGE/test/options/modesep}{\NGE@temp}},
+  underscore/.code={%
+    \def\NGE@temp{_}%
+    \@onelevel@sanitize\NGE@temp%
+    \pgfkeyslet{/NGE/test/options/modesep}{\NGE@temp}},
+  .unknown/.code={%
+    \let\NGE@temp=\pgfkeyscurrentname%
+    \@onelevel@sanitize\NGE@temp%
+    \pgfkeyslet{/NGE/test/options/modesep}{\NGE@temp}}
 }
 %    \end{macrocode}
 %    \begin{macrocode}
@@ -368,32 +381,34 @@
 %    \end{macrocode}
 %^^A Put this reference where it belongs
 %^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
-% \todo{Conversion should be done unconditionally, for variants}
+% \todo{refactor for variants}
 %    \begin{macrocode}
 \pgfkeysifdefined{/NGE/test/options/mode}{}{%
-  \pgfkeys{/NGE/test/options/.cd,
-    mode}
-%    modesep/.convert/.expanded=\NGE@modesep}
-  \edef\NGE@modesep{\expandafter\strip@prefix\meaning\NGE@modesep}
-  \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}
-  \def\NGE@suffix{}
+  \pgfkeys{/NGE/test/options/modesep/.get=\NGE@modesep}
+  \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}%
+  \def\NGE@suffix{}%
   \def\NGE@StoreSuffix#1{%
-    \def\NGE@StoreSuffix##1{\def\NGE@suffix{##1}}}
+    \def\NGE@StoreSuffix##1{%
+      \def\NGE@suffix{##1}}}%
   \newcommand{\NGE@ProcessModesep}[1]{%
     \def\NGE@last##1#1{%
-      \def\NGE@temp{##1}
-      \ifx\NGE@temp\@nnil\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}}
-  \expandafter\NGE@ProcessModesep\expandafter{\NGE@modesep}
-  \expandafter\NGE@last\NGE@jobname
-  \ifthenelse{\equal{\NGE@suffix}{}}{}{%
-    \pgfkeys{/NGE/test/jobname/suffix/.expanded=\NGE@suffix}}
+      \def\NGE@temp{##1}%
+      \ifx\NGE@temp\@nnil\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}}%
+  \expandafter\NGE@ProcessModesep\expandafter{\NGE@modesep}%
+  \expandafter\NGE@last\NGE@jobname\relax%
+  \def\NGE@StripEndingQuote#1"{#1}
+  \ifthenelse{\equal{\NGE@modesep}{\space}}{%
+    \edef\NGE@suffix{\expandafter\NGE@StripEndingQuote\NGE@suffix}}{}
+  \ifthenelse{\equal{\NGE@suffix}{}}{%
+    \pgfkeys{/NGE/test/jobname/suffix}}{%
+    \pgfkeys{/NGE/test/jobname/suffix/.expand once=\NGE@suffix}}
 }
 %    \end{macrocode}
-%    \todo[inline]{add remark above why \texttt{NGE@ProcessModesep} and not \texttt{expandafter}}
 %\iffalse
 %<*hide>
 %\fi
-%
+%    \todo[inline]{add remark above why \texttt{NGE@ProcessModesep} and not \texttt{expandafter}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%^^A
 % The code below  prepares  guessing functions to work with the
 % specified value of \option{modesep}.
 % The actual guessing is performed after all the class options have been
@@ -595,17 +610,24 @@
 %<space>\documentclass[12pt,modesep=space]{ngetest}
 \makeatletter
 \begin{document}
-%<*hide>
-This is a test file for class \texttt{ngetest}.  First we test default
-settings and main environments \texttt{NGEtest}, \texttt{solution},
-\texttt{answer}, \texttt{comment}, and \texttt{markingcomment}.
-%</hide>
-Current mode is \pgfkeysvalueof{/NGE/test/options/mode}
-and the suffix is
+This is a test file for class \texttt{ngetest}.  Current mode is
+\pgfkeysvalueof{/NGE/test/options/mode}.
+%<*modesep>
+Modesep is 
+\pgfkeysifdefined{/NGE/test/options/modesep}{%
+  \pgfkeys{/NGE/test/options/modesep/.get=\NGE@temp}%
+  \ifthenelse{\equal{\NGE@temp}{}}{empty}{%
+    \ifthenelse{\equal{\NGE@temp}{\space}}{%
+      a space}{%
+      \pgfkeysvalueof{/NGE/test/options/modesep}}}}{%
+  undefined} and the suffix is
 \@ifundefined{NGE@suffix}{undefined}{%
   \ifthenelse{\equal{\NGE@suffix}{}}{empty}{\NGE@suffix}}.
-
+%</modesep>
 %<*hide>
+First we test default settings and main environments \texttt{NGEtest},
+\texttt{solution}, \texttt{answer}, \texttt{comment}, and
+\texttt{markingcomment}.
 \begin{NGEtask}
   This is the first task with default settings.
 \end{NGEtask}

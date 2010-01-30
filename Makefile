@@ -11,13 +11,12 @@ MAKEINDEX = makeindex
 
 name = nge
 sources = $(name).dtx
-targets = $(name).ins readme.txt install.txt license.txt \
-          ngetest.cls
+targets = ngetest.cls
 
 targets_test = test.tex test-ans.tex test-key.tex
 
 .PHONY: all doc dvi pdf ps
-all: $(targets) doc
+all: $(targets)
 	$(LATEX) $(name).dtx
 	$(MAKEINDEX) -s gind.ist $(name)
 	$(MAKEINDEX) -s gglo.ist -o $(name).gls $(name).glo

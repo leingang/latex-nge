@@ -7,18 +7,9 @@
 \nopreamble\nopostamble
 \generate{\file{ngetest.cls}{\from{\jobname.dtx}{ngetest}}
   \file{nge.drv}{\from{\jobname.dtx}{driver}}
-  \file{test.tex}{\from{\jobname.dtx}{test,default}}
-  \file{test-ans.tex}{\from{\jobname.dtx}{test,default}}
-  \file{test-key.tex}{\from{\jobname.dtx}{test,default}}
-  \file{test_underscore.tex}{\from{\jobname.dtx}{test,modesep,underscore}}
-  \file{test_underscore_ans.tex}{\from{\jobname.dtx}{test,modesep,underscore}}
-  \file{test_underscore_key.tex}{\from{\jobname.dtx}{test,modesep,underscore}}
-  \file{test+space.tex}{\from{\jobname.dtx}{test,modesep,space}}
-  \file{test+space+ans.tex}{\from{\jobname.dtx}{test,modesep,space}}
-  \file{test+space+key.tex}{\from{\jobname.dtx}{test,modesep,space}}
-  \file{test,comma.tex}{\from{\jobname.dtx}{test,modesep,comma}}
-  \file{test,comma,ans.tex}{\from{\jobname.dtx}{test,modesep,comma}}
-  \file{test,comma,key.tex}{\from{\jobname.dtx}{test,modesep,comma}}
+  \file{test.tex}{\from{\jobname.dtx}{test}}
+  \file{test-ans.tex}{\from{\jobname.dtx}{test}}
+  \file{test-key.tex}{\from{\jobname.dtx}{test}}
 }
 \expandafter\endbatchfile
 \fi
@@ -35,15 +26,16 @@
 \usepackage{svninfo}
 \providecommand{\fileversion}{}
 \providecommand{\filename}{}
-\renewcommand{\filename}[1]{\texttt{#1}}
 
+\usepackage{amsmath}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
 
 \newcommand{\package}[1]{\textsf{#1}}
-\newcommand{\latexclass}[1]{\textsf{#1}}
-\newcommand{\latexpackage}[1]{\textsf{#1}}
+\newcommand{\latexfile}[1]{\textsf{#1}}
+\newcommand{\latexclass}[1]{\latexfile{#1}}
+\newcommand{\latexpackage}[1]{\latexfile{#1}}
 \newcommand{\option}[1]{\textsl{#1}}
 \newcommand{\optionvalue}[1]{\texttt{#1}}
 \newcommand{\mode}[1]{\textsl{#1}}
@@ -77,18 +69,28 @@
 % \ProvidesFile{\svnInfoFile}[^^A
 % \svnInfoYear/\svnInfoMonth/\svnInfoDate\space\fileversion: NGEd source file.]
 %
-% \DoNotIndex{\RequirePackage,\LoadClass,\addtocounter,\arabic,\begin,
-%     \begingroup,\end,\endgroup,\bfseries,\boolean,\CurrentOption,
-%   \DeclareOption,\excludeversion,\ExecuteOptions,\ifthenelse,
-%   \includeversion,\item,\itshape,\NeedsTeXFormat,\newboolean,\newcommand,
-%   \newcounter,\newenvironment,\renewcommand,\renewenvironment,\normalfont,
-%   \or,\par,\PassOptionsToClass,\pgfkeys,\pgfqkeys,\ProcessOptions,
-%   \ProvidesClass,\ProvidesPackage,\refstepcounter,\setboolean,\setcounter,
-%   \sffamily,\slshape,\textbf,\textit,\value,\def,\edef,\if,\ifx,\else,\fi,
-%   \equal,\expandafter,\noexpand,\let,\jobname,\@nil,\@nnil,
-%   \InputIfFileExists,\meaning,\PassOptionsToPackage,\pgfkeysifdefined,
-%   \pgfkeyscurrentname,\relax,\space,\string,\ProcessPgfOptions,
-%   \ClassWarning}
+% \DoNotIndex{\NeedsTeXFormat,\ProvidesClass,\ProvidesPackage,\ProvidesFile}
+% \DoNotIndex{\RequirePackage,\LoadClass,\InputIfFileExists}
+% \DoNotIndex{\DeclareOption,\CurrentOption,\ExecuteOptions,\ProcessOptions}
+% \DoNotIndex{\PassOptionsToPackage,\PassOptionsToClass}
+% \DoNotIndex{\ClassWarning,\PackageWarning}
+% \DoNotIndex{\newcommand,\newenvironment,\renewcommand,\renewenvironment}
+% \DoNotIndex{\begin,\begingroup,\end,\endgroup,\csname,\endcsname}
+% \DoNotIndex{\normalfont,\itshape,\slshape,\bfseries,\sffamily}
+% \DoNotIndex{\textbf,\textit}
+% \DoNotIndex{\item,\par}
+% \DoNotIndex{\@onelevel@sanitize,\@nil,\@nnil}
+% \DoNotIndex{\pgfkeys,\pgfqkeys,\pgfkeysalso,\pgfqkeysalso}
+% \DoNotIndex{\pgfkeyslet,\pgfkeysvalueof,\pgfkeysifdefined}
+% \DoNotIndex{\pgfkeyscurrentname,\ProcessPgfOptions}
+% \DoNotIndex{\excludeversion,\includeversion}
+% \DoNotIndex{\ifthenelse,\equal,\newboolean,\boolean,\setboolean,\or}
+% \DoNotIndex{\newcounter,\setcounter,\stepcounter,\refstepcounter}
+% \DoNotIndex{\addtocounter,\value,\arabic}
+% \DoNotIndex{\def,\edef,\let,\if,\ifx,\else,\fi}
+% \DoNotIndex{\expandafter,\noexpand,\relax}
+% \DoNotIndex{\meaning,\string,\jobname,\space,\typeout}
+% \DoNotIndex{}
 %
 % \title{\nged: A Next Generation Educational Bundle\\ \fileversion}
 % \author{Matthew Leingang\\leingang@courant.nyu.edu
@@ -201,6 +203,90 @@
 % default), |answers| and |key|.
 %
 %
+% \paragraph{How \latexpackage{ngetest} determines the document mode.}
+% Here is the complete description of the algorithm, determining the
+% mode.
+% \begin{enumerate}\renewcommand{\theenumi}{\textit{Step} \arabic{enumi}}
+% \item If |\documentclass| line has option settings of the form
+%   |mode=|\meta{value}${}_1$, |mode=|\meta{value}${}_2$, \dots,
+%   |mode=|\meta{value}${}_n$, \latexpackage{ngetest} examines them
+%   one by one: if \meta{value}${}_i$ in setting
+%   |mode=|\meta{value}${}_i$ is recognized by \latexpackage{ngetest}
+%   as a valid mode setting, the mode is set to \meta{value}${}_i$,
+%   otherwise this setting is ignored and the ``unrecognized mode''
+%   warning is issued.  After all the settings are processed the
+%   document mode is either set to the last recognized value or is
+%   still undefined.  The latter also the case, in particular, when
+%   there were no settings |mode=|\meta{value} among class options.
+% \item If after step 1 the mode is still not defined,
+%   \latexpackage{ngetest} tries to guess an appropriate mode from the
+%   name of the latex file.  If the file name is \meta{name}|.tex|, then
+%   after the extension |.tex| is thrown out, \latexpackage{ngetest}
+%   represents \meta{name} as a sequence of fragments separated by
+%   character |-|
+%   \begin{equation*}
+%     \text{\meta{name}}
+%     =\text{\meta{frag}}_1|-|\text{\meta{frag}}_2|-|
+%     \dots|-|\text{\meta{frag}}_l
+%   \end{equation*}
+%   and such that the separating character |-| does not occur in any
+%   of the fragments.  If there are two fragments or more, the last
+%   fragment \meta{frag}${}_l$ is called the \emph{suffix} of the name
+%   \meta{name}.  In case, when there is only one fragment, that is
+%   when $l=1$, the suffix is empty.  If the suffix value \meta{suf}
+%   is recognized by \latexclass{ngetest}, the mode is set to the
+%   value, corresponding to \meta{suf}.
+% \item If the mode is still undefined after step 2 (unknown or empty
+%   suffix), the default mode is used.
+% \end{enumerate}
+% Class \latexpackage{ngetest} recognizes modes |test|, |answers| and
+% |key|, and uses |test| as the default mode.  Suffixes |ans| and
+% |sol| turn on mode |answers| and suffix |key| turns on mode |key|.
+% More mode-suffix pairs may be added to this relation in
+% \latexfile{nge.cfg} file with the help of |\NGE@DeclareModeSuffix|
+% command.
+%
+% \paragraph{Changing separator.}
+% It is possible to use another character for modesep.  Forbidden:
+% blanks (space, tab, newline), braces and brackets.  Not recommended
+% for internal reasons \%, \#, \~, backslash, but can use |,| and |=|
+% as comma and equals.  Others should be okay internally.  Not
+% recommended for external reasons on Unix pipe, < and >, ( and ),
+% star and semicolon, dollar, slash, and also double quote, single
+% quote and backquote, so is exclamation mark.  On Windows colon and
+% question mark are not legit.  Out of remaining \@, \^, -, \_, +, =,
+% . and , all but \@ seem to be good choices.
+%
+% \paragraph{To be rewritten}
+% If no mode is specified explicitely, class \latexpackage{ngetest}
+% tries to determine the mode by inspecting the file name.  If the
+% file name has the form \meta{root}-\meta{suffix}|.tex|, then
+% \latexclass{ngetest} compares \meta{suffix} agains the list of known
+% suffixes and set the mode accordingly: for suffixes |ans| and |sol|
+% mode |answers| is set and for suffix |key| mode |key| is selected.
+% In all other cases, including the case when no suffix is present,
+% the mode is set to the default value: |test|.
+% If the mode is given explicitely, no guessing is performed.
+% 
+% The separator between \meta{root} and \meta{suffix} may be set to
+% any character \meta{char} by specifying option |modesep=|\meta{char}.
+% In case when the file name contains several occurrences of the
+% separating character, it is broken by them characters into several
+% fragments, and \meta{suffix} is then the last, 
+% the tailing, fragment.  In case when there are no separating
+% characters in the filename, \meta{suffix} is empty.  Thus filenames
+% |exam-sol.tex| and |exam-1-sol.tex| have suffix |sol| and in
+% filenames |exam.tex|, |exam-.tex|, and |exam--.tex| the suffix is empty. 
+% In the former case the mode will be set by the guessing function to
+% |answers| and in the latter the default mode, |test|, will be used.
+% The default value for \option{modesep} is |-|.
+% 
+% Not all tex installations can handle filenames with spaces. So it's
+% better to avoid them.  Watch out for using both |-| and |_| in the
+% same filename.  We assume that modesep is a nonblank character.  One
+% cannot use braces in the options line.
+%
+%
 % \StopEventually{\PrintChanges\PrintIndex}
 % \section{\LaTeX{} code}
 % \label{sec:code}
@@ -215,14 +301,12 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ngetest}
 %    \end{macrocode}
-% We reserve prefix |NGE| for internal definitions in \nged class
+% We reserve prefix |NGE| for internal definitions in \nged\ class
 % and style files. 
 %
 % \subsection{Options and loaded packages}
 % \label{sec:code-ngetest-options}
 %
-% \todo[inline]{Think through the layout of initialization part and where to
-% input local cfg file.}
 % Package \latexpackage{ifthen} provides useful control structures.
 %    \begin{macrocode}
 \RequirePackage{ifthen}
@@ -236,11 +320,61 @@
 %    \end{macrocode}
 % 
 % We store all the class options at path |/NGE/test/options|.  All
-% these options need to be defined before they are processed.
+% these options need to be defined before they are processed.  The
+% code below is quite simple, it mostly collects settings.  The actual
+% processing takes places after all the packages are loaded.
 %
+% \paragraph{Modes}
+% The code above accounts for possibility that mode may be specified
+% more than once in the list of class options and processes settings
+% consecutively.  For each setting |mode=|\meta{name} the code checks
+% whether \meta{name} is a known mode name and if this is the case,
+% the mode is set to \meta{name}.  Unknown mode names are ignored and
+% a warning is issued.
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/options/mode}{%
+  .default=test,
+  .is choice,
+  .unknown/.code={%
+    \ClassWarning{ngetest}{Ignoring unknown mode%
+      '\pgfkeyscurrentname'}}}
+%    \end{macrocode}
+% \begin{macro}{\NGE@DeclareMode}
+%   Macro |\NGE@DeclareMode| creates the necessary keys for particular
+%   setting and also for mode value \meta{val} it provides the
+%   conditional |\ifvalmode|.
+%    \begin{macrocode}
+\newcommand\NGE@DeclareMode[1]{%
+  \pgfkeys{%
+    /NGE/test/options/mode/#1/.style={%
+      /NGE/test/options/mode/.initial=#1}}%
+  \expandafter\newcommand\csname if#1mode\endcsname[1]{%
+  \NGEifmode{#1}{##1}{}}}
+%    \end{macrocode}
+% This switch checks whether the mode has value \meta{val} and if this
+% is the case, executes its argument.  Otherwise it does nothing.
+%
+% The code below defines the three modes of \latexpackage{ngetest}.
+%    \begin{macrocode}
+\NGE@DeclareMode{test}
+\NGE@DeclareMode{answers}
+\NGE@DeclareMode{key}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/options/modesep}{%
+  .is choice,
+  .default={-},
+  comma/.style={/NGE/test/options/modesep/.initial={,}},
+  equals/.style={/NGE/test/options/modesep/.initial={=}},
+  .unknown/.code={%
+    \pgfkeyslet{/NGE/test/options/modesep}{\pgfkeyscurrentname}}
+}
+%    \end{macrocode}
+%
+% \paragraph{Options for other packages}
 % First we pass options for classes and packages
 % \latexpackage{ngetest} loads.
-%
 % Options for class \latexclass{article}:
 %    \begin{macrocode}
 \DeclareOption{a4paper}{\PassOptionsToClass{a4paper}{article}}
@@ -248,7 +382,8 @@
 \DeclareOption{b5paper}{\PassOptionsToClass{b5paper}{article}}
 \DeclareOption{letterpaper}{\PassOptionsToClass{letterpaper}{article}}
 \DeclareOption{legalpaper}{\PassOptionsToClass{legalpaper}{article}}
-\DeclareOption{executivepaper}{\PassOptionsToClass{executivepaper}{article}}
+\DeclareOption{executivepaper}{%
+  \PassOptionsToClass{executivepaper}{article}}
 \DeclareOption{landscape}{\PassOptionsToClass{landscape}{article}}
 \DeclareOption{10pt}{\PassOptionsToClass{10pt}{article}}
 \DeclareOption{11pt}{\PassOptionsToClass{11pt}{article}}
@@ -279,27 +414,9 @@
 %    \end{macrocode}
 %
 %
+% \paragraph{Determining mode.}
+%
 % 
-% \paragraph{Modes}
-%
-%
-%
-% First we define mode setting function when the mode is explicitely
-% given as an option.
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/options/mode}{%
-  .default=test,
-  .is choice,
-  .unknown/.code=\ClassWarning{ngetest}{%
-    Ignoring unknown mode '\pgfkeyscurrentname'}}
-\newcommand\NGE@DeclareMode[1]{%
-  \pgfkeys{%
-    /NGE/test/options/mode/#1/.style={/NGE/test/options/mode/.initial=#1}}%
-}
-\NGE@DeclareMode{test}
-\NGE@DeclareMode{answers}
-\NGE@DeclareMode{key}
-%    \end{macrocode}
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/jobname/suffix}{%
   .is choice, .default=.unknown,
@@ -311,66 +428,20 @@
 \NGE@DeclareModeSuffix{answers}{sol}
 \NGE@DeclareModeSuffix{key}{key}
 %    \end{macrocode}
-%    
-% The code above accounts for possibility that mode may be specified
-% more than once in the list of class options and processes settings
-% consecutively.  For each setting |mode=|\meta{name} the code checks
-% whether \meta{name} is a known mode name and if this is the case,
-% the mode is set to \meta{name}.  Unknown mode names are ignored and
-% a warning is issued.
-%
-% \todo{Move this part to user guide}
-% If no mode is specified explicitely, class \latexpackage{ngetest}
-% tries to determine the mode by inspecting the file name.  If the
-% file name has the form \meta{root}-\meta{suffix}|.tex|, then
-% \latexclass{ngetest} compares \meta{suffix} agains the list of known
-% suffixes and set the mode accordingly: for suffixes |ans| and |sol|
-% mode |answers| is set and for suffix |key| mode |key| is selected.
-% In all other cases, including the case when no suffix is present,
-% the mode is set to the default value: |test|.
-% If the mode is given explicitely, no guessing is performed.
-% 
-% The separator between \meta{root} and \meta{suffix} may be set to
-% any character \meta{char} by specifying option |modesep=|\meta{char}.
-% In case when the file name contains several occurrences of the
-% separating character, it is broken by them characters into several
-% fragments, and \meta{suffix} is then the last, 
-% the tailing, fragment.  In case when there are no separating
-% characters in the filename, \meta{suffix} is empty.  Thus filenames
-% |exam-sol.tex| and |exam-1-sol.tex| have suffix |sol| and in
-% filenames |exam.tex|, |exam-.tex|, and |exam--.tex| the suffix is empty. 
-% In the former case the mode will be set by the guessing function to
-% |answers| and in the latter the default mode, |test|, will be used.
-% The default value for \option{modesep} is |-|.\todo{Refactor
-% using kernel command \texttt{@sanitize}}
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/options/modesep}{%
-  .is choice,
-  .default={-},
-  space/.code={%
-    \let\NGE@temp=\space%
-    \@onelevel@sanitize\NGE@temp%
-    \pgfkeyslet{/NGE/test/options/modesep}{\NGE@temp}},
-  comma/.code={%
-    \def\NGE@temp{,}%
-    \@onelevel@sanitize\NGE@temp%
-    \pgfkeyslet{/NGE/test/options/modesep}{\NGE@temp}},
-  underscore/.code={%
-    \def\NGE@temp{_}%
-    \@onelevel@sanitize\NGE@temp%
-    \pgfkeyslet{/NGE/test/options/modesep}{\NGE@temp}},
-  .unknown/.code={%
-    \let\NGE@temp=\pgfkeyscurrentname%
-    \@onelevel@sanitize\NGE@temp%
-    \pgfkeyslet{/NGE/test/options/modesep}{\NGE@temp}}
-}
-%    \end{macrocode}
+% The order of commands in the next code fragment is important.  First
+% we load local configuration file, which may change default
+% settings.  Then default options are processed and finally
+% explicitely given options are processed.
 %    \begin{macrocode}
 \InputIfFileExists{nge.cfg}{}{}%
 \pgfkeys{/NGE/test/options/modesep}%
 \ExecuteOptions{}%
 \ProcessPgfOptions{/NGE/test/options}%
 \ProcessOptions%
+%    \end{macrocode}
+% Now it is time to load all the packages, starting with
+% \latexclass{article} class
+%    \begin{macrocode}
 \LoadClass{article}%
 %    \end{macrocode}
 % Package \latexpackage{version} is used to support modes and
@@ -383,30 +454,29 @@
 %^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
 % \todo{refactor for variants}
 %    \begin{macrocode}
+\newcommand{\NGE@ProcessModesep}[1]{%
+  \def\NGE@last##1#1{%
+    \def\NGE@temp{##1}%
+    \ifx\NGE@temp\@nnil\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}}%
 \pgfkeysifdefined{/NGE/test/options/mode}{}{%
-  \pgfkeys{/NGE/test/options/modesep/.get=\NGE@modesep}
-  \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}%
+  \pgfkeysalso{/NGE/test/options/modesep/.get=\NGE@modesep}
+  \@onelevel@sanitize\NGE@modesep
+  \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}
   \def\NGE@suffix{}%
   \def\NGE@StoreSuffix#1{%
     \def\NGE@StoreSuffix##1{%
       \def\NGE@suffix{##1}}}%
-  \newcommand{\NGE@ProcessModesep}[1]{%
-    \def\NGE@last##1#1{%
-      \def\NGE@temp{##1}%
-      \ifx\NGE@temp\@nnil\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}}%
   \expandafter\NGE@ProcessModesep\expandafter{\NGE@modesep}%
-  \expandafter\NGE@last\NGE@jobname\relax%
-  \def\NGE@StripEndingQuote#1"{#1}
-  \ifthenelse{\equal{\NGE@modesep}{\space}}{%
-    \edef\NGE@suffix{\expandafter\NGE@StripEndingQuote\NGE@suffix}}{}
+  \expandafter\NGE@last\NGE@jobname%
   \ifthenelse{\equal{\NGE@suffix}{}}{%
     \pgfkeys{/NGE/test/jobname/suffix}}{%
     \pgfkeys{/NGE/test/jobname/suffix/.expand once=\NGE@suffix}}
 }
+\typeout{Using mode \pgfkeysvalueof{/NGE/test/options/mode}}
+\newcommand{\NGEifmode}[3]{%
+  \pgfkeys{/NGE/test/options/mode/.get=\NGE@temp}%
+  \ifthenelse{\equal{\NGE@temp}{#1}}{#2}{#3}}
 %    \end{macrocode}
-%\iffalse
-%<*hide>
-%\fi
 %    \todo[inline]{add remark above why \texttt{NGE@ProcessModesep} and not \texttt{expandafter}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%^^A
 % The code below  prepares  guessing functions to work with the
@@ -423,12 +493,8 @@
 % trace them explicitely.
 %    \begin{macrocode}
 %    \end{macrocode}
-% \todo[inline]{Refactor without boolean}
+%
 %    \begin{macrocode}
-\DeclareOption{answers}{\def\NGEtestmode{answers}\setboolean{NGEAnswersMode}{true}}
-\DeclareOption{markingguide}{\setboolean{NGEAnswersMode}{true}%
-  \setboolean{NGEMarkingGuideMode}{true}}
-\ProcessOptions
 %    \end{macrocode}
 % 
 %
@@ -441,6 +507,10 @@
 %
 % \subsection{Tasks}
 % \label{sec:code-ngetest-tasks}
+%
+%\iffalse
+%<*hide>
+%\fi
 %
 % \todo[inline]{Refactor with \latexpackage{pgfkeys}}
 % In this section we define the generic environment for problems and
@@ -596,7 +666,7 @@
 % 
 % \todo[inline]{Add to index references to \latexpackage{pgfkeys} tree used}
 % \todo[inline]{Look up indexing commands for \latexpackage{doc}}
-%^^A \todo[inline]{}
+% \todo[inline]{Add to documentation DescribeOption and option macros}
 %^^A \todo[inline]{}
 %^^A \todo[inline]{}
 %^^A \todo[inline]{}
@@ -604,26 +674,11 @@
 % \Finale
 % \iffalse
 %<*test>
-%<default>\documentclass[12pt]{ngetest}
-%<underscore>\documentclass[12pt,modesep=_]{ngetest}
-%<comma>\documentclass[12pt,modesep=comma]{ngetest}
-%<space>\documentclass[12pt,modesep=space]{ngetest}
+\documentclass[12pt]{ngetest}
 \makeatletter
 \begin{document}
 This is a test file for class \texttt{ngetest}.  Current mode is
 \pgfkeysvalueof{/NGE/test/options/mode}.
-%<*modesep>
-Modesep is 
-\pgfkeysifdefined{/NGE/test/options/modesep}{%
-  \pgfkeys{/NGE/test/options/modesep/.get=\NGE@temp}%
-  \ifthenelse{\equal{\NGE@temp}{}}{empty}{%
-    \ifthenelse{\equal{\NGE@temp}{\space}}{%
-      a space}{%
-      \pgfkeysvalueof{/NGE/test/options/modesep}}}}{%
-  undefined} and the suffix is
-\@ifundefined{NGE@suffix}{undefined}{%
-  \ifthenelse{\equal{\NGE@suffix}{}}{empty}{\NGE@suffix}}.
-%</modesep>
 %<*hide>
 First we test default settings and main environments \texttt{NGEtest},
 \texttt{solution}, \texttt{answer}, \texttt{comment}, and

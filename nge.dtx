@@ -355,7 +355,7 @@
     /NGE/test/options/mode/#1/.style={%
       /NGE/test/options/mode/.initial=#1}}%
   \expandafter\newcommand\csname if#1mode\endcsname[1]{%
-  \NGEifmode{#1}{##1}{}}}
+  \ifNGEmode{#1}{##1}{}}}
 %    \end{macrocode}
 % This switch checks whether the mode has value \meta{val} and if this
 % is the case, executes its argument.  Otherwise it does nothing.
@@ -480,8 +480,7 @@
 }
 \pgfkeys{/NGE/test/options/mode/.get=\NGE@mode}
 \typeout{Using mode \NGE@mode}
-\newcommand{\NGEifmode}[3]{%
-  \ifthenelse{\equal{\NGE@mode}{#1}}{#2}{#3}}
+\newcommand{\ifNGEmode}[3]{\ifthenelse{\equal{\NGE@mode}{#1}}{#2}{#3}}
 %    \end{macrocode}
 %    \todo[inline]{add remark above why \texttt{NGE@ProcessModesep} and not \texttt{expandafter}}
 % The code below  prepares  guessing functions to work with the
@@ -539,23 +538,26 @@
 % number of points, assigned to a particular task may be specified
 % with points option for |NGEtask| environment and the default
 % assignment may be changed with the help of |\NGEtasks|
-% command.\todo{Allow for nonnumeric argument (e.g. \texttt{parts} or \texttt{subparts}(?))}
+% command.
 %    \begin{macrocode}
 %    \end{macrocode}
 % We also provide a quick way to turn off points counting temporarily
 % for a particular task.
 %    \begin{macrocode}
-%\pgfkeys{/NGE/task/nopoints/.code=\setcounter{NGEtaskpoints}{0}}
 %    \end{macrocode}
 % In the same way we treat the task name.
 %    \begin{macrocode}
 %    \end{macrocode}
 % First we specify default settings for the task header.
 %    \begin{macrocode}
-%\newcommand{\NGEtaskheader}{{\NGEtaskheaderfont\NGE@taskname{}
-%    \theNGEtask} ({\NGEtaskpointsfont\theNGEtaskpoints}): }
-%\newcommand{\NGEtaskheaderfont}{\bfseries}
-%\newcommand{\NGEtaskpointsfont}{\itshape}
+\pgfqkeys{/NGE/task}{%
+  .declare/task/.code={%
+    \pgfqkeysalso{/NGE/task/.declare/option}/.cd,name=#1}}}
+%\newcommand{\NGEDeclareTask}[1]{%
+%  \pgfqkeys{/NGE/task/#1}{%
+%}
+%}
+%\NGEDeclareTask{test}
 %    \end{macrocode}
 % \begin{macro}{NGEtask}
 % Now we can define the environment itself.
@@ -564,7 +566,7 @@
   points/.is choice,
   points/.default=0,
   % points/parts/.code={},
-  points/.unknown/.code=\setcounter{NGEtaskpoints}{\pgfkeyscurrentname},
+  points/.unknown/.code={\setcounter{NGEtaskpoints}{\pgfkeyscurrentname}},
   % showpoints/.is choice,
   % showpoints/.default=yes,
   % showpoints/yes/.code={},
@@ -587,18 +589,17 @@
   note/font/.store in=\NGEtasknotefont,
   note/font/.default=\itshape,
   note/.default={},
-  note/.code={\let\NGEtasknote=\@empty},
-%  note/.code={%
-%    \ifthenelse{\equal{}{#1}}{\let\NGEtasknote=\@empty}{%
-%      \def\NGEtasknote{(\begingroup\NGEtasktnotefont #1\endgroup)}}},
+  note/.store in=\NGEtasknote,
+  note/.default={},
   header/.store in=\NGEtaskheader,
-  header/.default={\begingroup\NGEtaskheaderfont\NGEtaskname%
-%    \protect\space\theNGEtask\endgroup\protect\space\NGEtasknote%
-    \endgroup}
+  header/.default={\begingroup%
+    \NGEtaskheaderfont\NGEtaskname\protect\space\theNGEtask%
+    \endgroup{} (\begingroup%
+    \NGEtasknotefont%
+    \ifthenelse{\equal{\NGEtasknote}{}}{}{\NGEtasknote, }%
+    \theNGEtaskpoints{} point\ifthenelse{\value{NGEtaskpoints} = 1}{}{s}%
+    \endgroup).}
 }
-%\newenvironment{NGEtask}[1][]{%
-%  \pgfqkeys{/NGE/task}{points,name,#1}% First defaults, then local options.
-%  \begin{trivlist}\item[\NGEtaskheader]\NGEtaskfont}{\end{trivlist}}
 \newenvironment{NGEtask}[1][]{%
   \refstepcounter{NGEtask}%
   \begingroup%
@@ -606,7 +607,6 @@
     header/font,note,note/font,header,#1}
 %  \addtocounter{NGEpointstotal}{\value{NGEtaskpoints}}%
   \begin{trivlist}\item[\NGEtaskheader]\NGEtaskfont}{\end{trivlist}\endgroup}
-%\newcommand{\NGEtaskfont}{\normalfont}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{NGEtasks}
@@ -638,9 +638,11 @@
   mark/.default={\NGEanswermarkfont\NGEanswername:\space\NGEanswerfont}
 }
 \newenvironment{answer}[1][]{%
-  \begingroup%
-  \pgfqkeys{/NGE/test/answer}{name,font,mark/font,mark,#1}%
-  \NGEanswermark\NGEanswerfont}{\par\endgroup}
+  \par%
+  \begin{trivlist}%
+    \pgfqkeys{/NGE/test/answer}{name,font,mark/font,mark,#1}%
+  \item[\NGEanswermarkfont\NGEanswername]\NGEanswerfont\ignorespaces
+}{\end{trivlist}}
 \AtEndOfClass{\iftestmode{\excludeversion{answer}}}
 %    \end{macrocode}
 % \end{macro}
@@ -694,6 +696,13 @@
 % \end{macro}
 % 
 %    \begin{macrocode}
+% \newcommand{\NGEDeclareModeComment}[2]{%
+%   \pgfqkeys{/NGE/test/#1comment}{%
+%   }
+%   \expandafter\newenvironment\expandafter{#1comment}[1][]{%
+%   }{}
+%   \expandafter\AtEndOfClass\expandafter{\csname if#1mode{\includeversion}
+% }
 %    \end{macrocode}
 % 
 %
@@ -733,7 +742,9 @@
 % \todo[inline]{Add to index references to \latexpackage{pgfkeys} tree used}
 % \todo[inline]{Look up indexing commands for \latexpackage{doc}}
 % \todo[inline]{Add to documentation DescribeOption and option macros}
-%^^A \todo[inline]{}
+% \todo[inline]{Make task declarations preamble only}
+% \todo[inline]{How to hook tasks into existing environments?  Kernel
+% and amsthm.}
 %^^A \todo[inline]{}
 %^^A \todo[inline]{}
 %^^A \todo[inline]{}
@@ -785,6 +796,10 @@ task 5 points by default.
 \end{NGEtask}
 \begin{NGEtask}[name=Practical task]
   This task has modified name and default number of points.
+\end{NGEtask}
+\begin{NGEtask}[name=Consolation problem, note=bonus, points=1]
+  This task has modified name and is assigned one point.  It also has
+  a note in it.
 \end{NGEtask}
 \end{document}
 %</test>

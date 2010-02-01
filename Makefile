@@ -15,8 +15,10 @@ targets = ngetest.cls
 
 targets_test = test.tex test-ans.tex test-key.tex
 
-.PHONY: all doc dvi pdf ps
+.PHONY: all doc dvi pdf draft
 all: $(targets)
+
+draft:
 	$(LATEX) $(name).dtx
 	$(MAKEINDEX) -s gind.ist $(name)
 	$(MAKEINDEX) -s gglo.ist -o $(name).gls $(name).glo

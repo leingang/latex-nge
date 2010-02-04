@@ -338,35 +338,96 @@
 % the mode is set to \meta{name}.  Unknown mode names are ignored and
 % a warning is issued.
 %    \begin{macrocode}
+\newcommand{\NGE@DeclareMode}[1]{%
+  \pgfkeys{/NGE/test/options/mode/#1/.style={%
+    }}
+}
+\pgfqkeys{/NGE/test/.declare/mode}{%
+  .value required,
+  .style={}
+}
 \pgfqkeys{/NGE/test/options/mode}{%
   .default=test,
   .is choice,
   .unknown/.code={%
     \ClassWarning{ngetest}{Ignoring unknown mode%
-      '\pgfkeyscurrentname'}}}
+      '\pgfkeyscurrentname'}},
+  /NGE/test/.declare/mode/.append style={%
+%    \pgfkeysalso{%
+      /NGE/test/options/mode/#1/.style={%
+        /NGE/test/options/mode/.initial=#1}%
+%    }%
+  }
+}
 %    \end{macrocode}
 % \begin{macro}{\NGE@DeclareMode}
 %   Macro |\NGE@DeclareMode| creates the necessary keys for particular
 %   setting and also for mode value \meta{val} it provides the
 %   conditional |\ifvalmode|.
 %    \begin{macrocode}
-\newcommand\NGE@DeclareMode[1]{%
-  \pgfkeys{%
-    /NGE/test/options/mode/#1/.style={%
-      /NGE/test/options/mode/.initial=#1}}%
-  \expandafter\newcommand\csname if#1mode\endcsname[1]{%
-  \ifNGEmode{#1}{##1}{}}}
+\pgfqkeys{/NGE/test/.declare/ifmode}{%
+  .value required,
+  .style={%
+    /NGE/test/options/mode/#1/ifmode/.code={%
+      \ifNGEmode{#1}{##1}{}},
+    /NGE/test/options/mode/#1/ifmode/.code/.get/.expanded={%
+      \csname if#1mode\endcsname%
+    }%
+  },
+  /NGE/test/.declare/mode/.append style={%
+    /NGE/test/.declare/ifmode=#1}%
+}
+\pgfqkeys{/NGE/test/.declare/comment}{%
+  .value required,
+  .style={%
+%    /NGE/test/modes/#1/comment/.code={%
+%    },
+   },
+   .append code={%
+     \AtEndOfClass{\ifNGEmode{#1}{}{\excludeversion{#1comment}}}%
+   },
+  /NGE/test/.declare/mode/.append style={%
+    /NGE/test/.declare/comment=#1}%
+}
+%      /NGE/test/options/mode/.initial=#1}},
+%  .append code={}
+%  .code={%
+%    \expandafter\newcommand\expandafter{%
+%      \csname if#1mode\endcsname}[1]{\ifNGEmode{#1}{##1}{}}%
+%    \pgfkeysalso{%
+%      /NGE/test/options/mode/#1/.style={%
+%        /NGE/test/options/mode/.initial=#1},
+%      /NGE/test/modes/.declare/comment=#1
+%    }%
+%  }%
+%}
+%\pgfqkeys{/NGE/test/modes/.declare/comment}{%
+%  .value required,
+%  .code={%
+%    \newenvironment{#1comment}[1][]{%
+%       \begingroup%
+%      \pgfqkeys{/NGE/test/modes/#1/comment}{##1}%
+%      % \NGEcommentfont%
+%    }{%
+%% Fix this!
+%      \@par\endgroup
+%    }%
+%    \pgfqkeysalso{/NGE/test/modes/#1/comment}{%
+%      font/.store in=\NGE#1commentfont%
+% }%
+%   \AtEndOfClass{\ifNGEmode{#1}{}{\excludeversion{#1comment}}}%
+%  },
+%}
 %    \end{macrocode}
 % This switch checks whether the mode has value \meta{val} and if this
 % is the case, executes its argument.  Otherwise it does nothing.
 %
 % The code below defines the three modes of \latexpackage{ngetest}.
 %    \begin{macrocode}
-\NGE@DeclareMode{test}
-\NGE@DeclareMode{answers}
-\NGE@DeclareMode{key}
+\pgfqkeys{/NGE/test/.declare}{mode=test,mode=answers,mode=key}
 %    \end{macrocode}
 % \end{macro}
+%
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/modesep}{%
   .is choice,
@@ -456,6 +517,9 @@
 %    \begin{macrocode}
 \RequirePackage{versions}%
 %    \end{macrocode}
+%\iffalse
+%<*hide>
+%\fi
 %^^A Put this reference where it belongs
 %^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
 % \todo{refactor for variants}
@@ -499,6 +563,7 @@
 %    \end{macrocode}
 %
 %    \begin{macrocode}
+\pgfqkeys{/NGE/test/.declare}{mode=test,mode=answers,mode=key}
 %    \end{macrocode}
 % 
 %
@@ -550,9 +615,12 @@
 %    \end{macrocode}
 % First we specify default settings for the task header.
 %    \begin{macrocode}
-\pgfqkeys{/NGE/task}{%
+\pgfqkeys{/NGE/tasks}{%
   .declare/task/.code={%
-    \pgfqkeysalso{/NGE/task/.declare/option}/.cd,name=#1}}}
+    \pgfqkeysalso{/NGE/tasks/.declare/options}{name={#1}{}}
+    \newenvironment{#1}{}{}},
+  .declare/options/.code 2 args={}
+}
 %\newcommand{\NGEDeclareTask}[1]{%
 %  \pgfqkeys{/NGE/task/#1}{%
 %}
@@ -682,27 +750,20 @@
 % excluded by default.
 % \begin{macro}{NGEcomment}
 %    \begin{macrocode}
-\pgfqkeys{/NGE/test/comment}{%
-  font/.store in=\NGEcommentfont,
-  font/.default=\slshape
-}
-\includeversion{comment}
-\renewenvironment{comment}[1][]{%
-  \begingroup%
-  \pgfqkeys{/NGE/test/comment}{font,#1}%
-  \NGEcommentfont}{\par\endgroup}
-\AtEndOfClass{\iftestmode{\includeversion{comment}}}%
+%\pgfqkeys{/NGE/test/comment}{%
+%  font/.store in=\NGEcommentfont,
+%  font/.default=\slshape
+%}
+%\includeversion{comment}
+%\renewenvironment{comment}[1][]{%
+%  \begingroup%
+%  \pgfqkeys{/NGE/test/comment}{font,#1}%
+%  \NGEcommentfont}{\par\endgroup}
+%\AtEndOfClass{\iftestmode{\includeversion{comment}}}%
 %    \end{macrocode}
 % \end{macro}
 % 
 %    \begin{macrocode}
-% \newcommand{\NGEDeclareModeComment}[2]{%
-%   \pgfqkeys{/NGE/test/#1comment}{%
-%   }
-%   \expandafter\newenvironment\expandafter{#1comment}[1][]{%
-%   }{}
-%   \expandafter\AtEndOfClass\expandafter{\csname if#1mode{\includeversion}
-% }
 %    \end{macrocode}
 % 
 %
@@ -712,18 +773,10 @@
 % In the same way we define commands and environments for the marking
 % guide mode.
 %    \begin{macrocode}
-\pgfqkeys{/NGE/test/markingcomment}{%
-  font/.store in=\NGEmarkingcommentfont,
-  font/.default=\sffamily
-}
-\newenvironment{markingcomment}[1][]{%
-  \begingroup%
-  \pgfqkeys{/NGE/test/markingcomment}{font,#1}%
-  \NGEmarkingcommentfont}{\par\endgroup}
-\AtEndOfClass{%
-  \iftestmode{\excludeversion{markingcomment}}%
-  \ifanswersmode{\excludeversion{markingcomment}}%
-}
+%\pgfqkeys{/NGE/test/markingcomment}{%
+%  font/.store in=\NGEmarkingcommentfont,
+%  font/.default=\sffamily
+%}
 %    \end{macrocode}
 % 
 %    \begin{macrocode}
@@ -736,6 +789,7 @@
 %    \end{macrocode}
 %
 %\iffalse
+%</hide>
 %</ngetest>
 %\fi
 % 
@@ -756,17 +810,19 @@
 \begin{document}
 This is a test file for class \texttt{ngetest}.  Current mode is
 \pgfkeysvalueof{/NGE/test/options/mode}.
-
+%\iffalse
+%<*hide>
+%\fi
 First we test default settings and main environments \texttt{NGEtest},
 \texttt{solution}, \texttt{answer}, \texttt{comment}, and
 \texttt{markingcomment}.
 \begin{NGEtask}
   This is the first task with default settings.
 \end{NGEtask}
-\begin{markingcomment}
+\begin{keycomment}
   In marking guide mode solutions and answers are interspersed with
   marking notes, which do not show in answers mode, or in test mode.
-\end{markingcomment}
+\end{keycomment}
 \begin{answer}
   The answer must not show up in the task mode.
 \end{answer}
@@ -801,6 +857,12 @@ task 5 points by default.
   This task has modified name and is assigned one point.  It also has
   a note in it.
 \end{NGEtask}
+\begin{keycomment}
+  This is a comment which should be visible only in key mode.
+\end{keycomment}
+%\iffalse
+%</hide>
+%\fi
 \end{document}
 %</test>
 % \fi

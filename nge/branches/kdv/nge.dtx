@@ -330,6 +330,17 @@
 % code below is quite simple, it mostly collects settings.  The actual
 % processing takes places after all the packages are loaded.
 %
+% \paragraph{Infrastructure}
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/.declare}{%
+  .is choice,
+  .unknown/.code={\ClassError{ngetest}{Do not know, how to
+    declare `\pgfkeyscurrentname'}{}}
+  }
+%    \end{macrocode}
+%\iffalse
+%<*hide>
+%\fi
 % \paragraph{Modes}
 % The code above accounts for possibility that mode may be specified
 % more than once in the list of class options and processes settings
@@ -439,6 +450,10 @@
 }
 %    \end{macrocode}
 %
+%\iffalse
+%</hide>
+%\fi
+%
 % \paragraph{Options for other packages}
 % First we pass options for classes and packages
 % \latexpackage{ngetest} loads.
@@ -481,6 +496,9 @@
 %    \end{macrocode}
 %
 %
+%\iffalse
+%<*hide>
+%\fi
 % \paragraph{Determining mode.}
 %
 % 
@@ -499,9 +517,12 @@
 % we load local configuration file, which may change default
 % settings.  Then default options are processed and finally
 % explicitely given options are processed.
+%\iffalse
+%</hide>
+%\fi
 %    \begin{macrocode}
 \InputIfFileExists{nge.cfg}{}{}%
-\pgfkeys{/NGE/test/options/modesep}%
+%\pgfkeys{/NGE/test/options/modesep}%
 \ExecuteOptions{}%
 \ProcessPgfOptions{/NGE/test/options}%
 \ProcessOptions%
@@ -511,15 +532,15 @@
 %    \begin{macrocode}
 \LoadClass{article}%
 %    \end{macrocode}
+%\iffalse
+%<*hide>
+%\fi
 % Package \latexpackage{version} is used to support modes and
 % variants.
 % \todo{Enable comments and redefine comment environment}
 %    \begin{macrocode}
 \RequirePackage{versions}%
 %    \end{macrocode}
-%\iffalse
-%<*hide>
-%\fi
 %^^A Put this reference where it belongs
 %^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
 % \todo{refactor for variants}

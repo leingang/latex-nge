@@ -535,29 +535,48 @@
 \newcounter{NGEpointstotal}
 %    \end{macrocode}
 %    \begin{macrocode}
-\newboolean{NGEshowpoints}
-\newboolean{NGEunnumbered}
+\newboolean{NGEshowtaskpoints}
+\newboolean{NGEunnumberedtask}
 %    \end{macrocode}
 %    \begin{macrocode}
-\newcommand{\NGETaskNote}[1]{%
-  \ifthenelse{\equal{#1}{}}{%
-    \ifthenelse{\boolean{NGEshowpoints}{\NGETaskPoints}{}}}{%
-    \ifthenelse{\boolean{NGEshowpoints}}{#1}{#1, \NGETaskPoints}}%
-}
 %    \end{macrocode}
 %    
 %    
 %    \begin{macrocode}
-\newcommand{\NGETaskPoints}{%
-  \theNGEtaskpoints point\ifthenelse{\value{NGEtaskpoints} = 1}{}{s}}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-\newcommand{\NGETaskHead}[1]{%
-  \ifthenelse{\equal{#1}{}}{%
-  \ifthenelse{\boolean{NGEunnumbered}}{}{\NGEtasknumber}}{%
-  \ifthenelse{\boolean{NGEunnumbered}}{#1}{#1 \NGEtasknumber}}
-}
+\newcommand{\NGEtaskhead}{%
+  \NGEtaskname\NGEtasknote\pgfkeysvalueof{\NGE@taskpath/head/punctuation}}
+\newcommand{\NGEtaskname}{%
+  \pgfkeys{\NGE@taskpath/name/.get=\NGE@taskname}
+  \begingroup\pgfkeysvalueof{\NGE@taskpath/head/font}%
+    \ifthenelse{\equal{\NGE@taskname}{}}%
+    {\ifthenelse{\boolean{NGEunnumberedtask}}%
+      {\ClassWarning{ngetest}{empty task name in an unnumbered task}}%
+      {\NGEtasknumber}}%
+    {\ifthenelse{\boolean{NGEunnumberedtask}}%
+      {\NGE@taskname}%
+      {\NGEtaskname\space\NGEtasknumber}}%
+  \endgroup}
+\newcommand{\NGEtasknote}{%
+  \pgfkeys{\NGE@taskpath/note/.get=\NGE@tasknote}
+  \ifthenelse{\boolean{NGEshowtaskpoints}}%
+  {\ifthenelse{\equal{\NGE@tasknote}{}}%
+    {\edef\NGE@tasknote{\NGEtaskpoints}}%
+    {\edef\NGE@tasknote{\NGE@tasknote,\space\NGEtaskpoints}}}%
+  \ifthenelse{\equal{\NGE@tasknote}{}}%
+  {}%
+  {\space(\begingroup\pgfkeysvalueof{\NGE@taskpath/note/font}%
+    \NGE@tasknote\endgroup)}}
+\newcommand{\NGEtaskpoints}{%
+  \pgfkeys{\NGE@taskpath/points/.get=\NGE@taskpoints}%
+  \ifthenelse{\boolean{NGEshowtaskpoints}}%
+  {\ifthenelse{9<1\NGE@taskpoints}%
+    {\setcounter{NGEtaskpoints}{\NGE@taskpoints}%
+      \theNGEtaskpoints\space point%
+      \ifthenelse{\value{NGEtaskpoints}=1}{}{s}}%
+    {}}}
 %    \end{macrocode}
 % It is users responsibility to guarantee that counter exists.
 %^^A see also
@@ -571,33 +590,7 @@
     pretaskhook/.initial={},
     posttaskhook/.initial={},
     points/.initial=0,
-    head/.initial={%
-      \ifthenelse{\equal{\NGE@taskhead}{}}%
-      {\ifthenelse{\equal{\NGE@tasknote}{}}%
-        {}%
-        {\begingroup%
-            \pgfkeysvalueof{\NGE@taskpath/note/font}%
-            \NGE@tasknote%
-          \endgroup%
-          \pgfkeysvalueof{\NGE@taskpath/head/punctuation}%
-          \pgfkeysvalueof{\NGE@taskpath/head/afterskip}}}%
-      {\ifthenelse{\equal{\NGE@tasknote}{}}%
-        {\begingroup%
-            \pgfkeysvalueof{\NGE@taskpath/head/font}%
-            \NGE@testhead%
-            \pgfkeysvalueof{\NGE@taskpath/head/punctuation}%
-          \endgroup%
-          \pgfkeysvalueof{\NGE@taskpath/head/afterskip}}%
-        {\begingroup%
-            \pgfkeysvalueof{\NGE@taskpath/head/font}%
-            \NGE@taskhead%
-          \endgroup%
-          \space(\begingroup%
-            \pgfkeysvalueof{\NGE@taskpath/note/font}%
-            \NGE@tasknote%
-          \endgroup)%
-          \pgfkeysvalueof{\NGE@taskpath/head/punctuation}%
-          \pgfkeysvalueof{\NGE@taskpath/head/afterskip}}}},
+    head/.initial={\NGEtaskhead}
     head/font/.initial={\bfseries},
     head/punctuation/.initial={.},
     head/afterskip/.initial={},
@@ -609,10 +602,7 @@
     \def\NGE@taskpath{/NGE/test/tasks/#1}%
     \pgfqkeys{\NGE@taskpath}{##1}%
     \pgfqkeys{\NGE@taskpath}{%
-      name/.get=\NGE@taskname,
       counter/.get=\NGE@taskcounter,
-      note/.get=\NGE@tasknote,
-      points/.get=\NGE@taskpoints
     }%
     \refstepcounter{\NGE@taskcounter}%
     \edef\NGETaskNumber{\csname the\NGE@taskcounter\endcsname}%
@@ -623,10 +613,9 @@
       {}%
       {\ClassError{ngetest}{Unknown points setting%
           '\NGE@taskpoints'}{}}}%
-    \edef\NGE@tasknote{\NGETaskNote{\NGE@tasknote}}%
-    \edef\NGE@taskhead{\NGETaskHead{\NGE@taskname}}%
     \pgfkeysvalueof{\NGe@taskpath/pretaskhook}%
-  \item[\pgfkeysvalueof{/NGE/test/tasks/#1/head}]%
+  \item[\pgfkeysvalueof{\NGE@taskpath/head}]%
+    \pgfkeysvalueof{\NGE@taskpath/head/afterskip}}%
     \pgfkeysvalueof{\NGE@taskpath/font}%
   }%
   {\pgfkeysvalueof{\NGE@taskpath/posttaskhook}%
@@ -1019,19 +1008,19 @@ This is a test file for class \texttt{ngetest}.  The default mode is
   This is a comment \texttt{testcomment}.
 \end{testcomment}
 And this is text outside this comment
-%\iffalse
-%<*hide>
-%\fi
+
 First we test default settings and main environments \texttt{NGEtest},
 \texttt{solution}, \texttt{answer}, \texttt{comment}, and
 \texttt{keycomment}.
-\begin{NGEtask}[points=5]
+\begin{NGEtask}
   This is the first task with default settings.  The are
   \pgfkeysvalueof{/NGE/test/tasks/NGEtask/points} 
 points.
 \end{NGEtask}
 
-
+%\iffalse
+%<*hide>
+%\fi
 \begin{keycomment}
   In marking guide mode solutions and answers are interspersed with
   marking notes, which do not show in answers mode, or in test mode.

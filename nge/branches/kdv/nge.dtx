@@ -330,134 +330,95 @@
 % code below is quite simple, it mostly collects settings.  The actual
 % processing takes places after all the packages are loaded.
 %
-% \paragraph{Infrastructure}
 %    \begin{macrocode}
-\pgfqkeys{/NGE/test/.declare}{%
-  .is choice,
-  .unknown/.code={\ClassError{ngetest}{Do not know, how to
-    declare `\pgfkeyscurrentname'}{}}
-  }
 %    \end{macrocode}
-%\iffalse
-%<*hide>
-%\fi
-% \paragraph{Modes}
-% The code above accounts for possibility that mode may be specified
-% more than once in the list of class options and processes settings
-% consecutively.  For each setting |mode=|\meta{name} the code checks
-% whether \meta{name} is a known mode name and if this is the case,
-% the mode is set to \meta{name}.  Unknown mode names are ignored and
-% a warning is issued.
+%
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/options/mode}{%
+  .value required,
+  .is choice,
+  .unknown/.code={%
+    \PackageWarning{ngetest}{%
+      Ignoring unknown mode '\pgfkeyscurrentname'}}
+}
+%    \end{macrocode}
+%
 %    \begin{macrocode}
 \newcommand{\NGE@DeclareMode}[1]{%
-  \pgfkeys{/NGE/test/options/mode/#1/.style={%
-    }}
+  \pgfkeys{/NGE/test/options/mode/#1/.code={\def\NGEmode{#1}}}
+  \expandafter\newcommand\expandafter{\csname if#1mode\endcsname}[1]{%
+    \ifNGEmode{#1}{##1}{}}
+  \NGE@DeclareModeComment{#1}%
+  \AtEndOfClass{\ifNGEmode{#1}{}{\excludeversion{#1comment}}}
 }
-\pgfqkeys{/NGE/test/.declare/mode}{%
-  .value required,
-  .style={}
-}
-\pgfqkeys{/NGE/test/options/mode}{%
-  .default=test,
-  .is choice,
-  .unknown/.code={%
-    \ClassWarning{ngetest}{Ignoring unknown mode%
-      '\pgfkeyscurrentname'}},
-  /NGE/test/.declare/mode/.append style={%
-%    \pgfkeysalso{%
-      /NGE/test/options/mode/#1/.style={%
-        /NGE/test/options/mode/.initial=#1}%
-%    }%
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcommand\NGE@par{\par}
+\newcommand{\NGE@DeclareModeComment}[1]{
+  \pgfqkeys{/NGE/test/modes/#1/comment}{%
+    header/.initial={},
+    font/.initial={},
+    precommenthook/.initial={},
+    postcommenthook/.initial={},
+    par/.initial={},
+    inline/.code={\def\NGE@par{\relax}}
+  }
+  \newenvironment{#1comment}[1][]{%
+    \pgfqkeys{/NGE/test/modes/#1/comment}{##1}%
+    \pgfkeysvalueof{/NGE/test/modes/#1/comment/par}%
+    \pgfkeysvalueof{/NGE/test/modes/#1/comment/header}%
+    \pgfkeysvalueof{/NGE/test/modes/#1/comment/font}%
+    \pgfkeysvalueof{/NGE/test/modes/#1/comment/precommenthook}%
+  }{%
+    \pgfkeysvalueof{/NGE/test/modes/#1/comment/postcommenthook}%
+    \pgfkeysvalueof{/NGE/test/modes/#1/comment/par}%
   }
 }
 %    \end{macrocode}
-% \begin{macro}{\NGE@DeclareMode}
-%   Macro |\NGE@DeclareMode| creates the necessary keys for particular
-%   setting and also for mode value \meta{val} it provides the
-%   conditional |\ifvalmode|.
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/.declare/ifmode}{%
-  .value required,
-  .style={%
-    /NGE/test/options/mode/#1/ifmode/.code={%
-      \ifNGEmode{#1}{##1}{}},
-    /NGE/test/options/mode/#1/ifmode/.code/.get/.expanded={%
-      \csname if#1mode\endcsname%
-    }%
-  },
-  /NGE/test/.declare/mode/.append style={%
-    /NGE/test/.declare/ifmode=#1}%
-}
-\pgfqkeys{/NGE/test/.declare/comment}{%
-  .value required,
-  .style={%
-%    /NGE/test/modes/#1/comment/.code={%
-%    },
-   },
-   .append code={%
-     \AtEndOfClass{\ifNGEmode{#1}{}{\excludeversion{#1comment}}}%
-   },
-  /NGE/test/.declare/mode/.append style={%
-    /NGE/test/.declare/comment=#1}%
-}
-%      /NGE/test/options/mode/.initial=#1}},
-%  .append code={}
-%  .code={%
-%    \expandafter\newcommand\expandafter{%
-%      \csname if#1mode\endcsname}[1]{\ifNGEmode{#1}{##1}{}}%
-%    \pgfkeysalso{%
-%      /NGE/test/options/mode/#1/.style={%
-%        /NGE/test/options/mode/.initial=#1},
-%      /NGE/test/modes/.declare/comment=#1
-%    }%
-%  }%
-%}
-%\pgfqkeys{/NGE/test/modes/.declare/comment}{%
-%  .value required,
-%  .code={%
-%    \newenvironment{#1comment}[1][]{%
-%       \begingroup%
-%      \pgfqkeys{/NGE/test/modes/#1/comment}{##1}%
-%      % \NGEcommentfont%
-%    }{%
-%% Fix this!
-%      \@par\endgroup
-%    }%
-%    \pgfqkeysalso{/NGE/test/modes/#1/comment}{%
-%      font/.store in=\NGE#1commentfont%
-% }%
-%   \AtEndOfClass{\ifNGEmode{#1}{}{\excludeversion{#1comment}}}%
-%  },
-%}
-%    \end{macrocode}
-% This switch checks whether the mode has value \meta{val} and if this
-% is the case, executes its argument.  Otherwise it does nothing.
-%
-% The code below defines the three modes of \latexpackage{ngetest}.
-%    \begin{macrocode}
-\pgfqkeys{/NGE/test/.declare}{mode=test,mode=answers,mode=key}
-%    \end{macrocode}
-% \end{macro}
-%
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/options/modesep}{%
+  .value required,
   .is choice,
-  .default={-},
-  comma/.style={/NGE/test/options/modesep/.initial={,}},
-  equals/.style={/NGE/test/options/modesep/.initial={=}},
-  .unknown/.code={%
-    \pgfkeyslet{/NGE/test/options/modesep}{\pgfkeyscurrentname}}
+  .unknown/.code={\let\NGE@modesep=\pgfkeyscurrentname},
+  comma/.code={\def\NGE@modesep{,}},
+  equals/.code={\def\NGE@modesep{=}},
 }
 %    \end{macrocode}
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/jobname/suffix}{%
+  .is choice,
+  .unknown/.code={\relax},
+}
+%    \end{macrocode}
+%    
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/modes/.configure}{%
+  default/.style={/NGE/test/options/mode/.initial=#1},
+  modesep/.style={/NGE/test/options/modesep=#1},
+  modesuffix/.style 2 args={%
+    /NGE/test/jobname/suffix/#2/.style={%
+      /NGE/test/options/mode=#1%
+    }
+  }
+}
+\newcommand{\NGE@ConfigureModes}[1]{%
+  \pgfqkeys{/NGE/test/modes/.configure}{#1}}
+\newcommand{\NGEConfigureModeComment}[2]{%
+  \pgfqkeys{/NGE/test/modes/#1/comment}{#2}}
+%    \end{macrocode}
 %
-%\iffalse
-%</hide>
-%\fi
 %
-% \paragraph{Options for other packages}
-% First we pass options for classes and packages
-% \latexpackage{ngetest} loads.
-% Options for class \latexclass{article}:
+%
+%
+%
+%
+%
+%
+%
+%    \begin{macrocode}
+%    \end{macrocode}
+%
 %    \begin{macrocode}
 \DeclareOption{a4paper}{\PassOptionsToClass{a4paper}{article}}
 \DeclareOption{a5paper}{\PassOptionsToClass{a5paper}{article}}
@@ -482,118 +443,77 @@
 \DeclareOption{fleqn}{\PassOptionsToClass{fleqn}{article}}
 \DeclareOption{openbib}{\PassOptionsToClass{openbib}{article}}
 %    \end{macrocode}
-% Options for package \latexpackage{versions}:
+%
 %    \begin{macrocode}
 \DeclareOption{nogroup}{\PassOptionsToPackage{nogroup}{versions}}
 \DeclareOption{tracing}{\PassOptionsToPackage{tracing}{versions}}
 %    \end{macrocode}
-% Everything else given on |\documentclass| line is considered
-% undeclared option and is passed for handling to
-% \latexpackage{pgfopts} package.  The line below suppresses ``unused
-% option'' warnings for unrecognized options.
+%
 %    \begin{macrocode}
 \DeclareOption*{\relax}
 %    \end{macrocode}
 %
 %
-%\iffalse
-%<*hide>
-%\fi
-% \paragraph{Determining mode.}
 %
-% 
+%
 %    \begin{macrocode}
-\pgfqkeys{/NGE/test/jobname/suffix}{%
-  .is choice, .default=.unknown,
-  .unknown/.style={/NGE/test/options/mode}}
-\newcommand{\NGE@DeclareModeSuffix}[2]{%
-  \pgfkeys{%
-    /NGE/test/jobname/suffix/#2/.style={/NGE/test/options/mode=#1}}}
-\NGE@DeclareModeSuffix{answers}{ans}
-\NGE@DeclareModeSuffix{answers}{sol}
-\NGE@DeclareModeSuffix{key}{key}
-%    \end{macrocode}
-% The order of commands in the next code fragment is important.  First
-% we load local configuration file, which may change default
-% settings.  Then default options are processed and finally
-% explicitely given options are processed.
-%\iffalse
-%</hide>
-%\fi
-%    \begin{macrocode}
+\NGE@DeclareMode{test}
+\NGE@DeclareMode{answers}
+\NGE@DeclareMode{key}
+\NGE@ConfigureModes{default=test,modesep={-},
+  modesuffix={answers}{ans},
+  modesuffix={answers}{sol},
+  modesuffix={key}{key}}
+
+
+\NGEConfigureModeComment{test}{font={\itshape},par={\NGE@par}}
+\NGEConfigureModeComment{answers}{font={\itshape},par={\NGE@par}}
+\NGEConfigureModeComment{key}{font={\itshape},par={\NGE@par}}
+
 \InputIfFileExists{nge.cfg}{}{}%
-%\pgfkeys{/NGE/test/options/modesep}%
 \ExecuteOptions{}%
 \ProcessPgfOptions{/NGE/test/options}%
 \ProcessOptions%
 %    \end{macrocode}
-% Now it is time to load all the packages, starting with
-% \latexclass{article} class
+%
 %    \begin{macrocode}
 \LoadClass{article}%
 %    \end{macrocode}
-%\iffalse
-%<*hide>
-%\fi
-% Package \latexpackage{version} is used to support modes and
-% variants.
-% \todo{Enable comments and redefine comment environment}
+%
 %    \begin{macrocode}
 \RequirePackage{versions}%
 %    \end{macrocode}
-%^^A Put this reference where it belongs
-%^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
-% \todo{refactor for variants}
 %    \begin{macrocode}
-\newcommand{\NGE@ProcessModesep}[1]{%
-  \def\NGE@last##1#1{%
-    \def\NGE@temp{##1}%
-    \ifx\NGE@temp\@nnil\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}}%
-\pgfkeysifdefined{/NGE/test/options/mode}{}{%
-  \pgfkeysalso{/NGE/test/options/modesep/.get=\NGE@modesep}
+\newcommand{\NGE@ParseJobname}[1]{%
   \@onelevel@sanitize\NGE@modesep
-  \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}
+  \edef\NGE@jobname{\jobname#1\noexpand\@nil#1}
+  \def\NGE@Next##1#1{%
+    \def\NGE@temp{##1}%
+    \ifx\NGE@temp\@nnil\else\NGE@ProcessFragment{##1}\expandafter\NGE@Next\fi}%
   \def\NGE@suffix{}%
-  \def\NGE@StoreSuffix#1{%
-    \def\NGE@StoreSuffix##1{%
-      \def\NGE@suffix{##1}}}%
-  \expandafter\NGE@ProcessModesep\expandafter{\NGE@modesep}%
-  \expandafter\NGE@last\NGE@jobname%
-  \ifthenelse{\equal{\NGE@suffix}{}}{%
-    \pgfkeys{/NGE/test/jobname/suffix}}{%
-    \pgfkeys{/NGE/test/jobname/suffix/.expand once=\NGE@suffix}}
-}
-\pgfkeys{/NGE/test/options/mode/.get=\NGE@mode}
-\typeout{Using mode \NGE@mode}
-\newcommand{\ifNGEmode}[3]{\ifthenelse{\equal{\NGE@mode}{#1}}{#2}{#3}}
+  \def\NGE@Suffix##1{\def\NGE@suffix{##1}}%
+  \def\NGE@ProcessFragment##1{%
+    \pgfkeys{/NGE/test/options/jobname/root/.initial={##1}}%
+    \let\NGE@ProcessFragment=\NGE@Suffix}%
+  \expandafter\NGE@Next\NGE@jobname}
 %    \end{macrocode}
-%    \todo[inline]{add remark above why \texttt{NGE@ProcessModesep} and not \texttt{expandafter}}
-% The code below  prepares  guessing functions to work with the
-% specified value of \option{modesep}.
-% The actual guessing is performed after all the class options have been
-% collected and processed.
-%
-% The following command converts all the letters in a given string to
-% category 12 (other) and stores the conversion in a PGF tree at given
-% address. 
-%
-% I do not do it with \latexpackage{pgfkeys}, because parameter
-% passing in embedded |\def|'s are tricky enough, so it is better to
-% trace them explicitely.
 %    \begin{macrocode}
+\@ifundefined{NGEmode}{%
+  \ClassInfo{ngetest}{Document mode is not given, deriving it from the file name}
+  \expandafter\NGE@ParseJobname\expandafter{\NGE@modesep}%
+  \ifthenelse{\equal{\NGE@suffix}{}}{}{%
+    \pgfkeys{/NGE/test/jobname/suffix=\NGE@suffix}}
+}{}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-\pgfqkeys{/NGE/test/.declare}{mode=test,mode=answers,mode=key}
-%    \end{macrocode}
-% 
-%
-%    \begin{macrocode}
+\typeout{Using mode '\NGEmode'}
 %    \end{macrocode}
 %
-% 
 %    \begin{macrocode}
+\newcommand{\ifNGEmode}[3]{\ifthenelse{\equal{\NGEmode}{#1}}{#2}{#3}}
 %    \end{macrocode}
+%
 %
 % \subsection{Tasks}
 % \label{sec:code-ngetest-tasks}
@@ -614,11 +534,119 @@
 \newcounter{NGEtaskpoints}
 \newcounter{NGEpointstotal}
 %    \end{macrocode}
-% Redefine macro |\theNGEtaskpoints| to expand number n to ``n points''.
 %    \begin{macrocode}
-%\renewcommand{\theNGEtaskpoints}{%
-%\arabic{NGEtaskpoints} point\ifthenelse{\value{NGEtaskpoints} = 1}{}{s}}
+\newboolean{NGEshowpoints}
+\newboolean{NGEunnumbered}
 %    \end{macrocode}
+%    \begin{macrocode}
+\newcommand{\NGETaskNote}[1]{%
+  \ifthenelse{\equal{#1}{}}{%
+    \ifthenelse{\boolean{NGEshowpoints}{\NGETaskPoints}{}}}{%
+    \ifthenelse{\boolean{NGEshowpoints}}{#1}{#1, \NGETaskPoints}}%
+}
+%    \end{macrocode}
+%    
+%    
+%    \begin{macrocode}
+\newcommand{\NGETaskPoints}{%
+  \theNGEtaskpoints point\ifthenelse{\value{NGEtaskpoints} = 1}{}{s}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcommand{\NGETaskHead}[1]{%
+  \ifthenelse{\equal{#1}{}}{%
+  \ifthenelse{\boolean{NGEunnumbered}}{}{\NGEtasknumber}}{%
+  \ifthenelse{\boolean{NGEunnumbered}}{#1}{#1 \NGEtasknumber}}
+}
+%    \end{macrocode}
+% It is users responsibility to guarantee that counter exists.
+%^^A see also
+%^^A http://www.tex.ac.uk/cgi-bin/texfaq2html?label=isitanum
+%    \begin{macrocode}
+\newcommand{\NGEDeclareTask}[1]{
+  \pgfqkeys{/NGE/test/tasks/#1}{%
+    name/.initial=#1,
+    counter/.initial={NGEtask},
+    font/.initial={\normalfont},
+    pretaskhook/.initial={},
+    posttaskhook/.initial={},
+    points/.initial=0,
+    head/.initial={%
+      \ifthenelse{\equal{\NGE@taskhead}{}}%
+      {\ifthenelse{\equal{\NGE@tasknote}{}}%
+        {}%
+        {\begingroup%
+            \pgfkeysvalueof{\NGE@taskpath/note/font}%
+            \NGE@tasknote%
+          \endgroup%
+          \pgfkeysvalueof{\NGE@taskpath/head/punctuation}%
+          \pgfkeysvalueof{\NGE@taskpath/head/afterskip}}}%
+      {\ifthenelse{\equal{\NGE@tasknote}{}}%
+        {\begingroup%
+            \pgfkeysvalueof{\NGE@taskpath/head/font}%
+            \NGE@testhead%
+            \pgfkeysvalueof{\NGE@taskpath/head/punctuation}%
+          \endgroup%
+          \pgfkeysvalueof{\NGE@taskpath/head/afterskip}}%
+        {\begingroup%
+            \pgfkeysvalueof{\NGE@taskpath/head/font}%
+            \NGE@taskhead%
+          \endgroup%
+          \space(\begingroup%
+            \pgfkeysvalueof{\NGE@taskpath/note/font}%
+            \NGE@tasknote%
+          \endgroup)%
+          \pgfkeysvalueof{\NGE@taskpath/head/punctuation}%
+          \pgfkeysvalueof{\NGE@taskpath/head/afterskip}}}},
+    head/font/.initial={\bfseries},
+    head/punctuation/.initial={.},
+    head/afterskip/.initial={},
+    note/.initial={},
+    note/font/.initial={\normalfont\itshape}
+  }
+  \newenvironment{#1}[1][]{%
+    \begin{trivlist}%
+    \def\NGE@taskpath{/NGE/test/tasks/#1}%
+    \pgfqkeys{\NGE@taskpath}{##1}%
+    \pgfqkeys{\NGE@taskpath}{%
+      name/.get=\NGE@taskname,
+      counter/.get=\NGE@taskcounter,
+      note/.get=\NGE@tasknote,
+      points/.get=\NGE@taskpoints
+    }%
+    \refstepcounter{\NGE@taskcounter}%
+    \edef\NGETaskNumber{\csname the\NGE@taskcounter\endcsname}%
+    \ifthenelse{9<1\NGE@taskpoints}%
+    {\setcounter{NGEtaskpoints}{\NGE@taskpoints}}%
+    {\pgfkeys{\NGE@taskpath/points/\NGE@taskpoints/.try}%
+      \ifthenelse{\boolean{pgfkeyssuccess}}%
+      {}%
+      {\ClassError{ngetest}{Unknown points setting%
+          '\NGE@taskpoints'}{}}}%
+    \edef\NGE@tasknote{\NGETaskNote{\NGE@tasknote}}%
+    \edef\NGE@taskhead{\NGETaskHead{\NGE@taskname}}%
+    \pgfkeysvalueof{\NGe@taskpath/pretaskhook}%
+  \item[\pgfkeysvalueof{/NGE/test/tasks/#1/head}]%
+    \pgfkeysvalueof{\NGE@taskpath/font}%
+  }%
+  {\pgfkeysvalueof{\NGE@taskpath/posttaskhook}%
+    \addtocounter{NGEpointstotal}{\value{NGEtaskpoints}}%
+    \end{trivlist}}%
+}
+\newcommand{\NGEConfigureTask}[2]{%
+  \pgfqkeys{/NGE/test/tasks/#1}{#2}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\NGEDeclareTask{NGEtask}
+\NGEConfigureTask{NGEtask}{name=Question}
+%    \end{macrocode}
+%\iffalse
+%<*hide>
+%\fi
+%    
+%
+% Redefine macro |\theNGEtaskpoints| to expand number n to ``n points''.
+%
 % Point processing is done with the help of \latexpackage{pgfkeys}
 % package.  Initially each task is assigned 0 points by default.  The
 % number of points, assigned to a particular task may be specified
@@ -706,6 +734,161 @@
   \pgfkeysalso{/NGE/task/\pgfkeyscurrentname/.default=#1}}
 %    \end{macrocode}
 % \end{macro}
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+% \paragraph{Infrastructure}
+%    \begin{macrocode}
+%    \end{macrocode}
+% \paragraph{Modes}
+% The code above accounts for possibility that mode may be specified
+% more than once in the list of class options and processes settings
+% consecutively.  For each setting |mode=|\meta{name} the code checks
+% whether \meta{name} is a known mode name and if this is the case,
+% the mode is set to \meta{name}.  Unknown mode names are ignored and
+% a warning is issued.
+%
+%   Macro |\NGE@DeclareMode| creates the necessary keys for particular
+%   setting and also for mode value \meta{val} it provides the
+%   conditional |\ifvalmode|.
+%    \begin{macrocode}
+%    \end{macrocode}
+% This switch checks whether the mode has value \meta{val} and if this
+% is the case, executes its argument.  Otherwise it does nothing.
+%
+% The code below defines the three modes of \latexpackage{ngetest}.
+%    \begin{macrocode}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%    \end{macrocode}
+%
+%
+% \paragraph{Options for other packages}
+% First we pass options for classes and packages
+% \latexpackage{ngetest} loads.
+% Options for class \latexclass{article}:
+% Options for package \latexpackage{versions}:
+%
+% Everything else given on |\documentclass| line is considered
+% undeclared option and is passed for handling to
+% \latexpackage{pgfopts} package.  The line below suppresses ``unused
+% option'' warnings for unrecognized options.
+%
+%
+% \paragraph{Determining mode.}
+%
+% 
+%    \begin{macrocode}
+%    \end{macrocode}
+% The order of commands in the next code fragment is important.  First
+% we load local configuration file, which may change default
+% settings.  Then default options are processed and finally
+% explicitely given options are processed.
+%
+% Now it is time to load all the packages, starting with
+% \latexclass{article} class
+%
+% Package \latexpackage{version} is used to support modes and
+% variants.
+% \todo{Enable comments and redefine comment environment}
+%
+%^^A Put this reference where it belongs
+%^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
+% \todo{refactor for variants}
+%    \begin{macrocode}
+\newcommand{\NGE@ProcessModesep}[1]{%
+  \def\NGE@last##1#1{%
+    \def\NGE@temp{##1}%
+    \ifx\NGE@temp\@nnil\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}}%
+\pgfkeysifdefined{/NGE/test/options/mode}{}{%
+  \pgfkeysalso{/NGE/test/options/modesep/.get=\NGE@modesep}
+  \@onelevel@sanitize\NGE@modesep
+  \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}
+  \def\NGE@suffix{}%
+  \def\NGE@StoreSuffix#1{%
+    \def\NGE@StoreSuffix##1{%
+      \def\NGE@suffix{##1}}}%
+  \expandafter\NGE@ProcessModesep\expandafter{\NGE@modesep}%
+  \expandafter\NGE@last\NGE@jobname%
+  \ifthenelse{\equal{\NGE@suffix}{}}{%
+    \pgfkeys{/NGE/test/jobname/suffix}}{%
+    \pgfkeys{/NGE/test/jobname/suffix/.expand once=\NGE@suffix}}
+}
+\pgfkeys{/NGE/test/options/mode/.get=\NGE@mode}
+\typeout{Using mode \NGE@mode}
+%    \end{macrocode}
+%    \todo[inline]{add remark above why \texttt{NGE@ProcessModesep} and not \texttt{expandafter}}
+% The code below  prepares  guessing functions to work with the
+% specified value of \option{modesep}.
+% The actual guessing is performed after all the class options have been
+% collected and processed.
+%
+% The following command converts all the letters in a given string to
+% category 12 (other) and stores the conversion in a PGF tree at given
+% address. 
+%
+% I do not do it with \latexpackage{pgfkeys}, because parameter
+% passing in embedded |\def|'s are tricky enough, so it is better to
+% trace them explicitely.
+%    \begin{macrocode}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%    \end{macrocode}
+% 
+%
+%    \begin{macrocode}
+%    \end{macrocode}
+%
+% 
+%    \begin{macrocode}
+%    \end{macrocode}
+%
 % 
 % \subsection{Answers and solutions}
 % \label{sec:code-ngetest-answers}
@@ -829,17 +1012,26 @@
 \documentclass[12pt]{ngetest}
 \makeatletter
 \begin{document}
-This is a test file for class \texttt{ngetest}.  Current mode is
-\pgfkeysvalueof{/NGE/test/options/mode}.
+This is a test file for class \texttt{ngetest}.  The default mode is
+\pgfkeysvalueof{/NGE/test/options/mode} and the current mode is
+\@ifundefined{NGEmode}{undefined}{\NGEmode}.
+\begin{testcomment}
+  This is a comment \texttt{testcomment}.
+\end{testcomment}
+And this is text outside this comment
 %\iffalse
 %<*hide>
 %\fi
 First we test default settings and main environments \texttt{NGEtest},
 \texttt{solution}, \texttt{answer}, \texttt{comment}, and
-\texttt{markingcomment}.
-\begin{NGEtask}
-  This is the first task with default settings.
+\texttt{keycomment}.
+\begin{NGEtask}[points=5]
+  This is the first task with default settings.  The are
+  \pgfkeysvalueof{/NGE/test/tasks/NGEtask/points} 
+points.
 \end{NGEtask}
+
+
 \begin{keycomment}
   In marking guide mode solutions and answers are interspersed with
   marking notes, which do not show in answers mode, or in test mode.

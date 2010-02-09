@@ -568,7 +568,7 @@
   {\ifthenelse{\boolean{NGEshowtaskpoints}}%
     {\NGEtasknotemark{\NGEtaskpoints}}{}}%
   {\ifthenelse{\boolean{NGEshowtaskpoints}}%
-    {\NGEtasknotemark{\pgfkeysvalueof{\NGE@taskpath},\space\NGEtaskpoints}}%
+    {\NGEtasknotemark{\pgfkeysvalueof{\NGE@taskpath/note},\space\NGEtaskpoints}}%
     {\NGEtasknotemark{\pgfkeysvalueof{\NGE@taskpath}}}}%
 }
 \newcommand{\NGEtasknotemark}[1]{\space(\begingroup%
@@ -804,31 +804,33 @@
 % \subsection{Answers and solutions}
 % \label{sec:code-ngetest-answers}
 %
-%
+% Everything below this line must not be visible in test mode.
 % \begin{macro}{answer}
 % In test mode everything enclosed between |\begin{answer}| and
 % |\end{answer}| is skipped by \LaTeX.  In answers mode the actual job
 % of |answer| is done by environment |NGEanswer|.
-%\iffalse
-%<*hide>
-%\fi
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/answer}{%
-  name/.store in=\NGEanswername,
-  name/.default=Answer,
-  font/.store in=\NGEanswerfont,
-  font/.default=\normalfont,
-  mark/font/.store in=\NGEanswermarkfont,
-  mark/font/.default=\bfseries,
-  mark/.store in=\NGEanswermark,
-  mark/.default={\NGEanswermarkfont\NGEanswername:\space\NGEanswerfont}
+  name/.initial={Answer},
+  font/.initial={\normalfont},
+  head/font/.initial={\itshape},
+  head/.initial={\NGEanswerhead},
+  head/punctuation/.initial={:},
+  head/afterskip/.initial={}
 }
-\newenvironment{answer}[1][]{%
-  \par%
-  \begin{trivlist}%
-    \pgfqkeys{/NGE/test/answer}{name,font,mark/font,mark,#1}%
-  \item[\NGEanswermarkfont\NGEanswername]\NGEanswerfont\ignorespaces
-}{\end{trivlist}}
+\newcommand{\NGEanswerhead}{%
+  \ifthenelse{\equal{\pgfkeysvalueof{/NGE/test/answer/name}}{}}%
+  {}{\begingroup\pgfkeysvalueof{/NGE/test/answer/head/font}%
+    \pgfkeysvalueof{/NGE/test/answer/name}%
+    \pgfkeysvalueof{/NGE/test/answer/head/punctuation}%
+    \endgroup}}
+\newenvironment{answer}[1][]
+{\begin{trivlist}%
+    \pgfqkeys{/NGE/test/answer}{#1}
+  \item[\pgfkeys{/NGE/test/answer/head}]%
+    \pgfkeysvalueof{/NGE/test/answer/head/afterskip}%
+    \pgfkeysvalueof{/NGE/test/answer/font}\ignorespaces}
+{\end{trivlist}}
 \AtEndOfClass{\iftestmode{\excludeversion{answer}}}
 %    \end{macrocode}
 % \end{macro}
@@ -843,20 +845,27 @@
 %
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/solution}{%
-  name/.store in=\NGEsolutionname,
-  name/.default=Solution,
-  font/.store in=\NGEsolutionfont,
-  font/.default=\normalfont,
-  mark/font/.store in=\NGEsolutionmarkfont,
-  mark/font/.default=\bfseries,
-  mark/.store in=\NGEsolutionmark,
-  mark/.default={\NGEsolutionmarkfont\NGEsolutionname:\space\NGEsolutionfont}
+  name/.initial={Solution},
+  font/.initial={\normalfont},
+  head/font/.initial={\itshape},
+  head/.initial={\NGEsolutionhead},
+  head/punctuation/.initial={:},
+  head/afterskip/.initial={}
 }
-\newenvironment{solution}[1][]{%
-  \begingroup%
-  \pgfqkeys{/NGE/test/solution}{name,font,mark/font,mark,#1}%
-  \NGEsolutionmark}{\par\endgroup}%
-\AtEndOfClass{\iftestmode{\excludeversion{solution}}}%
+\newcommand{\NGEsolutionhead}{%
+  \ifthenelse{\equal{\pgfkeysvalueof{/NGE/test/solution/name}}{}}%
+  {}{\begingroup\pgfkeysvalueof{/NGE/test/solution/head/font}%
+    \pgfkeysvalueof{/NGE/test/solution/name}%
+    \pgfkeysvalueof{/NGE/test/solution/head/punctuation}%
+    \endgroup}}
+\newenvironment{solution}[1][]
+{\begin{trivlist}%
+    \pgfqkeys{/NGE/test/solution}{#1}
+  \item[\pgfkeys{/NGE/test/solution/head}]%
+    \pgfkeysvalueof{/NGE/test/solution/head/afterskip}%
+    \pgfkeysvalueof{/NGE/test/solution/font}\ignorespaces}
+{\end{trivlist}}
+\AtEndOfClass{\iftestmode{\excludeversion{solution}}}
 %    \end{macrocode}   
 % \end{macro}
 % \begin{macro}{NGEsolution}
@@ -882,6 +891,9 @@
 % guide mode.
 %    \begin{macrocode}
 %    \end{macrocode}
+%\iffalse
+%<*hide>
+%\fi
 % 
 %    \begin{macrocode}
 %\newenvironment{rubrics}{\begin{NGErubrics}}{\end{NGErubrics}}
@@ -932,18 +944,31 @@ This is a test file for class \texttt{ngetest}.
 \showmacro{NGE@modesep}
 \showkey{/NGE/test/jobname/root}
 \showmacro{NGE@suffix}
+
+
 \ifNGEmode{test}
-{\par\noindent This line should be visible only in \texttt{test} mode.}
-{\par\noindent This line should be visible in all modes other than \texttt{test}.}
+{\par\noindent
+  This line should be visible only in \texttt{test} mode.}
+{\par\noindent
+  This line should be visible in all modes other than \texttt{test}.}
 \ifNGEmode{answers}
-{\par\noindent This line should be visible only in \texttt{answers} mode.}
-{\par\noindent This line should be visible in all modes other than \texttt{answers}.}
+{\par\noindent
+  This line should be visible only in \texttt{answers} mode.}
+{\par\noindent
+  This line should be visible in all modes other than \texttt{answers}.}
 \ifNGEmode{key}
-{\par\noindent This line should be visible only in \texttt{key} mode.}
-{\par\noindent This line should be visible in all modes other than \texttt{key}.}
-\iftestmode{\par\noindent This line should be visible only in \texttt{test} mode.}
-\ifanswersmode{\par\noindent This line should be visible in \texttt{answers} mode only.}
-\ifkeymode{\par\noindent This line should be visible in \texttt{key} mode only.}
+{\par\noindent
+  This line should be visible only in \texttt{key} mode.}
+{\par\noindent
+  This line should be visible in all modes other than \texttt{key}.}
+
+\iftestmode{
+  \par\noindent This line should be visible only in \texttt{test} mode.}
+\ifanswersmode{\par\noindent
+  This line should be visible in \texttt{answers} mode only.}
+\ifkeymode{\par\noindent
+  This line should be visible in \texttt{key} mode only.}
+
 \begin{testcomment}
   This is a test comment.  It is visible only in \texttt{test} mode.
 \end{testcomment}
@@ -1038,24 +1063,24 @@ Let us continue with task options testing.
 \begin{NGEtask}[name=Practical task]
   This task has modified name and default number of points.
 \end{NGEtask}
-\begin{NGEtask}[name=Consolation problem, note=bonus, points=1]
+\begin{NGEtask}[name=Consolation problem, note={bonus}, points=1]
   This task has modified name and is assigned one point.  It also has
   a note in it.
 \end{NGEtask}
 
+\subsection*{Solutions and answers}
 
+Solutions and answers must not be visible in \texttt{test} mode.
+\begin{answer}
+  This is the default confiration of answer.
+\end{answer}
+\begin{solution}
+  This is the default configuration of the solution.  It looks just
+  like the answer, but has \texttt{end of solution} sign at the end.
+\end{solution}
 %\iffalse
 %<*hide>
 %\fi
-\begin{answer}
-  The answer must not show up in the task mode.
-\end{answer}
-\begin{solution}
-  Problems have both solution and
-\end{solution}
-\begin{answer}
-  answers
-\end{answer} 
 %\iffalse
 %</hide>
 %\fi

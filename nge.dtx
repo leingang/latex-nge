@@ -493,13 +493,15 @@
   \def\NGE@suffix{}%
   \def\NGE@Suffix##1{\def\NGE@suffix{##1}}%
   \def\NGE@ProcessFragment##1{%
-    \pgfkeys{/NGE/test/options/jobname/root/.initial={##1}}%
+    \pgfkeys{/NGE/test/jobname/root/.initial={##1}}%
     \let\NGE@ProcessFragment=\NGE@Suffix}%
   \expandafter\NGE@Next\NGE@jobname}
 %    \end{macrocode}
 %    \begin{macrocode}
 \@ifundefined{NGEmode}{%
-  \ClassInfo{ngetest}{Document mode is not given, deriving it from the file name}
+  \ClassInfo{ngetest}{Document mode is not given,%
+    deriving it from the file name}
+  \pgfkeys{/NGE/test/options/mode/.get=\NGEmode}
   \expandafter\NGE@ParseJobname\expandafter{\NGE@modesep}%
   \ifthenelse{\equal{\NGE@suffix}{}}{}{%
     \pgfkeys{/NGE/test/jobname/suffix=\NGE@suffix}}
@@ -507,7 +509,7 @@
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-\typeout{Using mode '\NGEmode'}
+\typeout{Using mode \NGEmode}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
@@ -547,36 +549,36 @@
 %
 %    \begin{macrocode}
 \newcommand{\NGEtaskhead}{%
-  \NGEtaskname\NGEtasknote\pgfkeysvalueof{\NGE@taskpath/head/punctuation}}
+  \NGEtaskname\NGEtasknote%
+  \pgfkeysvalueof{\NGE@taskpath/head/punctuation}}
 \newcommand{\NGEtaskname}{%
   \pgfkeys{\NGE@taskpath/name/.get=\NGE@taskname}
   \begingroup\pgfkeysvalueof{\NGE@taskpath/head/font}%
-    \ifthenelse{\equal{\NGE@taskname}{}}%
+    \ifthenelse{\equal{\pgfkeysvalueof{\NGE@taskpath/name}}{}}%
     {\ifthenelse{\boolean{NGEunnumberedtask}}%
       {\ClassWarning{ngetest}{empty task name in an unnumbered task}}%
       {\NGEtasknumber}}%
     {\ifthenelse{\boolean{NGEunnumberedtask}}%
-      {\NGE@taskname}%
-      {\NGEtaskname\space\NGEtasknumber}}%
-  \endgroup}
+      {\pgfkeysvalueof{\NGE@taskpath/name}}%
+      {\pgfkeysvalueof{\NGE@taskpath/name}\space\NGEtasknumber}}%
+  \endgroup
+}
 \newcommand{\NGEtasknote}{%
-  \pgfkeys{\NGE@taskpath/note/.get=\NGE@tasknote}
-  \ifthenelse{\boolean{NGEshowtaskpoints}}%
-  {\ifthenelse{\equal{\NGE@tasknote}{}}%
-    {\edef\NGE@tasknote{\NGEtaskpoints}}%
-    {\edef\NGE@tasknote{\NGE@tasknote,\space\NGEtaskpoints}}}%
-  \ifthenelse{\equal{\NGE@tasknote}{}}%
-  {}%
-  {\space(\begingroup\pgfkeysvalueof{\NGE@taskpath/note/font}%
-    \NGE@tasknote\endgroup)}}
+  \ifthenelse{\equal{\pgfkeysvalueof{\NGE@taskpath/note}}{}}%
+  {\ifthenelse{\boolean{NGEshowtaskpoints}}%
+    {\NGEtasknotemark{\NGEtaskpoints}}{}}%
+  {\ifthenelse{\boolean{NGEshowtaskpoints}}%
+    {\NGEtasknotemark{\pgfkeysvalueof{\NGE@taskpath},\space\NGEtaskpoints}}%
+    {\NGEtasknotemark{\pgfkeysvalueof{\NGE@taskpath}}}}%
+}
+\newcommand{\NGEtasknotemark}[1]{\space(\begingroup%
+  \pgfkeysvalueof{\NGE@taskpath/note/font}#1\endgroup)}
 \newcommand{\NGEtaskpoints}{%
-  \pgfkeys{\NGE@taskpath/points/.get=\NGE@taskpoints}%
-  \ifthenelse{\boolean{NGEshowtaskpoints}}%
-  {\ifthenelse{9<1\NGE@taskpoints}%
-    {\setcounter{NGEtaskpoints}{\NGE@taskpoints}%
-      \theNGEtaskpoints\space point%
-      \ifthenelse{\value{NGEtaskpoints}=1}{}{s}}%
-    {}}}
+  \theNGEtaskpoints\space point%
+  \ifthenelse{\value{NGEtaskpoints}=1}{}{s}}%
+\newcommand{\NGEtasknumber}{%
+  \ifthenelse{\boolean{NGEunnumberedtask}}{}{%
+    \csname the\pgfkeysvalueof{\NGE@taskpath/counter}\endcsname}}
 %    \end{macrocode}
 % It is users responsibility to guarantee that counter exists.
 %^^A see also
@@ -586,40 +588,41 @@
   \pgfqkeys{/NGE/test/tasks/#1}{%
     name/.initial=#1,
     counter/.initial={NGEtask},
+    unnumbered/.initial={false},
+    unnumbered/.default={true},
+    showpoints/.initial={true},
+    hidepoints/.style={/NGE/test/tasks/#1/showpoints={false}},
+    nopoints/.style={/NGE/test/tasks/#1/hidepoints,%
+      /NGE/test/tasks/#1/points=0},
     font/.initial={\normalfont},
     pretaskhook/.initial={},
     posttaskhook/.initial={},
-    points/.initial=0,
-    head/.initial={\NGEtaskhead}
-    head/font/.initial={\bfseries},
+    points/.initial={0},
+    head/.initial={\NGEtaskhead},
+    head/font/.initial={\normalfont\bfseries},
     head/punctuation/.initial={.},
     head/afterskip/.initial={},
     note/.initial={},
-    note/font/.initial={\normalfont\itshape}
-  }
+    note/font/.initial={\normalfont\itshape}}
   \newenvironment{#1}[1][]{%
     \begin{trivlist}%
-    \def\NGE@taskpath{/NGE/test/tasks/#1}%
-    \pgfqkeys{\NGE@taskpath}{##1}%
-    \pgfqkeys{\NGE@taskpath}{%
-      counter/.get=\NGE@taskcounter,
-    }%
-    \refstepcounter{\NGE@taskcounter}%
-    \edef\NGETaskNumber{\csname the\NGE@taskcounter\endcsname}%
-    \ifthenelse{9<1\NGE@taskpoints}%
-    {\setcounter{NGEtaskpoints}{\NGE@taskpoints}}%
-    {\pgfkeys{\NGE@taskpath/points/\NGE@taskpoints/.try}%
-      \ifthenelse{\boolean{pgfkeyssuccess}}%
+      \def\NGE@taskpath{/NGE/test/tasks/#1}%
+      \pgfqkeys{\NGE@taskpath}{##1}%
+      \setboolean{NGEunnumberedtask}{%
+        \pgfkeysvalueof{\NGE@taskpath/unnumbered}}%
+      \setboolean{NGEshowtaskpoints}{%
+        \pgfkeysvalueof{\NGE@taskpath/showpoints}}%
+      \setcounter{NGEtaskpoints}{%
+        \pgfkeysvalueof{\NGE@taskpath/points}}%
+      \ifthenelse{\boolean{NGEunnumberedtask}}%
       {}%
-      {\ClassError{ngetest}{Unknown points setting%
-          '\NGE@taskpoints'}{}}}%
-    \pgfkeysvalueof{\NGe@taskpath/pretaskhook}%
-  \item[\pgfkeysvalueof{\NGE@taskpath/head}]%
-    \pgfkeysvalueof{\NGE@taskpath/head/afterskip}}%
-    \pgfkeysvalueof{\NGE@taskpath/font}%
-  }%
-  {\pgfkeysvalueof{\NGE@taskpath/posttaskhook}%
-    \addtocounter{NGEpointstotal}{\value{NGEtaskpoints}}%
+      {\refstepcounter{\pgfkeysvalueof{\NGE@taskpath/counter}}}%
+      \pgfkeysvalueof{\NGE@taskpath/pretaskhook}%
+    \item[\pgfkeysvalueof{\NGE@taskpath/head}]%
+      \pgfkeysvalueof{\NGE@taskpath/head/afterskip}%
+      \pgfkeysvalueof{\NGE@taskpath/font}}%
+    {\pgfkeysvalueof{\NGE@taskpath/posttaskhook}%
+      \addtocounter{NGEpointstotal}{\value{NGEtaskpoints}}%
     \end{trivlist}}%
 }
 \newcommand{\NGEConfigureTask}[2]{%
@@ -629,9 +632,6 @@
 \NGEDeclareTask{NGEtask}
 \NGEConfigureTask{NGEtask}{name=Question}
 %    \end{macrocode}
-%\iffalse
-%<*hide>
-%\fi
 %    
 %
 % Redefine macro |\theNGEtaskpoints| to expand number n to ``n points''.
@@ -653,74 +653,16 @@
 %    \end{macrocode}
 % First we specify default settings for the task header.
 %    \begin{macrocode}
-\pgfqkeys{/NGE/tasks}{%
-  .declare/task/.code={%
-    \pgfqkeysalso{/NGE/tasks/.declare/options}{name={#1}{}}
-    \newenvironment{#1}{}{}},
-  .declare/options/.code 2 args={}
-}
 %\newcommand{\NGEDeclareTask}[1]{%
-%  \pgfqkeys{/NGE/task/#1}{%
-%}
-%}
-%\NGEDeclareTask{test}
 %    \end{macrocode}
 % \begin{macro}{NGEtask}
 % Now we can define the environment itself.
 %    \begin{macrocode}
-\pgfqkeys{/NGE/test/task}{%
-  points/.is choice,
-  points/.default=0,
-  % points/parts/.code={},
-  points/.unknown/.code={\setcounter{NGEtaskpoints}{\pgfkeyscurrentname}},
-  % showpoints/.is choice,
-  % showpoints/.default=yes,
-  % showpoints/yes/.code={},
-  % showpoints/no/.code={},
-  % showpoints/true/.style={/NGE/test/task/showpoints=yes},
-  % showpoints/false/.style={/NGE/test/task/showpoints=no},
-  % hidepoints/.is choice,
-  % hidepoints/.default=yes,
-  % hidepoints/yes/.style={/NGE/test/task/showpoints=no},
-  % hidepoints/no/.style={/NGE/test/task/showpoints=yes},
-  % hidepoints/true/.style={/NGE/test/task/showpoints=no},
-  % hidepoints/false/.style={/NGE/test/task/showpoints=yes},
-  % nopoints/.style={/NGE/test/task/points=0,/NGE/test/task/hidepoints},
-  name/.store in=\NGEtaskname,
-  name/.default=Question,
-  font/.store in=\NGEtaskfont,
-  font/.default=\normalfont,
-  header/font/.store in=\NGEtaskheaderfont,
-  header/font/.default=\bfseries,
-  note/font/.store in=\NGEtasknotefont,
-  note/font/.default=\itshape,
-  note/.default={},
-  note/.store in=\NGEtasknote,
-  note/.default={},
-  header/.store in=\NGEtaskheader,
-  header/.default={\begingroup%
-    \NGEtaskheaderfont\NGEtaskname\protect\space\theNGEtask%
-    \endgroup{} (\begingroup%
-    \NGEtasknotefont%
-    \ifthenelse{\equal{\NGEtasknote}{}}{}{\NGEtasknote, }%
-    \theNGEtaskpoints{} point\ifthenelse{\value{NGEtaskpoints} = 1}{}{s}%
-    \endgroup).}
-}
-\newenvironment{NGEtask}[1][]{%
-  \refstepcounter{NGEtask}%
-  \begingroup%
-  \pgfqkeys{/NGE/test/task}{name,points,font,%
-    header/font,note,note/font,header,#1}
-%  \addtocounter{NGEpointstotal}{\value{NGEtaskpoints}}%
-  \begin{trivlist}\item[\NGEtaskheader]\NGEtaskfont}{\end{trivlist}\endgroup}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{NGEtasks}
 %   The command |\NGEtasks| sets default values for task options.
 %    \begin{macrocode}
-\newcommand{\NGEtasks}[1][]{\pgfqkeys{/NGE/tasks}{#1}}
-\pgfkeys{/NGE/tasks/.unknown/.code=%
-  \pgfkeysalso{/NGE/task/\pgfkeyscurrentname/.default=#1}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -830,26 +772,6 @@
 %^^A See http://www.tex.ac.uk/cgi-bin/texfaq2html?label=compjobnam
 % \todo{refactor for variants}
 %    \begin{macrocode}
-\newcommand{\NGE@ProcessModesep}[1]{%
-  \def\NGE@last##1#1{%
-    \def\NGE@temp{##1}%
-    \ifx\NGE@temp\@nnil\else\NGE@StoreSuffix{##1}\expandafter\NGE@last\fi}}%
-\pgfkeysifdefined{/NGE/test/options/mode}{}{%
-  \pgfkeysalso{/NGE/test/options/modesep/.get=\NGE@modesep}
-  \@onelevel@sanitize\NGE@modesep
-  \edef\NGE@jobname{\jobname\NGE@modesep\noexpand\@nil\NGE@modesep}
-  \def\NGE@suffix{}%
-  \def\NGE@StoreSuffix#1{%
-    \def\NGE@StoreSuffix##1{%
-      \def\NGE@suffix{##1}}}%
-  \expandafter\NGE@ProcessModesep\expandafter{\NGE@modesep}%
-  \expandafter\NGE@last\NGE@jobname%
-  \ifthenelse{\equal{\NGE@suffix}{}}{%
-    \pgfkeys{/NGE/test/jobname/suffix}}{%
-    \pgfkeys{/NGE/test/jobname/suffix/.expand once=\NGE@suffix}}
-}
-\pgfkeys{/NGE/test/options/mode/.get=\NGE@mode}
-\typeout{Using mode \NGE@mode}
 %    \end{macrocode}
 %    \todo[inline]{add remark above why \texttt{NGE@ProcessModesep} and not \texttt{expandafter}}
 % The code below  prepares  guessing functions to work with the
@@ -887,6 +809,9 @@
 % In test mode everything enclosed between |\begin{answer}| and
 % |\end{answer}| is skipped by \LaTeX.  In answers mode the actual job
 % of |answer| is done by environment |NGEanswer|.
+%\iffalse
+%<*hide>
+%\fi
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/answer}{%
   name/.store in=\NGEanswername,
@@ -943,16 +868,6 @@
 % excluded by default.
 % \begin{macro}{NGEcomment}
 %    \begin{macrocode}
-%\pgfqkeys{/NGE/test/comment}{%
-%  font/.store in=\NGEcommentfont,
-%  font/.default=\slshape
-%}
-%\includeversion{comment}
-%\renewenvironment{comment}[1][]{%
-%  \begingroup%
-%  \pgfqkeys{/NGE/test/comment}{font,#1}%
-%  \NGEcommentfont}{\par\endgroup}
-%\AtEndOfClass{\iftestmode{\includeversion{comment}}}%
 %    \end{macrocode}
 % \end{macro}
 % 
@@ -966,10 +881,6 @@
 % In the same way we define commands and environments for the marking
 % guide mode.
 %    \begin{macrocode}
-%\pgfqkeys{/NGE/test/markingcomment}{%
-%  font/.store in=\NGEmarkingcommentfont,
-%  font/.default=\sffamily
-%}
 %    \end{macrocode}
 % 
 %    \begin{macrocode}
@@ -1000,52 +911,124 @@
 %<*test>
 \documentclass[12pt]{ngetest}
 \makeatletter
-\begin{document}
-This is a test file for class \texttt{ngetest}.  The default mode is
-\pgfkeysvalueof{/NGE/test/options/mode} and the current mode is
-\@ifundefined{NGEmode}{undefined}{\NGEmode}.
-\begin{testcomment}
-  This is a comment \texttt{testcomment}.
-\end{testcomment}
-And this is text outside this comment
+\newcommand{\showkey}[1]{%
+\par\noindent  Key \texttt{#1} is
+  \pgfkeysifdefined{#1}{%
+    \ifthenelse{\equal{\pgfkeysvalueof{#1}}{}}{is empty}
+    {has value \texttt{\pgfkeysvalueof{#1}}}}
+  {is undefined}.}
 
-First we test default settings and main environments \texttt{NGEtest},
-\texttt{solution}, \texttt{answer}, \texttt{comment}, and
-\texttt{keycomment}.
+\newcommand{\showmacro}[1]{%
+\par\noindent  Macro \texttt{\char`\\ #1} \@ifundefined{#1}{is undefined}
+  {\ifthenelse{\equal{\csname #1\endcsname}{}}{is empty}{has value
+      \texttt{\csname #1\endcsname}}}.}
+\begin{document}
+This is a test file for class \texttt{ngetest}.
+
+\subsection*{Modes}
+
+\showkey{/NGE/test/options/mode}
+\showmacro{NGEmode}
+\showmacro{NGE@modesep}
+\showkey{/NGE/test/jobname/root}
+\showmacro{NGE@suffix}
+\ifNGEmode{test}
+{\par\noindent This line should be visible only in \texttt{test} mode.}
+{\par\noindent This line should be visible in all modes other than \texttt{test}.}
+\ifNGEmode{answers}
+{\par\noindent This line should be visible only in \texttt{answers} mode.}
+{\par\noindent This line should be visible in all modes other than \texttt{answers}.}
+\ifNGEmode{key}
+{\par\noindent This line should be visible only in \texttt{key} mode.}
+{\par\noindent This line should be visible in all modes other than \texttt{key}.}
+\iftestmode{\par\noindent This line should be visible only in \texttt{test} mode.}
+\ifanswersmode{\par\noindent This line should be visible in \texttt{answers} mode only.}
+\ifkeymode{\par\noindent This line should be visible in \texttt{key} mode only.}
+\begin{testcomment}
+  This is a test comment.  It is visible only in \texttt{test} mode.
+\end{testcomment}
+\begin{answerscomment}
+  This is an answers comment.  It is visible only in \texttt{answers} mode.
+\end{answerscomment}
+\begin{keycomment}
+  This is a key comment.  It is visible only in \texttt{key} mode.
+\end{keycomment}
+\begin{comment}
+  This is a generic comment.  It must never be visible unless revealed
+  explicitely with \verb+\includeversion+.
+\end{comment}
+
+\subsection*{Tasks}
+
 \begin{NGEtask}
-  This is the first task with default settings.  The are
-  \pgfkeysvalueof{/NGE/test/tasks/NGEtask/points} 
-points.
+  This is the default task with default settings.\\\noindent
+\end{NGEtask}
+\begin{NGEtask}[name=Task]
+  This is a task, whose name was changed.
+\end{NGEtask}
+\begin{NGEtask}[points=10]
+  This is a task with modified number of points.
+\end{NGEtask}
+\begin{NGEtask}[unnumbered]
+  This is a task without a number.
+\end{NGEtask}
+\begin{NGEtask}[name={}]
+  This is a task without a name.
+\end{NGEtask}
+\begin{NGEtask}[hidepoints]
+  This is a task with hidden point value.
+\end{NGEtask}
+\begin{NGEtask}[font=\sffamily]
+  This is a task with modified body font.
+\end{NGEtask}
+\begin{NGEtask}[head={}]
+  This is a task with disabled header.
+\end{NGEtask}
+\begin{NGEtask}[head/font={\ttfamily}]
+  This is a task with modified head font.
+\end{NGEtask}
+\begin{NGEtask}[note/font={\ttfamily}]
+  This is a task with modified note font.
+\end{NGEtask}
+\begin{NGEtask}[head/punctuation={:}]
+  This is a task with modified punctuation sign after the header.
 \end{NGEtask}
 
-%\iffalse
-%<*hide>
-%\fi
-\begin{keycomment}
-  In marking guide mode solutions and answers are interspersed with
-  marking notes, which do not show in answers mode, or in test mode.
-\end{keycomment}
-\begin{answer}
-  The answer must not show up in the task mode.
-\end{answer}
-\begin{comment}
-  Here is a comment to the answer.  It must not show up in the test
-  mode either, but it will show in other modes.
-\end{comment}
+\newcounter{problem}
+\NGEDeclareTask{problem}
+\NGEConfigureTask{problem}{name=Problem, counter=problem, points=5}
+Now we declare new type of tasks, which have different default
+settings and are numbered separately from the previous sequence of tasks.
+\begin{problem}
+  Here is a problem with default settings.
+\end{problem}
+\begin{problem}[points=10]
+  Here is another problem with modified number of points.
+\end{problem}
+\begin{problem}[name={Bonus problem}, nopoints, unnumbered]
+  This problem has modified title and is assigned no points.
+\end{problem}
+\renewcommand{\theNGEtask}{\Roman{NGEtask}}
+\begin{NGEtask}[name=Problem, points=5]
+  Here is another question from the default series.  It has been
+  modified to look like a problem, but is numbered together with other
+  tasks, not with problems.  The numbering style has been changed to
+  roman numerals though.
+\end{NGEtask}
+\begin{problem}[name=Consolation task, unnumbered]
+  Here is another problem without a number.
+\end{problem}
+\begin{problem}
+  Last problem with default settings.
+\end{problem}
+
+Let us continue with task options testing.
 \begin{NGEtask}[points=10]
   This is the second task.  Ten points are assigned to it.
 \end{NGEtask}
 \begin{NGEtask}[points=50,name=Problem]
   This task is a problem, it is 50 points worth.
 \end{NGEtask}
-\begin{solution}
-  Problems have both solution and
-\end{solution}
-\begin{answer}
-  answers
-\end{answer} Now we change the default name to ``Query'' and give each
-task 5 points by default.
-\NGEtasks[name=Query,points=5]
 \begin{NGEtask}
   This is the task with the new default settings.
 \end{NGEtask}
@@ -1059,9 +1042,20 @@ task 5 points by default.
   This task has modified name and is assigned one point.  It also has
   a note in it.
 \end{NGEtask}
-\begin{keycomment}
-  This is a comment which should be visible only in key mode.
-\end{keycomment}
+
+
+%\iffalse
+%<*hide>
+%\fi
+\begin{answer}
+  The answer must not show up in the task mode.
+\end{answer}
+\begin{solution}
+  Problems have both solution and
+\end{solution}
+\begin{answer}
+  answers
+\end{answer} 
 %\iffalse
 %</hide>
 %\fi

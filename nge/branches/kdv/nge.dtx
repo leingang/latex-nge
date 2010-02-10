@@ -40,7 +40,7 @@
 \newcommand{\latexpackage}[1]{\latexfile{#1}}
 \newcommand{\option}[1]{\textsl{#1}}
 \newcommand{\optionvalue}[1]{\texttt{#1}}
-\newcommand{\mode}[1]{\textsl{#1}}
+\newcommand{\mode}[1]{\textbf{#1}}
 \newcommand{\nged}{\package{NGEd}}
 \begin{document}
   \MakeShortVerb{\|}
@@ -108,6 +108,12 @@
 %
 % \section{User manual}
 % \label{sec:user-ngetest}
+%
+% Class \latexclass{ngetest} is the generic class for producing tests:
+% exams, quizzes, questionnaires, and so on\ldots.  From each source
+% file one can produce three types of documents: the test itself, the
+% test with solutions to problems and answers to questions, and
+% marking guide for the test with the answer key and marking rubrics.
 %
 % \subsection{Options}
 % \label{sec:user-ngetest-options}
@@ -183,33 +189,143 @@
 %   be difficult or impossible to set \option{modesep} explicitely to
 %   some characters in |\documentclass| line, keywords are reserved
 %   for underscore, comma and space characters as \option{modesep}
-%   values.  For details see section \ref{sec:user-ngetest-modes}.
+%   values.  For details see section
+%   \ref{sec:user-ngetest-modes}.\todo{fix reference}
 % \end{description}
 %
 % \subsection{Modes}
 % \label{sec:user-ngetest-modes}
-%\todo{Rewrite!}
-% Class \latexclass{ngetest} is the generic class for producing tests:
-% exams, quizzes, questionnaires, and so on\ldots.  From each source
-% file one can produce three types of documents: the test itself, the
-% test with solutions to problems and answers to questions, and
-% marking guide for the test with the answer key and marking rubrics.
-% Accordingly we distinguish three modes for the document processing:
-% \emph{test} mode, \emph{answers} mode, and \emph{marking key}
-% mode. Test and answers modes are mutually exclusive, the marking
-% guide mode is an extension to the answers mode.
 %
-% By default if class \latexclass{ngetest} is used without options, the
-% document is processed in test mode.  Option \option{answers}
-% switches to answers mode and option \option{markingguide} typesets
-% all solutions and answers together with marking rubrics.
+% Class \latexclass{ngetest} may process document in one of three
+% modes: \mode{test}, \mode{answers} and \mode{key}.  These modes
+% reflect three settings in which the document is used in different
+% ways: testing, marking and discussion.  During the exam one needs a
+% version of a document, which has only testing materials in it:
+% questions, problems, references, instructions.  Such version is
+% produced by \latexclass{ngetest} in \mode{test} mode.  Later, when
+% the test is over, solutions and answers may be shown to students,
+% together with the discussion of the results of the exam.  Document
+% version, necessary for this stage is produced by
+% \latexpackage{ngetest} in \mode{answers} mode.  Finally a team of
+% graders may need yet another version of the document, which, in
+% addition to questions and answers, contains the marking key and
+% other grading instructions.  Such a version is produced by
+% \latexpackage{ngetest} in \mode{key} mode.  All the three versions
+% may be produced from the same document, prepared in advance.  By
+% default \latexclass{ngetest} is in mode \mode{test}: running
+% \LaTeX{} on a document using class \latexclass{ngetest} without any
+% options will produce a version, ready to be used on the exam.  In
+% order to reveal any additional parts, contained in the document, the
+% \latexclass{ngetest} mode has to be set to an appropriate value
+% explicitely.
 %
-% Mode may be specified explicitely as an option to
-% \latexclass{ngetest}.  Possible values are |test| (this is the
-% default), |answers| and |key|.
+% \paragraph{Setting the mode.}
 %
+% There are two ways to set \latexpackage{ngetest} mode: it may be
+% specified as the class option \option{mode} or
+% \latexpackage{ngetest} may deduce an appropriate mode from the
+% document's file name.  To specify the mode as the class option, give
+% its name as the value to option \option{mode}.  For example, the
+% line
+% \begin{verbatim}
+% \documentclass[mode=answers]{ngetest}
+% \end{verbatim}
+% turns on mode \mode{answers}, and so on.  Only \optionvalue{test},
+% \optionvalue{answers}, and \optionvalue{key} are recognized as valid
+% values for option \option{mode}.  Any other value specified is
+% simply ignored.  As a rule, option \option{mode} is specified in
+% |\documentclass| line of the document no more than once, but if
+% several specifications are given, they are processed consecutively
+% and the last recognized value will be the actual mode of
+% \latexclass{ngetest}.
 %
-% \paragraph{How \latexpackage{ngetest} determines the document mode.}
+% If option \option{mode} was not specified explicitely in
+% |\documentclass| line, or if none of the specifications were
+% recognized as valid mode values, then \latexclass{ngetest} inspects
+% documents' file name and tries to deduce an appropriate mode from
+% the part of the file name just before the extension: if the file
+% name has the form \meta{filename}\texttt{.tex}, then if
+% \meta{filename} ends in \texttt{-ans} or \texttt{-sol}, then mode
+% \mode{answers} is turned on, and if \meta{filename} ends in
+% \texttt{-key}, then mode \mode{key} is turned on.  In all other
+% cases the default mode is used.  A complete description of the
+% algorithm, determining the mode is given on
+% page~\pageref{page:mode-algorithm}.
+%
+% More mode-determining suffixes for \meta{filename} may be specified
+% in local configuration file \latexfile{nge.cfg} for \nged.  For
+% details see section \ref{sec:user-config}.\todo{give more detailed
+%   reference}
+%
+% Suffix separator |-| may
+% be changed to another character with the help of \option{modesep}
+% class option.  For example, the line
+% \begin{verbatim}
+% \documentclass[modesep=_]{ngetest}
+% \end{verbatim}
+% in file |exam_sol.tex| sets \mode{answers} mode (see
+% page~\pageref{page:modesep}\todo{give subsection number} for
+% details).
+% 
+% \paragraph{Conditional inclusion of text.}
+%
+% \DescribeMacro{\NGEmode}
+% Once \latexpackage{ngetest} is loaded and its mode determined, the
+% mode name is kept in macro |\NGEmode| whose value may be inspected
+% and used for conditional test processing.
+% \DescribeMacro{\ifNGEmode}
+% For this purpose \latexclass{ngetest} provides the conditional
+% |\ifNGEmode|.  This macro accepts three arguments
+% \begin{verbatim}
+% \ifNGEmode{}{}{}
+% \end{verbatim}
+% if \meta{mode} is the current mode of \latexpackage{ngetest}, then
+% part \meta{YES} is executed, otherwise part \meta{NO} is executed.
+%
+% \DescribeMacro{\iftestmode}
+% \DescribeMacro{\ifanswersmode}
+% \DescribeMacro{\ifkeymode}
+% In addition \latexpackage{ngetest} provides three commands
+% |\iftestmode|, |\ifanswersmode|, and |\ifkeymode|, which abbreviate
+% most frequent usages of |\ifNGEmode|.  Command |\iftestmode| accepts
+% one argument
+% \begin{verbatim}
+% \iftestmode{}
+% \end{verbatim}
+% and executes it only if the current mode is \mode{test}, otherwise
+% it does nothing.  Commands |\ifanswersmode| and |\ifkeymode| behave
+% similarly in modes \mode{answers} and \mode{key} respectively.
+% \todo[inline]{Add here warning about the blanks to watch out before
+%   and after these commands.}
+%
+% In addition to generic command |\ifNGEmode| and its derivatives for
+% conditional execution of code or for conditional inclusion of 
+% fragments of text depending on the current mode, \latexclass{ngetest} also
+% provides several specialized environments, whose behaviour depends
+% on the current mode.
+%
+% \DescribeMacro{testcomment}
+% \DescribeMacro{answerscomment}
+% \DescribeMacro{keycomment}
+% Environments |testcomment|, |answerscomment| and |keycomment| reveal
+% their content only in their respective modes.  Part of the source
+% file, enclosed between |\begin{testcomment}| and |\end{testcomment}|
+% is processed by \LaTeX{} only when \latexpackage{ngetest} is in mode
+% \mode{test} and is skipped in all other modes.  Environments
+% |answerscomment| and |keycomment| behave similarly in modes
+% \mode{answers} and \mode{key} respectively.  Semantically these
+% three environments provide comments to users of the document from
+% the documents creator.  For example, |keycomment| may be used to
+% typeset marking instructions, whereas |answerscomment| may be used
+% to for discussion of typical errors in asnswers and solutions.  To
+% simplify this usage these comment environments are configured by
+% default to typeset their content in italic font\todo{check this in
+%   default settings!} (see \todo{provide reference!}).  
+% 
+% 
+% \paragraph{How does \latexpackage{ngetest} determine the document
+% mode.}\label{page:mode-algorithm}
+% \todo[inline]{Find an appropriate place for this paragraph.}
 % Here is the complete description of the algorithm, determining the
 % mode.
 % \begin{enumerate}\renewcommand{\theenumi}{\textit{Step} \arabic{enumi}}
@@ -252,7 +368,8 @@
 % \latexfile{nge.cfg} file with the help of |\NGE@DeclareModeSuffix|
 % command.
 %
-% \paragraph{Changing separator.}
+% \paragraph{Changing separator.}\label{page:modesep}
+% \todo[inline]{Rewrite and find an appropriate place for this paragraph.}
 % It is possible to use another character for modesep.  Forbidden:
 % blanks (space, tab, newline), braces and brackets.  Not recommended
 % for internal reasons \%, \#, \~, backslash, but can use |,| and |=|
@@ -292,6 +409,8 @@
 % same filename.  We assume that modesep is a nonblank character.  One
 % cannot use braces in the options line.
 %
+% \subsection{Configuring packages}
+% \label{sec:user-config}
 %
 % \StopEventually{\PrintChanges\PrintIndex}
 % \section{\LaTeX{} code}
@@ -915,7 +1034,7 @@
 % \todo[inline]{Make task declarations preamble only}
 % \todo[inline]{How to hook tasks into existing environments?  Kernel
 % and amsthm.}
-%^^A \todo[inline]{}
+% \todo[inline]{switch to \texttt{fancyvrb}}
 %^^A \todo[inline]{}
 %^^A \todo[inline]{}
 % \Finale

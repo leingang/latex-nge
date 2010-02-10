@@ -19,7 +19,7 @@
 %</hide>
 %<*driver>
 %<driver>\documentclass[final]{ltxdoc}
-%\usepackage{ifthen}
+\usepackage{ifthen}
 \usepackage{ifdraft}
 \usepackage[obeyDraft,dvistyle]{todonotes}
 \usepackage{showkeys}
@@ -109,12 +109,14 @@
 % \section{User manual}
 % \label{sec:user-ngetest}
 %
+% \todo[inline]{Add general description: three stages of tests and
+% three modes.}
 % Class \latexclass{ngetest} is the generic class for producing tests:
 % exams, quizzes, questionnaires, and so on\ldots.  From each source
 % file one can produce three types of documents: the test itself, the
 % test with solutions to problems and answers to questions, and
 % marking guide for the test with the answer key and marking rubrics.
-%
+% 
 % \subsection{Options}
 % \label{sec:user-ngetest-options}
 %
@@ -722,11 +724,15 @@
     head/punctuation/.initial={.},
     head/afterskip/.initial={},
     note/.initial={},
-    note/font/.initial={\normalfont\itshape}}
+    note/font/.initial={\normalfont\itshape},
+    options/.unknown/.style={/NGE/test/tasks/#1/\pgfkeyscurrentname=##1},
+    options/head/.unknown/.style={/NGE/test/tasks/#1/head/\pgfkeyscurrentname=##1},
+    options/note/.unknown/.style={/NGE/test/tasks/#1/note/\pgfkeyscurrentname=##1}
+  }
   \newenvironment{#1}[1][]{%
     \begin{trivlist}%
       \def\NGE@taskpath{/NGE/test/tasks/#1}%
-      \pgfqkeys{\NGE@taskpath}{##1}%
+      \pgfqkeys{\NGE@taskpath/options}{##1}%
       \setboolean{NGEunnumberedtask}{%
         \pgfkeysvalueof{\NGE@taskpath/unnumbered}}%
       \setboolean{NGEshowtaskpoints}{%
@@ -751,8 +757,7 @@
 \NGEDeclareTask{NGEtask}
 \NGEConfigureTask{NGEtask}{name=Question}
 %    \end{macrocode}
-%    
-%
+% \todo[inline]{put this text where it belongs}   
 % Redefine macro |\theNGEtaskpoints| to expand number n to ``n points''.
 %
 % Point processing is done with the help of \latexpackage{pgfkeys}
@@ -761,16 +766,28 @@
 % with points option for |NGEtask| environment and the default
 % assignment may be changed with the help of |\NGEtasks|
 % command.
-%    \begin{macrocode}
-%    \end{macrocode}
+%
 % We also provide a quick way to turn off points counting temporarily
 % for a particular task.
+%
+% \subsubsection{Parts}
+% \label{sec:code-tasks-parts}
+%    \begin{macrocode}
+%\newcounter{NGEtaskpart}
+%\newcounter{NGEtaskpartpoints}
+%    \end{macrocode}
+%    \begin{macrocode}
+%\newenvironment{parts}[1][]{%
+%  \setcounter{NGEtaskpart}{0}%
+%  \pgfqkeys{/NGE/test/parts/options}{#1}%
+%}{}
+%\newcommand{part}[1][]{%
+%  \pgfqkeys{/NGE/test/parts/part/options}{#1}%
+%  \refstepcounter{NGEtaskpart}%
+%}
+%    \end{macrocode}
 %    \begin{macrocode}
 %    \end{macrocode}
-% In the same way we treat the task name.
-%    \begin{macrocode}
-%    \end{macrocode}
-% First we specify default settings for the task header.
 %    \begin{macrocode}
 %\newcommand{\NGEDeclareTask}[1]{%
 %    \end{macrocode}

@@ -587,9 +587,9 @@
   modesuffix={key}{key}}
 
 
-\NGEConfigureModeComment{test}{font={\itshape},par={\NGE@par}}
-\NGEConfigureModeComment{answers}{font={\itshape},par={\NGE@par}}
-\NGEConfigureModeComment{key}{font={\itshape},par={\NGE@par}}
+\NGEConfigureModeComment{test}{font={\sffamily},par={\NGE@par}}
+\NGEConfigureModeComment{answers}{font={\sffamily},par={\NGE@par}}
+\NGEConfigureModeComment{key}{font={\sffamily},par={\NGE@par}}
 
 \InputIfFileExists{nge.cfg}{}{}%
 \ExecuteOptions{}%
@@ -724,15 +724,12 @@
     head/punctuation/.initial={.},
     head/afterskip/.initial={},
     note/.initial={},
-    note/font/.initial={\normalfont\itshape},
-    options/.unknown/.style={/NGE/test/tasks/#1/\pgfkeyscurrentname=##1},
-    options/head/.unknown/.style={/NGE/test/tasks/#1/head/\pgfkeyscurrentname=##1},
-    options/note/.unknown/.style={/NGE/test/tasks/#1/note/\pgfkeyscurrentname=##1}
+    note/font/.initial={\normalfont\itshape}
   }
   \newenvironment{#1}[1][]{%
     \begin{trivlist}%
       \def\NGE@taskpath{/NGE/test/tasks/#1}%
-      \pgfqkeys{\NGE@taskpath/options}{##1}%
+      \pgfqkeys{\NGE@taskpath}{##1}%
       \setboolean{NGEunnumberedtask}{%
         \pgfkeysvalueof{\NGE@taskpath/unnumbered}}%
       \setboolean{NGEshowtaskpoints}{%
@@ -789,7 +786,6 @@
 %    \begin{macrocode}
 %    \end{macrocode}
 %    \begin{macrocode}
-%\newcommand{\NGEDeclareTask}[1]{%
 %    \end{macrocode}
 % \begin{macro}{NGEtask}
 % Now we can define the environment itself.
@@ -949,7 +945,7 @@
 \pgfqkeys{/NGE/test/answer}{%
   name/.initial={Answer},
   font/.initial={\normalfont},
-  head/font/.initial={\itshape},
+  head/font/.initial={\scshape},
   head/.initial={\NGEanswerhead},
   head/punctuation/.initial={:},
   head/afterskip/.initial={}
@@ -983,7 +979,7 @@
 \pgfqkeys{/NGE/test/solution}{%
   name/.initial={Solution},
   font/.initial={\normalfont},
-  head/font/.initial={\itshape},
+  head/font/.initial={\scshape},
   head/.initial={\NGEsolutionhead},
   head/punctuation/.initial={:},
   head/afterskip/.initial={}
@@ -1027,9 +1023,6 @@
 % guide mode.
 %    \begin{macrocode}
 %    \end{macrocode}
-%\iffalse
-%<*hide>
-%\fi
 % 
 %    \begin{macrocode}
 %\newenvironment{rubrics}{\begin{NGErubrics}}{\end{NGErubrics}}
@@ -1040,6 +1033,59 @@
 %\ifthenelse{\boolean{NGEMarkingGuideMode}}{}{\excludeversion{rubrics}}
 %    \end{macrocode}
 %
+% \subsection{Title page}
+% \label{sec:code-ngetest-title-page}
+%
+%    \begin{macrocode}
+\ifthenelse{\boolean{@titlepage}}{%
+  \renewcommand{\maketitle}{\begin{titlepage}%
+      \let\footnotesize\small
+      \let\footnoterule\relax
+      \let \footnote \thanks
+      \null\vfil
+      \vskip 60\p@
+      \begin{center}%
+        {\LARGE \@title \par}%
+        \vskip 3em%
+        {\large
+          \lineskip .75em%
+          \begin{tabular}[t]{c}%
+            %\@author
+          \end{tabular}\par}%
+        \vskip 1.5em%
+        {\large \@date \par}%       % Set date in \large size.
+      \end{center}\par
+      \@thanks
+      \vfil\null
+    \end{titlepage}}}
+ {\renewcommand{\@maketitle}{\newpage%
+   \null%
+   \vskip 2em%
+   \begin{center}%
+   \let \footnote \thanks%
+     {\LARGE \@title \par}%
+     \vskip 1.5em%
+    {\large%
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+% %        \@author%
+     \end{tabular}\par}%
+     \vskip 1em%
+     {\large \@date}%
+   \end{center}%
+   \par%
+   \vskip 1.5em}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\pgfkeys{/NGE/test/information/.unknown/.style={%
+    /NGE/test/information/\pgfkeyscurrentname/.initial={#1}}}
+\newcommand{\NGEtestinformation}[1]{%
+  \pgfqkeys{/NGE/test/information}{#1}}
+%    \end{macrocode}
+%\iffalse
+%<*hide>
+%\fi
+% 
 %\iffalse
 %</hide>
 %</ngetest>
@@ -1058,6 +1104,8 @@
 % \iffalse
 %<*test>
 \documentclass[12pt]{ngetest}
+\title{Test of \textsl{ngetest}}
+\NGEtestinformation{course={Calculus-II}}
 \makeatletter
 \newcommand{\showkey}[1]{%
 \par\noindent  Key \texttt{#1} is
@@ -1071,8 +1119,11 @@
   {\ifthenelse{\equal{\csname #1\endcsname}{}}{is empty}{has value
       \texttt{\csname #1\endcsname}}}.}
 \begin{document}
+\maketitle
 This is a test file for class \texttt{ngetest}.
 
+\showkey{/NGE/test/information/name}
+\showkey{/NGE/test/information/course}
 \subsection*{Modes}
 
 \showkey{/NGE/test/options/mode}

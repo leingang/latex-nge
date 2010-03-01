@@ -47,6 +47,7 @@ texclean:
 	-$(RM) $(patsubst %, ${name}.%, ${tex_suffixes})
 	-$(RM) $(targets) $(targets_test) 
 	-$(RM) texput.* *.log *.aux *.dvi
+	-$(RM) test.nge test-ans.nge test-key.nge
 	-$(RM) test/*.aux test/*.dvi test/*.log
 
 clean: texclean

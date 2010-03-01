@@ -29,6 +29,9 @@
 
 \usepackage{amsmath}
 \usepackage{fancyvrb}
+\VerbatimFootnotes
+\DefineShortVerb{\|}
+
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
@@ -41,9 +44,8 @@
 \newcommand{\optionvalue}[1]{\texttt{#1}}
 \newcommand{\mode}[1]{\textbf{#1}}
 \newcommand{\nged}{\package{NGEd}}
+\newenvironment{warning}{\par\textit{Warning}:\small}{\par}
 \begin{document}
-%^^A  \MakeShortVerb{\|}
- \DefineShortVerb{\|}
   \DocInput{\jobname.dtx}
 \end{document}
 %</driver>
@@ -169,6 +171,7 @@
 % value-receiving option this
 % section lists all the values this option may receive.
 %
+%
 % \section{Reference manual}
 % \label{sec:reference-ngetest}
 % \subsection{Options}
@@ -182,11 +185,11 @@
 % specified in the options list of the |\documentclass| line of the
 % document in the form \meta{option}|=|\meta{value}.  For example, in
 % the line
-% \begin{Verbatim}[commandchars=\\\{\}, gobble=4]
-%   \bslash{}documentclass[\meta{option}_1=value_1,\meta{option}_2,\dots]\{ngetest\}
+% \begin{Verbatim}[commandchars=\+\{\}, gobble=4]
+%   \documentclass[+meta{option}_1=value_1,+meta{option}_2,+dots]+{ngetest+}
 % \end{Verbatim}
-% option \meta{option}$_1$ receives value |value_1| and
-% \meta{option}$_2$ receives no value. 
+% \meta{option}$_1$ receives value |value_1| and \meta{option}$_2$
+% receives no value.
 %
 % Class \latexclass{ngetest} processes value receiving options with
 % the help of package \latexpackage{pgfopts}.  No blank spaces,
@@ -279,21 +282,21 @@
 %   |"|, |'|, |`|, |!|, |?|, which may have special meaning for the
 %   operating system and may make it confused\footnote{Note, in
 %     particular, that some of these characters may not be even
-%     legitimate in file name characters for some operating systems,
-%     for example forward slash \verb|/| in Unix and colon \verb|:| in Windows.}
-%   when it tries latex and other programs on a file, whose name
-%   includes these characters.
+%     legitimate file name characters for some operating systems, for
+%     example the forward slash \verb|/| in Unix and colon \verb|:| in
+%     Windows.}  when it tries latex and other programs on a file,
+%   whose name includes these characters.
 %
 %   Out of the remaining non-alphanumeric characters |-|, |_|, |.|,
 %   |+|, |^|, and |@| all may be used as file name separators, with
 %   the first four being preferred choices.  However, beware of using
-%   |-| and |_| characters in the same file name, they are easily
-%   mixed up with each other.
+%   |-| and |_| characters in the same file name, visually they are
+%   easily mixed up with each other.
 % 
 %   Option \option{modesep} also accepts special values
 %   \optionvalue{comma} and \optionvalue{equals}, which instruct
-%   \latexclass{ngetest} to use characters |,|, and, respectively |=|
-%   as file name separators.
+%   \latexclass{ngetest} to use characters |,|, and, respectively, |=|
+%   as the file name separator.
 % \end{description}
 %
 % \subsection{Modes}
@@ -302,29 +305,31 @@
 % Here is the exact algorithm of how \latexpackage{ngetest} determines
 % the document processing mode.  Initially the processing mode is
 % undefined.
-% \begin{enumerate}\renewcommand{\theenumi}{\textit{Step} \arabic{enumi}}
+% \begin{enumerate}\renewcommand{\labelenumi}{\itshape Step \theenumi).}
 % \item All the |\documentclass| line option settings of the form
 %   |mode=|\meta{value} are processed consecutively, in the order they
 %   were specified.  If \meta{value} is a recognized value, the
 %   document processing mode is set to \meta{value}, otherwise this
 %   setting is ignored and the "Unrecognized mode" warning is issued.
 %
-%  For example, options line
-% \begin{Verbatim}[gobble=4]
-%   \documentclass[mode=answers]{ngetest}
-% \end{Verbatim}
-% will turn on \mode{answers} mode, whereas after the options line
-% \begin{Verbatim}[gobble=4]
-%   \documentclass[mode=hints]{ngetest}
-% \end{Verbatim}
-% containing unrecognized mode \optionvalue{hints} the mode will still
-% be undefined.
-% \item  After all the mode settings in |\documentclass| line are processed the
-%   document processing mode is either set to the last recognized value or is
-%   still undefined.  The latter is also the case, in particular, when
-%   there were no settings |mode=|\meta{value} among class options.
+%   For example, options line
+%   \begin{Verbatim}[gobble=6]
+%     \documentclass[mode=answers]{ngetest}
+%   \end{Verbatim}
+%   will turn on \mode{answers} mode, whereas after the options line
+%   \begin{Verbatim}[gobble=6]
+%     \documentclass[mode=hints]{ngetest}
+%   \end{Verbatim}
+%   containing unrecognized option value \optionvalue{hints} the
+%   \latexclass{ngetest}'s mode is still undefined.
 %
-%   If after step 1 the mode is still not defined,
+%   After all the mode settings in |\documentclass| line are
+%   processed the document processing mode is either set to the last
+%   recognized value or is still undefined.  The latter is also the
+%   case, in particular, when there were no settings
+%   |mode=|\meta{value} among class options.
+%
+% \item If after step 1 the mode is still not defined,
 %   \latexpackage{ngetest} tries to guess an appropriate mode from the
 %   file name of the processed latex document \footnote{More
 %     precisely, the content of \LaTeX macro \verb|\jobname| is
@@ -342,39 +347,57 @@
 %     \dots\verb|-|\text{\meta{fragment}}_l
 %   \end{equation*}
 %   where the separating character |-| does not occur in any of the
-%   fragments.  If there are two fragments or more, the last fragment
-%   \meta{fragment}${}_l$ is called the \emph{suffix} of the name
-%   \meta{name}.  In case, when there is only one fragment, that is
-%   when $l=1$, the suffix is empty.  If the suffix \meta{suffix} is
-%   amoung the suffixes, recognized by \latexclass{ngetest}, the mode
-%   is set to the value, corresponding to \meta{suffix}.
+%   fragments\footnote{It means in particular, that if a separating
+%     character is followed by another separating character, these two
+%     characters bound an empty fragment.}.  If there are two
+%   fragments or more, the last fragment \meta{fragment}${}_l$ is
+%   called the \emph{suffix} of the name \meta{name}.  In case, when
+%   there is only one fragment, that is when $l=1$, the suffix is
+%   empty.  The suffix is also empty, if |\jobname| ends with a
+%   separator.  Thus with the default setting of \option{modesep} the
+%   suffix  in file names |exam.tex|, |examsol-.tex|, |exam-sol-.tex| is empty.
+%
+%   If the suffix \meta{suffix} is among the suffixes,
+%   recognized by \latexclass{ngetest}, the mode is set to the value,
+%   corresponding to \meta{suffix}.
+%
+%   Initially class \latexpackage{ngetest} recognizes three suffixes:
+%   suffixes |ans| and |sol| turn on mode \mode{answers}, and suffix
+%   |key| turns on mode \mode{key}.  More mode-suffix pairs may be
+%   declared in the configuration file \latexfile{nge.cfg} file with
+%   the help of |\NGE@DeclareModeSuffix| command (see
+%   \ref{sec:user-config-cfg}).
 % \item If the mode is still undefined after step 2 (in case of an
-%   unrecognized or empty suffix), the default mode for
-%   \latexclass{ngetest} is used.
-% \item 
-%   After the document processing mode is determined its value is
-%   stored in macro |\NGEmode|\DescribeMacro{\NGEmode}.
+%   unrecognized or an empty suffix), the default mode for
+%   \latexclass{ngetest} is used.  Initially the default mode is set
+%   to \mode{test}.  This setting may be changed in the configuration
+%   file \latexfile{nge.cfg}, see section \ref{sec:user-config-cfg}
+%   for details.
+% \item After the document processing mode is determined its value is
+%   stored in macro |\NGEmode|.
 % \end{enumerate}
-% Initially the default mode is \mode{test} and class
-% \latexpackage{ngetest} recognizes three suffixes.  Suffixes |ans|
-% and |sol| turn on mode \mode{answers} and suffix |key| turns on mode
-% \mode{key}.  \todo{provide reference} More mode-suffix pairs may be
-% added to this relation in \latexfile{nge.cfg} file with the help of
-% |\NGE@DeclareModeSuffix| command.
+%  \todo{provide reference to \latexfile{nge.cfg}}
 %
 % 
 % \paragraph{Conditional inclusion of text.}
 %
 % \DescribeMacro{\NGEmode}
 % Once \latexpackage{ngetest} is loaded and its mode determined, the
-% mode name is kept in macro |\NGEmode| whose value may be inspected
-% and used for conditional test processing.
+% mode name is kept in macro |\NGEmode|.
+% \begin{warning}
+%   Do not change the value of |\NGEmode|!  Modifying it is not going
+%   to change the \latexclass{ngetest}'s mode, which has been
+%   determined and set before |\NGEmode| is initialized, but it may
+%   unpredictably change the behaviour of other commands in
+%   \latexclass{ngetest} or even break them.
+% \end{warning}
 % \DescribeMacro{\ifNGEmode}
-% For this purpose \latexclass{ngetest} provides the conditional
-% |\ifNGEmode|.  This macro accepts three arguments
-% \begin{verbatim}
-% \ifNGEmode{}{}{}
-% \end{verbatim}
+% The value of |\NGEmode| may be inspected and used for conditional
+% test processing.  For this purpose \latexclass{ngetest} provides the
+% conditional |\ifNGEmode|.  This macro accepts three arguments
+% \begin{Verbatim}[commandchars=\+\{\}, gobble=4]
+%   \ifNGEmode+{+meta{mode}+}+{+meta{YES}+}+{+meta{NO}+}
+% \end{Verbatim}
 % if \meta{mode} is the current mode of \latexpackage{ngetest}, then
 % part \meta{YES} is executed, otherwise part \meta{NO} is executed.
 %
@@ -385,14 +408,15 @@
 % |\iftestmode|, |\ifanswersmode|, and |\ifkeymode|, which abbreviate
 % most frequent usages of |\ifNGEmode|.  Command |\iftestmode| accepts
 % one argument
-% \begin{verbatim}
-% \iftestmode{}
-% \end{verbatim}
-% and executes it only if the current mode is \mode{test}, otherwise
+% \begin{Verbatim}[gobble=4, commandchars=\+\{\}]
+%   \iftestmode+{+meta{ARG}+}
+% \end{Verbatim}
+% and executes \meta{ARG} only if the current mode is \mode{test}, otherwise
 % it does nothing.  Commands |\ifanswersmode| and |\ifkeymode| behave
 % similarly in modes \mode{answers} and \mode{key} respectively.
 % \todo[inline]{Add here warning about the blanks to watch out before
-%   and after these commands.}
+%   and after these commands, but experiment first.}
+%   
 %
 % In addition to generic command |\ifNGEmode| and its derivatives for
 % conditional execution of code or for conditional inclusion of 
@@ -455,6 +479,17 @@
 % \subsection{Configuring packages}
 % \label{sec:user-config}
 %
+% \subsubsection{File \latexfile{nge.cfg}}
+% \label{sec:user-config-cfg}
+%
+% Most of the aspects of \latexclass{ngetest}'s behaviour may be
+% configured in document's preamble except for mode determining
+% mechanism.  By the time \LaTeX{} starts processing commands in
+% document's preamble, document's class is already loaded and
+% \latexclass{ngetest}'s mode is already determined.
+%
+%\todo[inline]{add an example how to add system wide cfg file to local cfg file}
+%
 % \StopEventually{\PrintChanges\PrintIndex}
 % \section{\LaTeX{} code}
 % \label{sec:code}
@@ -470,7 +505,7 @@
 \ProvidesClass{ngetest}
 %    \end{macrocode}
 % We reserve prefix |NGE| for internal definitions in \nged\ class
-% and style files. 
+% and style files.
 %
 % \subsection{Options and modes}
 % \label{sec:code-ngetest-configuration}
@@ -520,8 +555,8 @@
 % \begin{Verbatim}[gobble=4,commandchars=\\\{\}]
 %   \bslash{}ifNGEmode\{\meta{mode}\}\{\meta{YES}\}\{\meta{NO}\}
 % \end{Verbatim}
-% and executes part \meta{YES}, if \meta{mode} coincides with the mode
-% of \latexclass{ngetest}, and executes part \meta{NO} otherwise.
+% and executes part \meta{YES}, if \meta{mode} coincides with
+% |\NGEmode|, otherwise it executes part \meta{NO}.
 %    \begin{macrocode}
 \newcommand{\ifNGEmode}[3]{\ifthenelse{\equal{\NGEmode}{#1}}{#2}{#3}}
 %    \end{macrocode}
@@ -546,7 +581,7 @@
   \NGE@DeclareModeComment{#1}%
 %    \end{macrocode}
 % Such an environment is defined with the help of package
-% \latexpackage{versions} and we have defer configuration of mode
+% \latexpackage{versions} and we have to defer configuration of mode
 % comments until this package is loaded.
 %    \begin{macrocode}
   \AtEndOfClass{\ifNGEmode{#1}{}{\excludeversion{#1comment}}}}
@@ -708,24 +743,35 @@
 %
 % \subsubsection{Determining the document processing mode}
 % \label{sec:code-ngetest-mode2}
+%
 % If the mode was not specified explicitely as an option (or if the
 % value for option \option{mode} was not recognized as a legitimate
 % mode name), we need to determine the mode from the file name.
 % \macro{\NGE@ParseJobname} Macro |\NGE@ParseJobname| receives one
-% argument and splits the content of macro |\jobname| into fragments,
-% using the received argument as a separator.
+% argument and views the contents of macro |\jobname| as a list of
+% fragments, using the received argument as a separator between
+% list elements.  It inspects the last fragment and sets the class
+% mode depending on whether the contents is of the last fragment is
+% one of the recognized mode suffixes.
 %    \begin{macrocode}
 \newcommand{\NGE@ParseJobname}[1]{%
 %    \end{macrocode}
-% We prepare the contents of |\jobname| for parsing by converting it
-% into a list of fragments, separated by the string, stored in
-% |\NGE@modesep|.   Then we parse |\jobname| list element by list
-% element, processing each of them in turn.  We find the next element
-% by searching for the next instance separator in |\jobname|.  In
-% order to be able to find the last element in the list we append to
-% |\jobname| one more copy of separator and then mark the end of the
-% list by a token, which can never occur in |\jobname|, and append one
-% more separator.  
+% \begin{enumerate}\renewcommand{\labelenumi}{\itshape Step \theenumi).}
+% \item The parsing macro |\NGE@Next| determines the next fragment as
+%   everything preceding the next instance of the separator.  It may
+%   happen, that the contents of |\jobname| does include any
+%   separators at all, or even if it does, unless the contents
+%   |\jobname| end notwalks
+%   Macros in the steps belowPrepare |\jobname| for parsing.  We
+%   prepare the contents of |\jobname| for parsing by converting it
+%   into a list of fragments, separated by the string, stored in
+%   |\NGE@modesep|.  Then we parse |\jobname| list element by list
+%   element, processing each of them in turn.  We find the next
+%   element by searching for the next instance of the separator in
+%   |\jobname|.  In order to be able to find the last element in the
+%   list we append to |\jobname| one more copy of separator and then
+%   mark the end of the list by a token, which can never occur in
+%   |\jobname|, and append one more separator.
 %    \begin{macrocode}
   \edef\NGE@jobname{\jobname#1\noexpand\@nil#1}
 %    \end{macrocode}
@@ -761,10 +807,11 @@
 %    \begin{macrocode}
   \expandafter\NGE@Next\NGE@jobname}
 %    \end{macrocode}
+% \end{enumerate}
 % This completes the definition of |\NGE@ParseJobname|
 % Note, that it is possible to define all the auxiliary commands for
 % parsing directly, using the value of |\NGE@modesep| and some
-% |\expandafter| acrobatics, but I think it is more transparent and
+% |\expandafter| acrobatics, but I believe it is more transparent and
 % robust to solve this problem by delegating it to \TeX's parsing
 % engine, that's why this approach was chosen.
 %
@@ -826,7 +873,6 @@
 %    \begin{macrocode}
 \newboolean{NGEshowtaskpoints}
 \newboolean{NGEunnumberedtask}
-%\newboolean{NGEuntaggedtask}
 %    \end{macrocode}
 %    \begin{macrocode}
 \pgfqkeys{/NGE/test/tasks/.styles}{
@@ -838,28 +884,45 @@
     posttaskhook/.initial={},
     posttaskhook/.value required,
     .process options/.code={}},
+  .points/.style={
+    /NGE/test/tasks/.options/.declare=points,
+%    points/.initial=0,
+%    points/.value required,
+%    showpoints/.initial=true,
+%    showpoints/.value forbidden,
+%    hidepoints/.style={showpoints/.initial={false}},
+%    hidepoints/.value forbidden,
+%    nopoints/.style={hidepoints, points=0},
+%    nopoints/.value forbidden,
+    .process options/.append code={%
+      \setboolean{NGEshowtaskpoints}{%
+        \pgfkeysvalueof{\NGE@taskpath/showpoints}}%
+      \pgfkeysalso{points/.get=\NGEtaskpoints}%
+      \ifthenelse{\equal{\NGEtaskpoints}{parts}}
+      {\ifthenelse{\boolean{NGEshowtaskpoints}}{%
+          \pgfkeys{/NGE/test/tasks/.parts/options/showpoints}}{}%
+        \pgfkeysifdefined{/NGE/test/tasks/\theNGE@task/points}
+        {\setcounter{NGEtaskpoints}
+          {\pgfkeysvalueof{/NGE/test/tasks/\theNGE@task/points}}}
+        {\setcounter{NGEtaskpoints}{0}}}
+      {\setcounter{NGEtaskpoints}{\NGEtaskpoints}}%
+      \addtocounter{NGEpointstotal}{\value{NGEtaskpoints}}%
+      \ifthenelse{\boolean{NGEshowtaskpoints}}
+      {\def\NGEtaskpoints{\theNGEtaskpoints\space point%
+          \ifthenelse{\value{NGEtaskpoints}=1}{}{s}}}
+      {\def\NGEtaskpoints{}}%
+      \ifthenelse{\equal{\pgfkeysvalueof{\NGE@taskpath/points}}{parts}}
+      {\pgfkeysalso{%
+          .begin/.append code={\setcounter{NGEtaskpoints}{0}},
+          .end/.prefix code={%
+            \protected@write{\NGE@out}{}{%
+              \string\pgfkeys{%
+                /NGE/test/tasks/\theNGE@task/points/.initial={%
+                  \theNGEtaskpoints}}}}}}{}}},
   .note/.style={
     note/.initial={},
     note/.value required,
     .process options/.append code={\pgfkeysalso{note/.get=\NGEtasknote}}},
-  .points/.style={
-    points/.initial=0,
-    points/.value required,
-    showpoints/.initial=true,
-    showpoints/.value forbidden,
-    hidepoints/.style={showpoints/.initial={false}},
-    hidepoints/.value forbidden,
-    nopoints/.style={hidepoints, points=0},
-    nopoints/.value forbidden,
-    .process options/.append code={%
-      \setcounter{NGEtaskpoints}{\pgfkeysvalueof{\NGE@taskpath/points}}
-      \setboolean{NGEshowtaskpoints}{%
-        \pgfkeysvalueof{\NGE@taskpath/showpoints}}
-      \ifthenelse{\boolean{NGEshowtaskpoints}}
-      {\def\NGEtaskpoints{%
-          \theNGEtaskpoints\space point%
-          \ifthenelse{\value{NGEtaskpoints}=1}{}{s}}}
-      {\def\NGEtaskpoints{}}}},
   .notewithpoints/.style={
     /NGE/test/tasks/.styles/.note,
     /NGE/test/tasks/.styles/.points,
@@ -871,21 +934,31 @@
           \def\NGEtasknotewithpoints{\NGEtasknote,\space\NGEtaskpoints}
         \fi}
       {\edef\NGEtasknotewithpoints{\NGEtasknote}}}},
+  .skip/.style={
+    skip/.initial={\z@skip},
+    skip/.value required,
+  },
   plain/.style={
     /NGE/test/tasks/.styles/.common,
     /NGE/test/tasks/.styles/.points},
+  plain/create environment/.code={
+    \setboolean{NGE@createtaskenvironment}{false}},
   theorem/.style={
     /NGE/test/tasks/.styles/.common,
     /NGE/test/tasks/.styles/.notewithpoints,
     .process options/.append code={%
       \ifx\NGEtasknotewithpoints\@empty\else%
       \pgfkeysalso{.begin/.append code={[\NGEtasknotewithpoints]}}\fi}},
+  theorem/create environment/.code={
+    \setboolean{NGE@createtaskenvironment}{false}},
+  nge/create environment/.code={
+    \setboolean{NGE@createtaskenvironment}{true}},
   nge/.style={
     /NGE/test/tasks/.styles/.common,
     /NGE/test/tasks/.styles/.notewithpoints,
     name/.initial=Question,
     name/.value required,
-    head/.initial={\NGEtaskhead},
+    head/.initial={\NGEtaskheadmark},
     head/.value required,
     head/.unknown/.code={%
       \ClassError{ngetest}
@@ -906,12 +979,17 @@
     counter/.initial=NGEtask,
     counter/.value required,
     unnumbered/.initial=false,
+    unnumbered/.style={unnumbered/.initial=true},
     unnumbered/.value forbidden,
     numbered/.style={unnumbered/.initial=false},
     numbered/.value forbidden,
     tag/.initial={},
-    tag/.style={tag/.initial=#1, unnumbered},
+    tag/.style={tag/.initial={##1}, unnumbered},
     tag/.value required,
+    preskip/.initial={\topsep},
+    preskip/.value required,
+    postskip/.initial={\topsep},
+    postskip/.value required,
     .process options/.append code={%
       \pgfkeysalso{
         name/.get=\NGEtaskname,
@@ -919,20 +997,18 @@
         head/font/.get=\NGEtaskheadfont,
         head/punctuation/.get=\NGEtaskheadpunctuation,
         head/afterskip/.get=\NGEtaskheadafterskip,
+        head/.get=\NGEtaskhead,
         note/font/.get=\NGEtasknotefont,
         counter/.get=\NGEtaskcounter,
         tag/.get=\NGEtasktag}
       \setboolean{NGEunnumberedtask}{\pgfkeysvalueof{\NGE@taskpath/unnumbered}}
       \ifthenelse{\boolean{NGEunnumberedtask}}
-      {\ifx\NGEtasktag\@empty
-          \edef\NGEtasknamewithtag{\NGEtaskname}
-        \else
-          \ifx\NGEtaskname\@empty
-            \def\NGEtasknamewithtag{\NGEtasktag}
-          \else
-            \def\NGEtasknamewithtag{\NGEtaskname\space\NGEtasktag}
-          \fi
-        \fi}
+      {\ifthenelse{\equal{\NGEtasktag}{}}
+        {\edef\NGEtasknamewithtag{\NGEtaskname}}
+        {\edef\@currentlabel{\NGEtasktag}
+          \ifthenelse{\equal{\NGEtaskname}{}}
+          {\edef\NGEtasknamewithtag{\NGEtasktag}}
+          {\def\NGEtasknamewithtag{\NGEtaskname\space\NGEtasktag}}}}
       {\refstepcounter{\pgfkeysvalueof{\NGE@taskpath/counter}}%
         \def\NGEtasktag{%
           \csname the\pgfkeysvalueof{\NGE@taskpath/counter}\endcsname}
@@ -943,7 +1019,7 @@
         \fi}
       \ifx\NGEtasknamewithtag\@empty%
         \ClassWarning{ngetest}{empty task header}\fi
-    \def\NGEtaskhead{%
+    \def\NGEtaskheadmark{%
       \begingroup\NGEtaskheadfont\NGEtasknamewithtag\endgroup%
       \ifx\NGEtasknotewithpoints\@empty\else%
         \space(\begingroup\NGEtasknotefont%
@@ -951,8 +1027,7 @@
       \NGEtaskheadpunctuation}},
   .begin/.code={%
     \begin{trivlist}%
-    \item[\pgfkeysvalueof{\NGE@taskpath/head}]%
-    \NGEtaskheadafterskip\NGEtaskfont},
+    \item[\NGEtaskhead]\NGEtaskheadafterskip\NGEtaskfont},
   .end/.code={\end{trivlist}}}}
 %    \end{macrocode}
 %    \begin{macrocode}
@@ -980,27 +1055,27 @@
 %    \end{macrocode}
 %\todo[inline]{more flexible error handling, allow for several styles
 % based on the same package}
-% \todo{Add if star}
+% \todo{Add if star? no need to!}
 %    \begin{macrocode}
+\newboolean{NGE@createtaskenvironment}
 \newcommand{\newtask}[2][]{%
+  \pgfkeys{/NGE/test/tasks/.styles/\NGE@taskstyle/create environment}
   \@ifundefined{#2}
-  {\ifthenelse{\equal{\NGE@taskstyle}{nge}}
+  {\ifthenelse{\boolean{NGE@createtaskenvironment}}
     {\pgfqkeys{/NGE/test/tasks/#2}{
         .begin/.code={},
         .end/.code={},
         /NGE/test/tasks/.styles/\NGE@taskstyle,
         #1}
       \newenvironment{#2}{}{}}
-    {\ClassError{ngetest}{environment '#2' does not exist}
-      {Before environment '#2' can be used as a task
-        \MessageBreak
-        it has to be declared
-        by means of '\NGE@taskstyle' package.
+    {\ClassError{ngetest}{environment `#2' does not exist}
+      {Before environment `#2' can be used as a task
+        it has to be declared.
         \MessageBreak
         Put the declaration of '#2' in the document's  preamble
         \MessageBreak
-        before '\@backslashchar newtask{#2}'}}}
-  {\ifthenelse{\equal{\NGE@taskstyle}{nge}}
+        before `\@backslashchar newtask{#2}'}}}
+  {\ifthenelse{\boolean{NGE@createtaskenvironment}}
     {\ClassError{ngetest}{environment '#2' already exists}
       {Existing environments cannot be used with task style
         '\NGE@taskstyle'\MessageBreak
@@ -1013,7 +1088,7 @@
        then choose a new environment name, which is not a name
        \MessageBreak
        of an existing environment.}}
-   {\ClassWarning{ngetest}{redefining environment '#2'}
+   {\ClassInfo{ngetest}{redefining environment '#2'}
      \expandafter\let\csname NGE@#2\expandafter\endcsname%
        \csname #2\endcsname
      \expandafter\let\csname endNGE@#2\expandafter\endcsname%
@@ -1052,9 +1127,6 @@
 %    \begin{macrocode}
 %    \end{macrocode}
 %
-%\iffalse
-%<*hide>
-%\fi
 %    \begin{macrocode}
 %    \end{macrocode}
 % It is users responsibility to guarantee that counter exists.
@@ -1077,106 +1149,140 @@
 % We also provide a quick way to turn off points counting temporarily
 % for a particular task.
 %
+%
 % \subsubsection{Parts}
 % \label{sec:code-tasks-parts}
 %    \begin{macrocode}
-%\newcounter{NGEtaskpart}
-%\newcounter{NGEtaskpartpoints}
+\newcounter{NGE@taskpartdepth}
+\newcounter{taskpart}[NGE@task]
+\renewcommand{\thetaskpart}{\alph{taskpart}}
+\newcommand{\labeltaskpart}{\thetaskpart).}
+\newcounter{taskppart}[taskpart]
+\renewcommand{\thetaskppart}{\arabic{taskppart}}
+\renewcommand{\p@taskppart}{\thetaskpart}
+\newcommand{\labeltaskppart}{$\hbox{\p@taskppart}_{\thetaskppart}$).}
+\newcounter{taskpppart}[taskppart]
+\renewcommand{\thetaskpppart}{\Alph{taskpppart}}
+%\renewcommand{\p@taskpppart}{$\hbox{\thetaskpart}_{\thetaskppart}$-\thetaskpppart).}
+\renewcommand{\p@taskpppart}{}
+\newcommand{\labeltaskpppart}{(\thetaskpppart)}
+\newcounter{taskpartpoints}
 %    \end{macrocode}
 %    \begin{macrocode}
-%\newenvironment{parts}[1][]{%
-%  \setcounter{NGEtaskpart}{0}%
-%  \pgfqkeys{/NGE/test/parts/options}{#1}%
-%}{}
-%\newcommand{part}[1][]{%
-%  \pgfqkeys{/NGE/test/parts/part/options}{#1}%
-%  \refstepcounter{NGEtaskpart}%
-%}
-%    \end{macrocode}
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-% \paragraph{Infrastructure}
-%    \begin{macrocode}
-%    \end{macrocode}
-% \paragraph{Modes}
-%    \begin{macrocode}
+\newboolean{NGE@showtaskpartpoints}
+\newenvironment{parts}[1][]{%
+  \let\part=\NGE@part%
+  \stepcounter{NGE@taskpartdepth}%
+  \ifthenelse{\value{NGE@taskpartdepth}>3}{%
+    \ClassError{ngetest}{%
+      parts nesting level is too deep,\MessageBreak
+      only three levels are allowed}{}}{}
+  \pgfkeys{/NGE/test/tasks/.parts/depth=\arabic{NGE@taskpartdepth}}%
+  \pgfqkeys{/NGE/test/tasks/.parts/options}{#1,
+  showpoints/.get=\NGE@showpointstemp}%
+  \setboolean{NGE@showtaskpartpoints}{\NGE@showpointstemp}%
+%    \pgfkeysvalueof{/NGE/test/tasks/.parts/options/showpoints}}%
+  \begin{list}{\NGE@labeltaskpart}{%
+      \renewcommand{\makelabel}[1]{\hss\llap{##1}}}}%
+{\end{list}\addtocounter{NGE@taskpartdepth}{-1}}
+\newcommand{\NGE@part}[1][]{%
+  \pgfqkeys{/NGE/test/tasks/.part/options}{
+    label/.initial={},
+    .numbered,
+    #1,
+    points/.get=\NGEtaskpartpoints,
+    label/.get=\NGE@taskpartlabel
+  }%
+%  \stepcounter{NGE@taskpart}%
+\ifthenelse{\boolean{NGE@numberedtaskpart}}
+{\refstepcounter{\NGE@taskpartcounter}}{}%
+  \ifthenelse{\equal{\pgfkeysvalueof{\NGE@taskpath/points}}{parts}}
+  {\addtocounter{NGEtaskpoints}{\NGEtaskpartpoints}}{}%
+  \ifthenelse{\boolean{NGE@numberedtaskpart}}
+  {\item\relax}{\item[\NGE@taskpartlabel]}%
+  \ifthenelse{\boolean{NGE@showtaskpartpoints}}
+  {}% remove after debugging!
+{(\NGE@showpointscounter{taskpartpoints}) }%{}
+}
 %    \end{macrocode}
 %    \begin{macrocode}
+\pgfqkeys{/NGE/test/tasks/.parts/depth}{
+  .is choice,
+  .value required,
+  1/.code={%
+    \newcommand{\NGE@taskpartcounter}{taskpart}%
+    \newcommand\NGE@labeltaskpart{\labeltaskpart}},
+  2/.code={%
+    \renewcommand{\NGE@taskpartcounter}{taskppart}%
+    \renewcommand\NGE@labeltaskpart{\labeltaskppart}%
+  },
+  3/.code={%
+    \renewcommand{\NGE@taskpartcounter}{taskpppart}%
+    \renewcommand\NGE@labeltaskpart{\labeltaskpppart}}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\newcommand{\NGE@showpointscounter}[1]{%
+  \arabic{#1} point\ifthenelse{\value{#1}=1}{}{s}}
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/tasks/.options}{
+  .declare/.is choice,
+  .declare/.value required,
+  .declare/.unknown/.code={%
+    \ClassError{ngetest}{%
+      Unknown option group `\pgfkeyscurrentname'}{}},
+  .declare/points/.style={%
+    points/.initial=0,
+    points/.value required,
+    showpoints/.initial=true,
+    showpoints/.style={showpoints/.initial=true},
+    showpoints/.value forbidden,
+    hidepoints/.style={showpoints/.initial=false},
+    hidepoints/.value forbidden,
+    nopoints/.style={hidepoints, points=0},
+    nopoints/.value forbidden}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\pgfqkeys{/NGE/test/tasks/.parts/options}{%
+  /NGE/test/tasks/.options/.declare=points, hidepoints}
+\newboolean{NGE@numberedtaskpart}
+\pgfqkeys{/NGE/test/tasks/.part/options}{
+  points/.initial={0},
+  points/.value required,
+  .numbered/.is if=NGE@numberedtaskpart,
+  .numbered/.default=true,
+  label/.style={.numbered=false,label/.initial=#1}
+}
+%    \end{macrocode}
+%    \begin{macrocode}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
 %    \end{macrocode}
+% 
 %
-%
-% \paragraph{Options for other packages}
-% \paragraph{Determining mode.}
+%    \begin{macrocode}
+%    \end{macrocode}
 %
 % 
 %    \begin{macrocode}
 %    \end{macrocode}
-% \todo{refactor for variants}
 %    \begin{macrocode}
-%    \end{macrocode}
-%    \begin{macrocode}
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-%    \end{macrocode}
-% 
-%
-%    \begin{macrocode}
+\newwrite\NGE@out
+\AtBeginDocument{%
+  \InputIfFileExists{\jobname.nge}{}{}
+  \ifthenelse{\boolean{@filesw}}{%
+    \immediate\openout\NGE@out\jobname.nge%
+    \immediate\write\NGE@out{\relax}}{}}
 %    \end{macrocode}
 %
-% 
-%    \begin{macrocode}
-%    \end{macrocode}
 %
-% 
+%\iffalse
+%<*hide>
+%\fi
+%
 % \subsection{Answers and solutions}
 % \label{sec:code-ngetest-answers}
 %
@@ -1277,24 +1383,42 @@
 %\ifthenelse{\boolean{NGEMarkingGuideMode}}{}{\excludeversion{rubrics}}
 %    \end{macrocode}
 %
+%\iffalse
+%</hide>
+%\fi
+%
 % \subsection{Title page}
 % \label{sec:code-ngetest-title-page}
-%
 %    \begin{macrocode}
-\ifthenelse{\boolean{@titlepage}}{%
-  \renewcommand{\maketitle}{\begin{titlepage}%
+\def\@author{}
+\newcommand{\course}{\@dblarg\NGE@course}
+\newcommand{\NGE@course}[2][]{%
+  \gdef\NGE@shortcoursename{#1}\gdef\NGE@coursename{#2}}
+\course{}
+\newcommand{\instructor}[2][Instructor]{\author{#1: #2}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\ifthenelse{\boolean{@titlepage}}
+{\renewcommand{\maketitle}{%
+    \begin{titlepage}%
       \let\footnotesize\small
       \let\footnoterule\relax
       \let \footnote \thanks
       \null\vfil
       \vskip 60\p@
       \begin{center}%
+      \ifthenelse{\equal{\NGE@coursename}{}}{}
+      {\Large%
+        \begin{tabular}[t]{c}%
+          \NGE@coursename%
+        \end{tabular}\par\vskip 3em}%
         {\LARGE \@title \par}%
         \vskip 3em%
+        \ifthenelse{\equal{\@author}{}}{}
         {\large
           \lineskip .75em%
           \begin{tabular}[t]{c}%
-            %\@author
+            \@author
           \end{tabular}\par}%
         \vskip 1.5em%
         {\large \@date \par}%       % Set date in \large size.
@@ -1302,23 +1426,30 @@
       \@thanks
       \vfil\null
     \end{titlepage}}}
- {\renewcommand{\@maketitle}{\newpage%
-   \null%
-   \vskip 2em%
-   \begin{center}%
-   \let \footnote \thanks%
-     {\LARGE \@title \par}%
-     \vskip 1.5em%
-    {\large%
-      \lineskip .5em%
-      \begin{tabular}[t]{c}%
-% %        \@author%
-     \end{tabular}\par}%
-     \vskip 1em%
-     {\large \@date}%
-   \end{center}%
-   \par%
-   \vskip 1.5em}}
+{\renewcommand{\@maketitle}{%
+    \newpage%
+    \null%
+    \vskip 2em%
+    \begin{center}%
+      \let \footnote \thanks%
+      \ifthenelse{\equal{\NGE@coursename}{}}{}
+      {\Large%
+        \begin{tabular}[t]{c}%
+          \NGE@coursename%
+        \end{tabular}\par\vskip 1.5em}%
+      {\LARGE \@title \par}%
+      \vskip 1.5em%
+      \ifthenelse{\equal{\@author}{}}{}
+      {\large%
+        \lineskip .5em%
+        \begin{tabular}[t]{c}%
+          \@author%
+        \end{tabular}\par}%
+      \vskip 1em%
+      {\large \@date}%
+    \end{center}%
+    \par%
+    \vskip 1.5em}}
 %    \end{macrocode}
 %    \begin{macrocode}
 \pgfkeys{/NGE/test/information/.unknown/.style={%
@@ -1328,6 +1459,11 @@
 %    \end{macrocode}
 % 
 %\iffalse
+%<*hide>
+%\fi
+% \subsubsection{Headers}
+% \label{sec:code-ngetest-headers}
+%\iffalse
 %</hide>
 %</ngetest>
 %\fi
@@ -1336,36 +1472,32 @@
 % \todo[inline]{Look up indexing commands for \latexpackage{doc}}
 % \todo[inline]{Add to documentation DescribeOption and option macros}
 % \todo[inline]{Make task declarations preamble only}
-% \todo[inline]{How to hook tasks into existing environments?  Kernel
-% and amsthm.}
+% \todo[inline]{Configure lists environments}
 % \todo[inline]{switch to \texttt{fancyvrb}}
-% \todo[inline]{how to reference tagged problems?}
+% \todo[inline]{Move title up on page and in code too}
+% \todo[inline]{refactor for variants}
 %^^A \todo[inline]{}
 % \Finale
 % \iffalse
 %<*test>
 \documentclass[12pt]{ngetest}
-\title{Test of \textsl{ngetest}}
-%\NGEtestinformation{course={Calculus-II}}
+
+%%%
 \makeatletter
 \newcommand{\showkey}[1]{%
-\par\noindent  Key \texttt{#1} is
+\par\noindent  Key \texttt{#1}
   \pgfkeysifdefined{#1}{%
     \ifthenelse{\equal{\pgfkeysvalueof{#1}}{}}{is empty}
     {has value \texttt{\pgfkeysvalueof{#1}}}}
   {is undefined}.}
-
 \newcommand{\showmacro}[1]{%
 \par\noindent  Macro \texttt{\char`\\ #1} \@ifundefined{#1}{is undefined}
   {\ifthenelse{\equal{\csname #1\endcsname}{}}{is empty}{has value
       \texttt{\csname #1\endcsname}}}.}
-
-
+%%%
 \newtask{NGEtask}
 \newcounter{problem}
 \newtask[name=Problem, counter=problem, points=5]{problem}
-
-
 \usepackage{amsthm}
 \theoremstyle{plain}
 \newtheorem{exercise}{Exercise}
@@ -1373,14 +1505,33 @@
 \taskstyle{theorem}
 \newtask{theorem}
 \newtask[points=12]{exercise}
-
+%%%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{\itshape Institution}
+\chead{\NGE@shortcoursename}
+\rhead{Semester}
+%\lfoot{}
+%\cfoot{}
+%\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+%\renewcommand{\footrulewidth}{0pt}
+%%%
+\title{Testing class \textsf{ngetest}\\  
+  \iftestmode{test mode}%
+  \ifanswersmode{answers mode}%
+  \ifkeymode{key mode}}
+\instructor{A.~N.~Onym}
+\course[Course]{Course name}
 \begin{document}
-%\maketitle
+\maketitle
 
 This is a test file for class \texttt{ngetest}.
 
 \showkey{/NGE/test/information/name}
 \showkey{/NGE/test/information/course}
+
+
 
 \subsection*{Modes}
 
@@ -1464,13 +1615,15 @@ First we test environment in \texttt{nge} style with default configuration.
 \begin{NGEtask}[head/punctuation={:}]
   This is a task with modified punctuation sign after the header.
 \end{NGEtask}
-\begin{NGEtask}[tag={R2D2}]
+\begin{NGEtask}[tag={ABC}]\label{task:abc}
   This question has no number.  It is tagged.  It should not break
   the numbering sequence though.
 \end{NGEtask}
-\begin{NGEtask}
+\begin{NGEtask}\label{task:last}
   Last question.
 \end{NGEtask}
+Let us also test whether we can reference these tasks:
+task \ref{task:abc} and task \ref{task:last}.
 
 Now we use another task with style \texttt{nge} with modified default
 settings: different name and these tasks are numbered separately from
@@ -1498,14 +1651,57 @@ the previous sequence of tasks.
 \end{problem}
 
 Let us continue with task options testing.
-\begin{NGEtask}[points=10]
-  This is the second task.  Ten points are assigned to it.
+\begin{NGEtask}[points=parts]
+  This is task number \theNGE@task.
+  Points for this task are computed by \texttt{parts} environment with
+  default settings.
+  \begin{parts}
+    \part Here is the part with default settings
+    \part[points=1] This part is assigned one point.
+    \part[points=2] This part is assigned two points and it also has subparts.
+    \begin{parts}
+      \part This is the first subpart.
+      \part This is the second subpart.  Here we introduce the deepest
+      subparts level.
+      \begin{parts}
+        \part subsubpart one
+      \end{parts}
+      The time one needs subsubparts is surely the time to
+      think through the problem outline.  But here it is, in case
+      anyone needs it.
+      \begin{parts}
+        \part Have to create better labels for this level though.
+        \part May be it is better to leave it at users discretion.
+      \end{parts}
+      \part This is the third subpart.
+    \end{parts}
+    \part And now we return to previous parts level.
+  \end{parts}
+  The value of NGE@task counter is \theNGE@task.
 \end{NGEtask}
-\begin{NGEtask}[points=50,name=Problem]
-  This task is a problem, it is 50 points worth.
-\end{NGEtask}
-\begin{NGEtask}
-  This is the task with the new default settings.
+\begin{NGEtask}[points=parts]
+  This is the task whose points are determined by \texttt{parts}
+  environment with modified setting: each part is by default given 4 points.
+  \begin{parts}[points=4]
+    \part This is a part with default settings.
+    \part This is also a part with default settings.
+    \part[label={ABC}] This is yet another part, but it is not
+    numbered, instead it is labeled explicitely.  Compare numbers of
+    parts before and after.
+    \part[points=6] This part received 6 points
+  \end{parts}
+  Here we interrupt parts outline with some general remarks.
+  \begin{parts}
+    \part This is a part with default settings.
+  \end{parts}
+  Finally we compare the previous setup with \texttt{enumerate} environment.
+  \begin{enumerate}\renewcommand{\theenumi}{\alph{enumi})}
+  \item Some text
+  \item Some more text.  We continue till the end of line to see
+    whether the second line is indented or it is flush with the label.
+    Apparently in \texttt{enumerate} environment it is flush.
+  \item Another item.  
+  \end{enumerate}
 \end{NGEtask}
 \begin{NGEtask}[points=15]
   This task is worth 15 points.
@@ -1517,8 +1713,13 @@ Let us continue with task options testing.
   This task has modified name and is assigned one point.  It also has
   a note in it.
 \end{NGEtask}
+\begin{NGEtask}[points=50,name=Problem]
+  This task is a problem, it is 50 points worth.
+\end{NGEtask}
 
-The next series of tasks are defined with style \texttt{latex}
+The next series of tasks are defined with style \texttt{theorem} and
+use \texttt{theorem} environment, configured with the help of
+\texttt{amsthm} package.
 \begin{exercise}
   First exercise.  Default settings.
 \end{exercise}
@@ -1533,15 +1734,18 @@ The next series of tasks are defined with style \texttt{latex}
 \end{exercise}
 
 Finally we here are a couple of tasks in \texttt{amsthm} style.
-\begin{theorem}
-  Prove something.
+\begin{theorem}[points=1]
+  Prove me.
 \end{theorem}
 \begin{theorem}[points=2]
-  Prove something else.
+  Prove harder.
 \end{theorem}
 \begin{theorem}[note={test note},nopoints]
   Now generalize.  Points are turned off, and a note is given.
 \end{theorem}
+
+Altogether there were \theNGEpointstotal\ points assigned to
+\theNGE@task\ tasks.
 
 %\iffalse
 %<*hide>

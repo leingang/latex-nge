@@ -44,17 +44,19 @@ test: $(targets_test)
 .PHONY: clean texclean distclean
 tex_suffixes = log aux dvi toc tdo ins drv def idx ilg ind glo gls
 texclean:
+	-$(RM) $(targets)
 	-$(RM) $(patsubst %, ${name}.%, ${tex_suffixes})
-	-$(RM) $(targets) $(targets_test) 
+	-$(RM) $(targets_test)
+	-$(RM) $(patsubst %.tex, %.nge, ${targets_test})
 	-$(RM) texput.* *.log *.aux *.dvi
-	-$(RM) test.nge test-ans.nge test-key.nge
 	-$(RM) test/*.aux test/*.dvi test/*.log
 
 clean: texclean
 	-$(RM) *~ style/*~ test/*~
+	-$(RM) -r test/auto
 
 distclean: texclean
-	-$(RM) $(targets) $(name).pdf $(name).ps
+	-$(RM) $(name).pdf $(name).ps
 
 
 ### Maintainers' and developers' section

@@ -969,33 +969,129 @@
 % the supporting macros for handling parts and subparts, points
 % tallying, etc\dots.
 %
-% \paragraph{Creating tasks.}
+% A task is an environment which receives the most use in
+% \latexclass{ngetest}.  Have names, numbers, they may be assign
+% points, tasks may contain parts and subparts with subsubparts.  We
+% may also want to use as tasks other environments, defined by other
+% means.  All this makes tasks the most complex part of
+% \latexclass{ngetest}.
 %
-%   By default all the tasks are numbered consecutively with the help of
-%   counter |NGEtask|.
 %    \begin{macrocode}
-\newcounter{NGEtask}
+\newenvironment{NGE@task}[1][]{%
+  \def{\NGE@taskpath}{/NGE/tasks/NGE@task}%
+  \stepcounter{NGE@tasks}%
+  \pgfqkeys{\NGE@taskpath/options}{%
+    \NGE@taskpath/initialize,
+    #1,
+    \NGE@taskpath/process options,
+    /NGE@taskpath/pretaskhook,
+   \NGE@taskpath/begin task}%
+  \begin{trivlist}[\NGEtaskhead]%
+    \NGEtaskskip\NGEtaskfont\NGEtaskindent%
+  }{\end{trivlist}%
+  \pgfqkeys{\NGE@taskpath}{
+    posttaskhook,
+    end task}}
+\pgfqkeys{/NGE/tasks/.declare}{
+  task/.style={
+    initialize/.style={},
+    process options/.code={},
+    pretaskhook/.code={},
+    begin task/.code={},
+    posttaskhook/.code={},
+    end task/.code={},
+    options/.unknown/.code={%
+      \ClassError{ngetest}{unknown task option '\pgfkeyscurrentname'}{}},
+    options/pretaskhook/.style={
+      \NGE@taskpath/pretaskhook/.code=##1},
+    options/pretaskhook/.value required,
+    options/posttaskhook/.code={
+      \NGE@taskpath/posttaskhook/.code=##1},
+    options/posttaskhook/.value required}}
+\pgfqkeys{/NGE/tasks/NGE@task}{%
+  /NGE/tasks/.declare/task}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcounter{NGEtaskpoints}
+\newcounter{NGEpointstotal}
 \newcounter{NGE@task}
-\newcounter{NGEtaskpart}
-\newcounter{NGEtaskppart}
-\newcounter{NGEtaskpppart}
+\newcounter{NGEtaskpartpoints}
+\newcounter{NGEtaskppartpoints}
+\newcounter{NGEtaskpppartpoints}
+\newboolean{NGEshowtaskpoints}
+\newboolean{NGEshowtaskpartpoints}
+\pgfqkeys{/NGE/tasks/.declare}{
+  option/points/.style={
+    options/points/.initial=0,
+    options/points/.value required,
+    showpoints/.is if=NGEshowtaskpoints,
+    options/showpoints/.style={\NGE@taskpath/showpoints=true},
+    options/showpoints/.value forbidden,
+    options/hidepoints/.style={\NGE@taskpath/showpoints=false},
+    options/hidepoints/.value forbidden,
+    options/nopoints/.style={hidepoints, points=0},
+    options/nopoints/.value forbidden,
+    initialize/.append code={\stepcounter{NGE@task}},
+    process options/.append style={%
+      points/.get=\NGE@taskpoints,
+      \NGE@taskpath/points=\NGE@taskpoints},
+    points/.is choice,
+    points/.value required,
+    points/.unknown/.code={%
+      \NGE@ifnonnegativenumber{\pgfkeyscurrentname}{%
+        \setcounter{NGEtaskpoints}{\pgfkeyscurrentname}%
+        \addtocounter{NGEpointstotal}{NGEtaskpoints}}
+      {\ClassError{ngetest}{unknown points setting `\pgfkeyscurrentname'{}}}},
+    points/parts/.code={%
+      \pgfkeysalso{/NGE/tasks/\arabic{NGE@task}/points/.try,
+        \NGE@taskpath/points/.retry=0}%
+%^^A move this to the right place,
+%^^A after the task header has already been printed
+%      \setcounter{NGEtaskpoints}{0}%
+      \NGE@taskpath/end task/.append code={%
+        \protected@write{\NGE@out}{}{%
+              \string\pgfkeys{%
+                /NGE/test/tasks/\arabic{NGE@task}/points/.style={%
+                  \NGE@taskpath/points=\arabic{NGEtaskpoints}}}}}},
+     initialize/.append style={showpoints},
+     process options/.append code={%
+       \ifthenelse{\boolean{NGEshowtaskpoints}}
+       {}
+       {}%
+     }
+      }}
+\newcommand{\NGE@ifnonnegativenumber}[3]{%
+  \ifcat_\ifnum9<1#1 _\else A\fi #2\else #3\fi}
 %    \end{macrocode}
 % We also introduce counters for keeping track of number of points,
 % assigned to each task.
 %    \begin{macrocode}
-\newcounter{NGEtaskpoints}
-\newcounter{NGEtaskpartpoints}
-\newcounter{NGEtaskppartpoints}
-\newcounter{NGEtaskpppartpoints}
-\newcounter{NGEpointstotal}
+\newcounter{NGEtask}
+\newcounter{NGEtaskpart}
+\newcounter{NGEtaskppart}
+\newcounter{NGEtaskpppart}
 %    \end{macrocode}
 %    \begin{macrocode}
-\newboolean{NGEshowtaskpoints}
-\newboolean{NGEshowtaskpartpoints}
 \newboolean{NGEunnumberedtask}
 %    \end{macrocode}
 %    \begin{macrocode}
 \pgfqkeys{/NGE/tasks/.declare}{
+%  task/.style={
+%    initialize/.style={},
+%    process options/.code={},
+%    pretaskhook/.code={},
+%    begin task/.code={},
+%    posttaskhook/.code={},
+%    end task/.code={},
+%    options/.unknown/.code={%
+%      \ClassError{ngetest}{unknown task option '\pgfkeyscurrentname'}{}},
+%    options/pretaskhook/.style={
+%      \NGE@taskpath/pretaskhook/.code=##1},
+%    options/pretaskhook/.value required,
+%    options/posttaskhook/.code={
+%      \NGE@taskpath/posttaskhook/.code=##1},
+%    options/posttaskhook/.value required},
   style/.style={
     options/.unknown/.code={%
       \ClassError{ngetest}{unknown task option '\pgfkeyscurrentname'}{}},

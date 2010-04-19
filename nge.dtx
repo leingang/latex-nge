@@ -962,8 +962,209 @@
 % \subsection{Tasks}
 % \label{sec:code-ngetest-tasks}
 %
-%
-% 
+%    \begin{macrocode}
+\newboolean{NGE@numberedtask}
+\newcounter{NGEtask}
+\newcounter{NGE@taskwithpoints}
+\newcounter{NGEtaskpoints}
+\newboolean{NGE@showtaskpoints}
+\newenvironment{NGE@task}[1][]{%
+%  \pgfqkeys{/NGE/tasks/NGE@task/options}{numbered,showpoints}%
+  \pgfqkeys{/NGE/tasks/NGE@task/initialize}{\NGE@taskpath/initialize}%
+  \pgfqkeys{/NGE/tasks/NGE@task/options}{#1}%
+  \pgfkeys{/NGE/tasks/NGE@task/options/name/.get=\NGE@taskname}%
+  \pgfkeys{/NGE/tasks/NGE@task/tag}%
+  \pgfkeys{/NGE/tasks/NGE@task/options/note/.get=\NGE@tasknote}%
+  \ifthenelse{\boolean{NGE@showtaskpoints}}%
+  {\stepcounter{NGE@taskwithpoints}%
+    \pgfqkeys{/NGE/tasks/NGE@task}{options/points/.get=\NGE@taskpoints,
+      points=\NGE@taskpoints}%
+    \ifx\NGE@tasknote\@empty%
+    \def\NGE@tasknotewithpoints{\NGE@showpointscounter{NGEtaskpoints}}%
+    \else\def\NGE@tasknotewithpoints{\NGE@tasknote\space%
+      \NGE@showpointscounter{NGEtaskpoints}}\fi}%
+  {\let\NGE@tasknotewithpoints=\NGE@tasknote}%
+  \def\NGE@taskhead{%
+    \begingroup%
+      \pgfkeysvalueof{/NGE/tasks/NGE@task/options/head/font}%
+      \NGE@tasknamewithtag%
+    \endgroup
+    \ifx\NGE@tasknotewithpoints\@empty\else%
+    (\begingroup%
+      \pgfkeysvalueof{/NGE/tasks/NGE@task/options/note/font}%
+      \NGE@tasknotewithpoints%
+    \endgroup)\fi%
+    \pgfkeysvalueof{/NGE/tasks/NGE@task/options/head/punctuation}}%
+  \pgfkeysvalueof{/NGE/tasks/NGE@task/options/pre hook}%
+  \begin{trivlist}\item[\NGE@taskhead]%
+  \pgfkeys{/NGE/tasks/NGE@task/head/post hook}%
+  \pgfkeysvalueof{/NGE/tasks/NGE@task/font}}
+{\end{trivlist}%
+  \pgfkeys{/NGE/tasks/NGE@task/options/post hook}%
+  \pgfkeys{/NGE/tasks/NGE@task/post hook}%
+}
+\pgfqkeys{/NGE/tasks/NGE@task}{
+  options/name/.initial={Question},
+  options/name/.value required,
+  options/numbered/.is if=NGE@numberedtask,
+  options/numbered/.default=true,
+  options/unnumbered/.style={numbered=false},
+  options/unnumbered/.value forbidden,
+  options/counter/.initial=NGEtask,
+  options/counter/.value required,
+  options/tag/.initial={},
+  options/tag/.style={tag/.initial={#1},unnumbered},
+  options/tag/.value required,
+  tag/.code={\ifthenelse{\boolean{NGE@numberedtask}}
+    {\pgfkeys{/NGE/tasks/NGE@task/options/counter/.get=\NGE@taskcounter}%
+    \refstepcounter{\NGE@taskcounter}%
+    \expandafter\def\expandafter\NGE@tasktag\expandafter{%
+      \csname the\NGE@taskcounter\endcsname}}
+    {\pgfkeys{/NGE/tasks/NGE@task/options/tag/.get=\NGE@tasktag}}},
+  options/points/.initial=0,
+  options/points/.value required,
+  options/showpoints/.is if=NGE@showtaskpoints,
+  options/showpoints/.default=true,
+  options/hidepoints/.style={showpoints=false,%
+    /NGE/tasks/parts/options/showpoints=false},
+  options/hidepoints/.value forbidden,
+  options/nopoints/.style={points=0,showpoints=false},
+  options/nopoints/.value forbidden,
+  points/.is choice,
+  points/.value required,
+  points/.unknown/.code={\NGE@ifnonnegativenumber{\pgfkeyscurrentname}
+    {\setcounter{NGEtaskpoints}{\pgfkeyscurrentname}}
+    {\ClassError{ngetest}{unknown points setting `\pgfkeyscurrentname'}{}}},
+  points/parts/.style={/NGE/tasks/\arabic{NGE@taskwithpoints}/points/.try,
+    /NGE/tasks/NGE@task/points/.retry=0,
+    /NGE/tasks/parts/options/showpoints,
+    /NGE/tasks/NGE@task/head/post hook/.append code={%
+      \setcounter{NGE@taskpoints}{0}},
+      /NGE/tasks/NGE@task/post hook/.append code={%
+        \protected@write{\NGE@out}{}
+        {\string\pgfkeys{%
+            /NGE/test/tasks/\arabic{NGE@taskwithpoints}/points/.initial={%
+            \arabic{NGE@taskpoints}}}}}},
+  options/note/.initial={},
+  options/note/.value required,
+  options/note/font/.initial={\itshape},
+  options/note/font/.value required,
+  options/head/font/.initial={\bfseries},
+  options/head/font/.value required,
+  options/head/punctuation/.initial={.},
+  options/head/punctuation/.value required,
+  options/pre hook/.initial={},
+  options/post hook/.initial={},
+  head/post hook/.code={\setcounter{NGE@taskpart}{0}},
+  options/font/.initial={\normalfont},
+  options/font/.value required,
+  options/.unknown/.code={%
+    \ClassError{ngetest}{unknown task option `\pgfkeyscurrentname'}{}},
+  options/note/.unknown/.code={%
+    \ClassError{ngetest}{unknown task note option `\pgfkeyscurrentname'}{}},
+  options/head/.unknown/.code={%
+    \ClassError{ngetest}{unknown task head option `\pgfkeyscurrentname'}{}},
+  post hook/.code={}
+}
+\newcommand{\NGE@tasknamewithtag}{%
+  \ifx\NGE@tasktag\@empty%
+    \ifx\NGE@taskname\@empty%
+      \ClassWarning{ngetest}{empty task head in unnumbered task}%
+    \else\NGE@taskname\fi%
+  \else%
+    \ifx\NGE@taskname\@empty%
+      \NGE@tasktag%
+    \else\NGE@taskname\space\NGE@tasktag\fi%
+  \fi}
+\newcommand{\NGE@showpointscounter}[1]{\arabic{#1} point%
+  \ifthenelse{\value{#1}=1}{}{s}}
+\newcommand{\NGE@ifnonnegativenumber}[3]{%
+  \ifcat_\ifnum9<1#1 _\else A\fi #2\else #3\fi}
+\newboolean{NGE@showtaskpartpoints}
+\pgfqkeys{/NGE/tasks/parts}{%
+  options/showpoints/.is if=NGE@showtaskpartpoints,
+  options/showpoints/.default=true,
+  options/hidepoints/.style={showpoints=false}}
+\newwrite\NGE@out
+\AtBeginDocument{%
+  \InputIfFileExists{\jobname.nge}{}{}
+  \ifthenelse{\boolean{@filesw}}{%
+    \immediate\openout\NGE@out\jobname.nge%
+    \immediate\write\NGE@out{\relax}}{}}
+\newcommand{\newtask}[2][]{%
+  \newenvironment{#2}[1][]{%
+    \def\NGE@taskpath{/NGE/tasks/declared/#2}
+    \pgfkeys{\NGE@taskpath/initialize/.style={numbered,showpoints,#1}}
+    \begin{NGE@task}[##1]}{\end{NGE@task}}}
+\pgfqkeys{/NGE/tasks/NGE@task/initialize}{
+  .unknown/.code={%
+    \let\NGE@taskoption=\pgfkeyscurrentname%
+    \pgfkeysalso{/NGE/tasks/NGE@task/options/\NGE@taskoption=#1}},
+    points/.style={/NGE/tasks/NGE@task/options/points/.initial=#1}}
+
+\newcounter{NGE@taskpartdepth}
+\newcounter{NGE@taskpart}
+%\iffalse
+%<*hide>
+%\fi
+\renewcommand{\theNGE@taskpart}{\alph{NGE@taskpart}}
+\newcommand{\labelNGE@taskpart}{\theNGE@taskpart).}
+\newcounter{NGE@taskppart}[NGE@taskpart]
+\renewcommand{\theNGE@taskppart}{\arabic{NGE@taskppart}}
+\renewcommand{\p@NGE@taskppart}{\theNGE@taskpart}
+\newcommand{\labelNGE@taskppart}{\p@NGE@taskppart.\theNGE@taskppart).}
+\newcounter{NGE@taskpppart}[NGE@taskppart]
+\renewcommand{\theNGE@taskpppart}{\arabic{NGE@taskpppart}}
+\renewcommand{\p@NGE@taskpppart}{\theNGE@taskpart.\theNGE@taskppart}
+\newcommand{\labelNGE@taskpppart}{\p@NGE@taskpppart-\theNGE@taskpppart).}
+\newboolean{NGE@showtaskpartpoints}
+\newboolean{NGE@showtaskppartpoints}
+\newboolean{NGE@showtaskpppartpoints}
+\newcounter{NGE@taskpartpoints}
+\newcounter{NGE@taskppartpoints}
+\newcounter{NGE@taskpppartpoints}
+\newenvironment{taskparts}[1][]{%
+  \let\part=\NGE@part%
+  \stepcounter{NGE@taskpartdepth}%
+  \ifthenelse{\value{NGE@taskpartdepth}>3}{%
+    \ClassError{ngetest}{%
+      parts nesting level is too deep,\MessageBreak
+      only three levels are allowed}{}}
+  {\pgfkeys{/NGE/tasks/parts/depth=\arabic{NGE@taskpartdepth}}}%
+  \edef\NGE@taskpartcounter{NGE@task\NGE@taskpartprefix part}%
+  \edef\NGE@labeltaskpart{%
+    \csname labelNGE@task\NGE@taskpartprefix part\endcsname}%
+  \edef\NGE@taskpartpointscounter{NGE@task\NGE@taskpartprefix partpoints}%
+  \pgfqkeys{/NGE/tasks/parts/options}{#1}%
+  \begin{list}{\NGE@labeltaskpart}{%
+    \renewcommand{\makelabel}[1]{\hss\llap{##1}}}}
+{\end{list}\addtocounter{NGE@taskpartdepth}{-1}}
+\pgfqkeys{/NGE/tasks/parts}{%
+  depth/.is choice,
+  depth/.value required,
+  depth/1/.code={%
+    \def\NGE@taskpartprefix{}%
+    \newcommand{\NGE@showpartpointsswitch}{NGE@showtaskpartpoints}
+  },
+  depth/2/.code={%
+    \def\NGE@taskpartprefix{p}%
+  },
+  depth/3/.code={%
+    \def\NGE@taskpartprefix{pp}%
+  },
+}
+\newcommand{\NGE@part}[1][]{%
+  \pgfqkeys{/NGE/tasks/part/options}{#1}%
+  \stepcounter{\NGE@taskpartcounter}
+}
+\pgfqkeys{/NGE/tasks/part}{}
+%\iffalse
+%</hide>
+%\fi
+%    \end{macrocode}
+%\iffalse
+%<*hide>
+%\fi
 % In this section we define the generic environment for problems and
 % questions, and provide means for its customization.  We define also
 % the supporting macros for handling parts and subparts, points
@@ -976,6 +1177,51 @@
 % means.  All this makes tasks the most complex part of
 % \latexclass{ngetest}.
 %
+% We need to consider the following.  Tasks must allow for points
+% assignment to them.  These points may be either assigned directly,
+% or collected from points assignments to tasks parts.  It should be
+% possible to display or hide the number of assigned points, as
+% necessary. Tasks should also allow specification of additional
+% information in its header, similar to theorem environments.  In fact
+% one may even want to use already defined theorem-like environments
+% as tasks, so we should allow for splicing points support into such
+% environments.
+%
+% For this we introduce task styles: tasks of the same style share
+% options definitions and behave similarly.  Initially no tasks are
+% declared, the have to be created with |\newtask| command.
+% 
+% We declare the generic environment |NGE@task|, which processes
+% options and passes the control further.  It uses variables
+% |\NGE@taskpath| and |\NGE@stylepath| to do all the work.  
+%    \begin{macrocode}
+\newenvironment{NEW@NGE@task}[2]{%
+  \pgfqkeys{/NGE/tasks/NGE@task/options}{#1}%
+  \pgfqkeys{\NGE@stylepath/options}{#2}%
+  \pgfkeys{\NGE@stylepath/process options}%
+  \pgfkeys{\NGE@taskpath/begin/.try,
+    \NGE@taskpath/begin/.retry}}
+{\pgfkeys{\NGE@taskpath/end/.try,\NGE@taskpath/end/.retry}}
+\pgfqkeys{/NGE/tasks/NGE@task/options}{
+  .unknown/.code={},
+  style/.code={\def\NGE@stylepath{/NGE/tasks/styles/#1},
+  style/.value required}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\newcommand{\NEWnewtask}[2]{%
+  \pgfqkeys{/NGE/tasks/newtask/options}{#2}
+% here we need only style and environment options
+  \newenvironment{#1}{\begin{NEW@NGE@task}{#1}{##2}}{\end{NEW@NGE@task}}
+}
+%    \end{macrocode}
+%    \begin{macrocode}
+\pgfqkeys{/NGE/tasks/.declare}{
+  style/.style={/NGE/tasks/styles/#1/.cd,
+  options/style/.code={}}}
+\pgfkeys{/NGE/tasks/.declare/style=plain,
+  /NGE/tasks/.declare/style=theorem,
+  /NGE/tasks/.declare/style=nge}
+%    \end{macrocode}
 %    \begin{macrocode}
 \newenvironment{NGE@task}[1][]{%
   \def{\NGE@taskpath}{/NGE/tasks/NGE@task}%
@@ -1061,8 +1307,6 @@
        {}%
      }
       }}
-\newcommand{\NGE@ifnonnegativenumber}[3]{%
-  \ifcat_\ifnum9<1#1 _\else A\fi #2\else #3\fi}
 %    \end{macrocode}
 % We also introduce counters for keeping track of number of points,
 % assigned to each task.
@@ -1539,15 +1783,12 @@
 %    \begin{macrocode}
 %    \end{macrocode}
 %    \begin{macrocode}
-\newwrite\NGE@out
-\AtBeginDocument{%
-  \InputIfFileExists{\jobname.nge}{}{}
-  \ifthenelse{\boolean{@filesw}}{%
-    \immediate\openout\NGE@out\jobname.nge%
-    \immediate\write\NGE@out{\relax}}{}}
 %    \end{macrocode}
 %
 %
+%\iffalse
+%</hide>
+%\fi
 %\iffalse
 %<*hide>
 %\fi
@@ -1634,7 +1875,17 @@
 %    \begin{macrocode}
 %    \end{macrocode}
 % 
-%
+%^^A\newenvironment{proof}[1][\proofname]{\par
+%^^A \pushQED{\qed}%
+%^^A \normalfont \topsep6\p@\@plus6\p@\relax
+%^^A \trivlist
+%^^A \item[\hskip\labelsep
+%^^A \itshape
+%^^A #1\@addpunct{.}]\ignorespaces
+%^^A }{%
+%^^A \popQED\endtrivlist\@endpefalse
+%^^A }
+
 % \subsection{Marking guide}
 % \label{sec:code-ngetest-marking-guide}
 %
@@ -1678,7 +1929,6 @@
 % \iffalse
 %<*test>
 \documentclass[12pt]{ngetest}
-
 %%%
 \makeatletter
 \newcommand{\showkey}[1]{%
@@ -1694,7 +1944,8 @@
 %%%
 \newtask{NGEtask}
 \newcounter{problem}
-\newtask[name=Problem, counter=problem, points=5]{problem}
+\newtask[name=Problem,counter=problem,points=5]{problem}
+%<*hide>
 \usepackage{amsthm}
 \theoremstyle{plain}
 \newtheorem{exercise}{Exercise}
@@ -1720,7 +1971,10 @@
   \ifkeymode{key mode}}
 \instructor{A.~N.~Onym}
 \course[Course]{Course name}
+
+%</hide>
 \begin{document}
+%<*hide>
 \maketitle
 
 This is a test file for class \texttt{ngetest}.
@@ -1775,9 +2029,8 @@ This is a test file for class \texttt{ngetest}.
   This is a generic comment.  It must never be visible unless revealed
   explicitely with \verb+\includeversion+.
 \end{comment}
-
+%</hide>
 \subsection*{Tasks}
-
 First we test environment in \texttt{nge} style with default configuration.
 \begin{NGEtask}
   This is the default task with default settings.
@@ -1800,7 +2053,7 @@ First we test environment in \texttt{nge} style with default configuration.
 \begin{NGEtask}[font=\sffamily]
   This is a task with modified body font.
 \end{NGEtask}
-\begin{NGEtask}[head={}]
+\begin{NGEtask}%[head={}]
   This is a task with disabled header.
 \end{NGEtask}
 \begin{NGEtask}[head/font={\ttfamily}]
@@ -1846,6 +2099,7 @@ the previous sequence of tasks.
 \begin{problem}
   Last problem with default settings.
 \end{problem}
+%<*hide>
 
 Let us continue with task options testing.
 \begin{NGEtask}[points=parts]
@@ -1943,7 +2197,9 @@ Finally we here are a couple of tasks in \texttt{amsthm} style.
 
 Altogether there were \theNGEpointstotal\ points assigned to
 \theNGE@task\ tasks.
-
+%\iffalse
+%</hide>
+%\fi
 %\iffalse
 %<*hide>
 %\fi

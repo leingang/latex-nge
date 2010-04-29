@@ -16,7 +16,7 @@
 %
 % \fi
 % \iffalse 
-\input nged.def
+\input{nged.def}
 %\NeedsTeXFormat{LaTeX2e}
 %<examclass>\def\ngefiledescription{NGED class for math exams}           \ProvidesClass{ngeexam}
 %<quizclass>\def\ngefiledescription{NGED class for math quizzes}         \ProvidesClass{ngequiz}
@@ -37,7 +37,10 @@
 %</dtx>
 [\ngefiledate\space \ngefileversion\space \ngefiledescription]
 %<*driver>
-\documentclass{ltxdoc}
+%^^A Switching to the amsdtx class because it provides nice indexing hooks.
+%^^A Oops: but it loses the \changes stuff which we always kind of liked
+%^^A Maybe just copy and hack?
+\documentclass{amsdtx}
 \usepackage{url}
 \usepackage{units}
 \usepackage{hyperref}
@@ -71,14 +74,25 @@
 %   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %   Right brace   \}     Tilde         \~}
 %
-% \newcommand\LaTeXClass[1]{\textsf{#1}}
-% \newcommand\LaTeXPackage[1]{\textsf{#1}}
-% \newcommand\LaTeXOption[1]{\textsf{#1}}
-% \newcommand\LaTeXFile[1]{\texttt{#1}}
-% \newcommand\LaTeXEnvironment[1]{\texttt{#1}}
-% \newcommand\option[1]{\texttt{#1}}
+%^^A Not using these anymore.  The \cls{amdtx} class has good commands
+%^^A for indexing these different strings.  Unfortunately, it sets them all
+%^^A in the same font (\tt).
+% \newcommand\LaTeXClass[1]{\textsf{#1}}           %^^A use \cls instead
+% \newcommand\LaTeXPackage[1]{\textsf{#1}}         %^^A use \pkg instead
+% \newcommand\LaTeXOption[1]{\textsf{#1}}          %^^A use \opt instead
+% \newcommand\LaTeXFile[1]{\texttt{#1}}            %^^A use \fn  instead
+% \newcommand\LaTeXEnvironment[1]{\texttt{#1}}     %^^A use \env instead
+%^^A TODO: hack e.g. |\cls| to |\let\ntt| be something use like |\nsf|
+% 
+% \newcommand{\oarg}[1]{[\meta{#1}]}
+% \newcommand{\marg}[1]{\{\meta{#1}\}}
+%^^A This one is for optional arguments to commands, 
+%^^A not class/package options, so I think it needs another name
+%^^A oops: already defined?
+% \renewcommand\option[1]{\texttt{#1}}
 % \newcommand{\truefalse}{\normalfont\texttt{true}/\texttt{false}}
 % \newcommand\nged{\textsf{nged}\xspace}
+% \MakeShortVerb{\|}
 %
 % \newenvironment{TODO}{\par\noindent\textbf{TODO:}}{\par}
 % \renewenvironment{TODO}{\noindent\marginpar{\hfill{\sffamily\bfseries TODO}}}{\par}
@@ -342,17 +356,17 @@
 % \subsection{Document Classes}
 % \subsubsection{Prerequisites}
 %
-% These is all derived from the \LaTeXClass{article} class.
+% These is all derived from the \cls{article} class.
 %    \begin{macrocode}
 %<*examclass|quizclass|worksheetclass>
 \LoadClass{article}
 %    \end{macrocode}
-% We use the package \LaTeXPackage{amsthm} because it gives us
+% We use the package \pkg{amsthm} because it gives us
 % the ability to define nice environments like ``hint'' and ``solution''
 %    \begin{macrocode}
 \RequirePackage{amsthm}
 %    \end{macrocode}
-% This package enables the \LaTeXEnvironment{comment} environment\dots very useful.
+% This package enables the \env{comment} environment\dots very useful.
 %    \begin{macrocode}
 \RequirePackage{verbatim}
 %    \end{macrocode}
@@ -363,7 +377,7 @@
 %    \end{macrocode}
 %
 % There are several pieces to an exam: the problems, the solutions, the grading key, and 
-% notes in case the exam is repeated.   The \LaTeXPackage{versions} package manages the 
+% notes in case the exam is repeated.   The \pkg{versions} package manages the 
 % conditional compiling of code.  It is not in the te\TeX\ distribution but it is in \TeX{}live and on CTAN.
 %    \begin{macrocode}
 \RequirePackage{versions}
@@ -487,7 +501,7 @@
 %
 % Mathematicians like to call out paragraphs with a word like
 % ``remark:'' or ``note.''  Various such are defined here.
-% These use the |\newtheorem| command from the \LaTeXPackage{amsthm} package.
+% These use the |\newtheorem| command from the \pkg{amsthm} package.
 %
 % \begin{environment}{hint}
 % \changes{v0.2.2}{2002/04/11}{added the hint environment}
@@ -645,9 +659,9 @@
 % \subsubsection{Solutions Mode}
 % In the solutions version
 % \begin{itemize}
-% \item The contents of the \LaTeXEnvironment{inexamonly} environment are ignored
-% \item The contents of the \LaTeXEnvironment{insolutions} environment are passed along without change
-% \item The contents of the \LaTeXEnvironment{solution} environment
+% \item The contents of the \env{inexamonly} environment are ignored
+% \item The contents of the \env{insolutions} environment are passed along without change
+% \item The contents of the \env{solution} environment
 % are typeset solutions in red and with a QED symbol at the end.
 % \end{itemize}
 % First we have to initialize the environments
@@ -695,8 +709,8 @@
 % \end{environment}
 %
 % In the \textbf{absence} of solutions mode, we disable the 
-% \LaTeXEnvironment{solutions} environment by letting its start and end commands
-% be those of \LaTeXEnvironment{comment}.
+% \env{solutions} environment by letting its start and end commands
+% be those of \env{comment}.
 %    \begin{macrocode}
 {\message{(* solutions mode off *)}
 \let\solution=\comment
@@ -709,8 +723,8 @@
 % But they really only need to be available in the exam version.
 %
 % \begin{TODO}
-% Perhaps this needs to be folded into the \LaTeXEnvironment{enumerate} environment inside of
-% \LaTeXEnvironment{problem}?
+% Perhaps this needs to be folded into the \env{enumerate} environment inside of
+% \env{problem}?
 % \end{TODO} 
 %    \begin{macrocode} 
 \newcommand{\examvfill}{\vfill}
@@ -816,8 +830,8 @@
 %
 %   For exams, we want a big title to go on a title page.
 %
-%   This is the |\maketitle| from \LaTeXClass{article} when using the
-%   \LaTeXOption{titlepage} option.  The only difference is that
+%   This is the |\maketitle| from \cls{article} when using the
+%   \opt{titlepage} option.  The only difference is that
 %   |\@author| is replaced by |\@course|.
 %    \begin{macrocode}
 %<*examclass>
@@ -1152,7 +1166,7 @@
 \gdef\problemfont{\normalfont}
 %    \end{macrocode}
 % \begin{TODO}
-%   Use \LaTeXPackage{pgfkeys} to handle all styling
+%   Use \pkg{pgfkeys} to handle all styling
 % \end{TODO}
 % \end{macro}
 % 

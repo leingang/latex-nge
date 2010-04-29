@@ -73,16 +73,30 @@ and version 1.2 or later is part of all distributions of LaTeX version
 %
 %    \begin{macrocode}
 \documentclass{minimal}
+%    \end{macrocode}
+%
+% \subsection{Subversion keywords}
+%
+% The \pkg{svninfo} package parses keywords substituted into the file by the 
+% subversion source control system.
+% 
+%    \begin{macrocode}
 \usepackage{svninfo}
-\svnInfo $Id: nged.dtx 516 2009-08-28 20:11:08Z leingang $
-\svnKeyword $HeadURL: https://subversive.cims.nyu.edu/mathclinical/nged/branches/3.0-dev1/nged.dtx $
+\svnInfo $Id$
+\svnKeyword $HeadURL$
 \edef\ngefiledate{\svnInfoMaxYear/\svnInfoMaxMonth/\svnInfoMaxDay}
 %    \end{macrocode}
 %   
+% \subsubsection{Package version information}
+%
+% We are additionally parsing the URL of the working copy in the repository to set
+% version tags. 
+%
 % I think at some point this snippet of code should be part of a package, but it needs scoping.
 % Many parsed files (documents and packages) could have subversion information.
 % I think the better implementation would be to store in a hash based on \jobname or \@currname,
-% or maybe just to give an argument to |\parseSvnInfoHeadURL| that will prefix the csname.
+% or maybe just to give an argument to |\parseSvnInfoHeadURL| that will prefix the csname if the user
+% wants to parse to information.
 %
 %    \begin{macrocode}
 % parse the URL to get the branch/tag/trunk
@@ -122,7 +136,11 @@ and version 1.2 or later is part of all distributions of LaTeX version
 	\xdef\ngefileversion{v\ngesvnInfoTag}
 \fi
 \makeatother
-
+%    \end{macrocode}
+%
+% \subsection{Writing the config file}
+%
+%    \begin{macrocode}
 \newwrite\configfile
 \immediate\openout\configfile=nged.def
 \immediate\write\configfile{\string\def\string\ngefiledate{\ngefiledate}}

@@ -16,28 +16,26 @@
 %
 % \fi
 % \iffalse 
+\input nged.def
 %\NeedsTeXFormat{LaTeX2e}
-\usepackage{svninfo}
-\svnInfo $Id$
-\svnKeyword $HeadURL$
-%<examclass>\ProvidesClass{ngeexam}
-%<quizclass>\ProvidesClass{ngequiz}
-%<worksheetclass>\ProvidesClass{ngewksht}
-%<driver>\ProvidesFile{ngeexam.drv}
-%<example>\ProvidesFile{example.tex}
-%<examunit1>\ProvidesFile{test_ngeexam1.tex}
-%<examunit2>\ProvidesFile{test_ngeexam2.tex}
-%<examunit3>\ProvidesFile{test_ngeexam3.tex}
-%<forms>\ProvidesPackage{ngeform}
-%<problems>\ProvidesPackage{ngeprob}
-%<versions>\ProvidesPackage{ngever}
-%<variants>\ProvidesPackage{ngevar}
-%<modes>\ProvidesPackage{ngemode}
-%<misc>\ProvidesPackage{ngemisc}
+%<examclass>\def\ngefiledescription{NGED class for math exams}           \ProvidesClass{ngeexam}
+%<quizclass>\def\ngefiledescription{NGED class for math quizzes}         \ProvidesClass{ngequiz}
+%<worksheetclass>\def\ngefiledescription{NGED class for math worksheets} \ProvidesClass{ngewksht}
+%<driver>\def\ngefiledescription{NGED driver}                            \ProvidesFile{ngeexam.drv}
+%<example>\def\ngefiledescription{NGED Example exam}                     \ProvidesFile{example.tex}
+%<examunit1>\def\ngefiledescription{NGED Unit Test 1}                    \ProvidesFile{test_ngeexam1.tex}
+%<examunit2>\def\ngefiledescription{NGED Unit Test 2}                    \ProvidesFile{test_ngeexam2.tex}
+%<examunit3>\def\ngefiledescription{NGED Unit Test 3}                    \ProvidesFile{test_ngeexam3.tex}
+%<forms>\def\ngefiledescription{NGED package for exam/quiz forms}        \ProvidesPackage{ngeform}
+%<problems>\def\ngefiledescription{NGED package for problem structure}   \ProvidesPackage{ngeprob}
+%<versions>\def\ngefiledescription{NGED package for versioning}          \ProvidesPackage{ngever}
+%<variants>\def\ngefiledescription{NGED package for variants}            \ProvidesPackage{ngevar}
+%<modes>\def\ngefiledescription{NGED package for document modes}         \ProvidesPackage{ngemode}
+%<misc>\def\ngefiledescription{NGED miscellaneous package}               \ProvidesPackage{ngemisc}
 %<*dtx>
-\ProvidesFile{\jobname.dtx}
+\def\ngefiledescription{NGED source file}\ProvidesFile{\jobname.dtx}
 %</dtx>
- [2009/04/02 v3.0-dev (Matthew Leingang)]
+[\ngefiledate\space \ngefileversion\space \ngefiledescription]
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage{url}

@@ -317,8 +317,11 @@ And some examples.
 % \DoNotIndex{\begin,\end}
 % \DoNotIndex{\(,\[,\],\),\item,\myvector,\mymatrix,
 %             \Span,\FiniteSet,\setS}
+% 
+%    
 %
-% \title{\nged: A Next Generation Educational Bundle \\ Version \ngefileversion}
+% \title{\nged: A Next Generation Educational Bundle \\ 
+%        Version \ngefileversion, revision \svnInfoMaxRevision}
 % \author{Matthew Leingang \\ leingang@courant.nyu.edu}
 %
 %
@@ -352,9 +355,11 @@ And some examples.
 %
 % \subsection{Other classes which do this kind of thing}
 %
-% Look at examdesign, mathexam, and exam.
+% Look at \cls{examdesign}, \cls{mathexam}, and \cls{exam}.
 % 
-% \section{Exams}
+% \section{Classes}
+%
+% \subsection{Exams}
 %
 % \DescribeMacro{\course\oarg{shortname}\marg{name}} Sets the name of
 % the course to be \meta{name} for typsetting in the document title.
@@ -364,17 +369,18 @@ And some examples.
 % \course[Math 1a]{Math 1a: Introduction to Calculus}
 % \end{verbatim}
 % 
-% \section{Quizzes}
+% \subsection{Quizzes}
 %
 % |\maketitle| produces something more compact to allow for more room on the page.
 %
-% \section{Worksheets}
+% \subsection{Worksheets}
 %
 % Nothing here yet.
 %
-% \section{Problems and their parts}
+% \section{Packages}
+% \subsection{Problems and their parts}
 %
-% \section{Answer forms}
+% \subsection{Answer forms}
 %
 %
 % When typesetting documents used as assessments in a learning
@@ -440,7 +446,7 @@ And some examples.
 %   separate file.  The default is \texttt{false}.
 % \end{description}
 %
-% \section{Document modes}
+% \subsection{Document modes}
 %
 % By \defined{mode} we mean a production of the assessment intended for a specific audience at a specific time:
 % \begin{itemize}
@@ -451,13 +457,13 @@ And some examples.
 % \item In assessment mode, notes about the problems and the students' performance are included along with the answers, solutions, and rubrics (audience: teachers, including older, more experienced forms of the original author)
 % \end{itemize}
 %
-% \section{Document variants}
+% \subsection{Document variants}
 %
 % By \defined{variant} we mean a production of the assessment
 % similar to the original, differing only in minor ways to promote academic
 % honesty.
 %
-% \section{Document versions}
+% \subsection{Document versions}
 %
 % By \defined{version} we mean an instance of the master document
 % marked by a point in the document's development, as in software development.
@@ -474,7 +480,7 @@ And some examples.
 % as in a docstrip file.  As of this version this command produces no
 % output.
 %
-% \section{Miscellaneous eye candy}
+% \subsection{Miscellaneous eye candy}
 %
 % \DescribeEnv{centeredpage}
 % Put the enclosed text by itself on a page, centered vertically.
@@ -529,7 +535,7 @@ And some examples.
 %
 % Then I define my commands, using the docstrip mode specifications to undo some if I need to.  
 %
-% One pass of \LaTeX\ on the |.dtx| file produces all the versions.  Then I \LaTeX\ one of 
+% One pass of \LaTeX\ on the \fn{.dtx} file produces all the versions.  Then I \LaTeX\ one of 
 % them to get the file
 %
 % Advantages:

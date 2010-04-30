@@ -1,61 +1,271 @@
-% \iffalse (This is a meta-comment)
+% \iffalse meta-comment
+% !TEX program  = pdfLaTeX
 % $Id$
-%
-% Copyright (C) 2003--2009 Matthew Leingang <leingang@courant.nyu.edu>
-% --------------------------------------------------------------------
-% 
-% This file may be distributed and/or modified under the
-% conditions of the LaTeX Project Public License, either version 1.2
-% of this license or (at your option) any later version.
-% The latest version of this license is in:
-%
-%    http://www.latex-project.org/lppl.txt
-%
-% and version 1.2 or later is part of all distributions of LaTeX 
-% version 1999/12/01 or later.
-%
-% \fi
-% \iffalse 
-\input{nged.def}
-%\NeedsTeXFormat{LaTeX2e}
-%<examclass>\def\ngefiledescription{NGED class for math exams}           \ProvidesClass{ngeexam}
-%<quizclass>\def\ngefiledescription{NGED class for math quizzes}         \ProvidesClass{ngequiz}
-%<worksheetclass>\def\ngefiledescription{NGED class for math worksheets} \ProvidesClass{ngewksht}
-%<driver>\def\ngefiledescription{NGED driver}                            \ProvidesFile{ngeexam.drv}
-%<example>\def\ngefiledescription{NGED Example exam}                     \ProvidesFile{example.tex}
-%<examunit1>\def\ngefiledescription{NGED Unit Test 1}                    \ProvidesFile{test_ngeexam1.tex}
-%<examunit2>\def\ngefiledescription{NGED Unit Test 2}                    \ProvidesFile{test_ngeexam2.tex}
-%<examunit3>\def\ngefiledescription{NGED Unit Test 3}                    \ProvidesFile{test_ngeexam3.tex}
-%<forms>\def\ngefiledescription{NGED package for exam/quiz forms}        \ProvidesPackage{ngeform}
-%<problems>\def\ngefiledescription{NGED package for problem structure}   \ProvidesPackage{ngeprob}
-%<versions>\def\ngefiledescription{NGED package for versioning}          \ProvidesPackage{ngever}
-%<variants>\def\ngefiledescription{NGED package for variants}            \ProvidesPackage{ngevar}
-%<modes>\def\ngefiledescription{NGED package for document modes}         \ProvidesPackage{ngemode}
-%<misc>\def\ngefiledescription{NGED miscellaneous package}               \ProvidesPackage{ngemisc}
+% $HeadURL$
+% See http://www.texdev.net/2009/10/06/a-model-dtx-file/ 
+% for information about the organization of this file
+%<*internal>
+\iffalse
+%</internal>
+%<*readme>
+----------------------------------------------------------------
+NGEd --- A Next Generation Educational Bundle
+by Matthew Leingang <leingang@courant.nyu.edu>
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+ABOUT THIS PROJECT
+
+CLASSES AND PACKAGES
+
+INSTALLATION INFORMATION
+
+%</readme>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+%\keepsilent
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+NGEd --- A Next Generation Educational Bundle
+by Matthew Leingang <leingang@courant.nyu.edu>
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+\endpreamble
+\postamble
+
+Copyright (C) 2010 by Matthew Leingang <leingang@courant.nyu.edu>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+
+This work consists of the file  nged.dtx
+and the derived files           ngeexam.cls
+                                ngequiz.cls
+                                ngewksht.cls
+                                ngeform.sty
+                                ngeprob.sty
+                                ngever.sty
+                                ngevar.sty
+                                ngemode.sty
+                                ngemisc.sty
+                                nged.drv
+
+And some examples.
+
+\endpostamble
+\usedir{tex/latex/demopkg}
+\generate{\file{ngeexam.cls}{\from{\jobname.dtx}{examclass}}
+          \file{ngequiz.cls}{\from{\jobname.dtx}{quizclass}}
+          \file{ngewksht.cls}{\from{\jobname.dtx}{worksheetclass}}
+          \file{ngeform.sty}{\from{\jobname.dtx}{forms}}
+          \file{ngeprob.sty}{\from{\jobname.dtx}{problems}}         
+          \file{ngever.sty}{\from{\jobname.dtx}{versions}}         
+          \file{ngevar.sty}{\from{\jobname.dtx}{variants}}
+          \file{ngemode.sty}{\from{\jobname.dtx}{modes}}
+          \file{ngemisc.sty}{\from{\jobname.dtx}{misc}}
+          \file{\jobname.drv}{\from{\jobname.dtx}{driver}}
+	      \file{example.tex}{\from{\jobname.dtx}{example}}
+          \file{test_exam1.tex}{\from{\jobname.dtx}{examunit1}}
+          \file{test_exam2.tex}{\from{\jobname.dtx}{examunit2}}
+          \file{test_exam3.tex}{\from{\jobname.dtx}{examunit3}}
+}
+
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/demopkg}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/demopkg}
+\generate{
+  \file{README.txt}{\from{\jobname.dtx}{readme}}
+}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+\RequirePackage{svninfo}
+\svnInfo $Id$
+\svnKeyword $HeadURL$
+\edef\ngefiledate{\svnInfoMaxYear/\svnInfoMaxMonth/\svnInfoMaxDay}
+\makeatletter
+\def\svnInfoBranch{--branch--}
+\def\svnInfoTag{--tag--}
+\newboolean{ngesvnurlisbranch}
+\newboolean{ngesvnurlistag}
+\newboolean{ngesvnurlistrunk}
+\def\@parseSvnInfoHeadURL@branchflag{branches}
+\def\@parseSvnInfoHeadURL@tagflag{tags}
+\def\@parseSvnInfoHeadURL@trunkflag{trunk}
+\def\@parseSvnInfoHeadURL@branch#1/#2/\relax/{%
+  \setboolean{ngesvnurlisbranch}{true}%
+  \xdef\ngesvnInfoBranch{#1}}
+\def\@parseSvnInfoHeadURL@tag#1/#2/\relax/{%
+  \setboolean{ngesvnurlistag}{true}%
+  \xdef\ngesvnInfoTag{#1}}
+\def\@parseSvnInfoHeadURL@trunk#1/\relax/{%
+  \setboolean{ngesvnurlistrunk}{true}}
+\def\parseSvnInfoHeadURL{\expandafter\@parseSvnInfoHeadURL\svnInfoHeadURL/\relax/}
+\def\@parseSvnInfoHeadURL#1/{
+	\let\@parseSvnInfoHeadURL@next=\relax
+	\ifx\relax#1
+		\let\@parsesvnInfoHeadURL@next=\empty%
+	\else
+		\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@branchflag}}
+			{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@branch}
+		    {\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@tagflag}}
+				{\expandafter\@parseSvnInfoHeadURL@tag}
+				{\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@trunkflag}}
+					{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@trunk}
+					{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL}}}
+	\fi
+	\expandafter\@parseSvnInfoHeadURL@next
+}
+\parseSvnInfoHeadURL
+\ifthenelse{\boolean{ngesvnurlisbranch}}{
+  \xdef\ngefileversion{b\ngesvnInfoBranch}
+  }{
+  \ifthenelse{\boolean{ngesvnurlistag}}{
+    \xdef\ngefileversion{v\svnInfoTag}
+    }{
+    \xdef\ngefileversion{r\svnInfoMaxRevision}}}
+\makeatother
+\NeedsTeXFormat{LaTeX2e}
+%<examclass>\def\ngefileinfo{NGED class for math exams}           \ProvidesClass{ngeexam}
+%<quizclass>\def\ngefileinfo{NGED class for math quizzes}         \ProvidesClass{ngequiz}
+%<worksheetclass>\def\ngefileinfo{NGED class for math worksheets} \ProvidesClass{ngewksht}
+%<driver>\def\ngefileinfo{NGED driver}                            \ProvidesFile{ngeexam.drv}
+%<example>\def\ngefileinfo{NGED Example exam}                     \ProvidesFile{example.tex}
+%<examunit1>\def\ngefileinfo{NGED Unit Test 1}                    \ProvidesFile{test_ngeexam1.tex}
+%<examunit2>\def\ngefileinfo{NGED Unit Test 2}                    \ProvidesFile{test_ngeexam2.tex}
+%<examunit3>\def\ngefileinfo{NGED Unit Test 3}                    \ProvidesFile{test_ngeexam3.tex}
+%<forms>\def\ngefileinfo{NGED package for exam/quiz forms}        \ProvidesPackage{ngeform}
+%<problems>\def\ngefileinfo{NGED package for problem structure}   \ProvidesPackage{ngeprob}
+%<versions>\def\ngefileinfo{NGED package for versioning}          \ProvidesPackage{ngever}
+%<variants>\def\ngefileinfo{NGED package for variants}            \ProvidesPackage{ngevar}
+%<modes>\def\ngefileinfo{NGED package for document modes}         \ProvidesPackage{ngemode}
+%<misc>\def\ngefileinfo{NGED miscellaneous package}               \ProvidesPackage{ngemisc}
 %<*dtx>
-\def\ngefiledescription{NGED source file}\ProvidesFile{\jobname.dtx}
+\def\ngefileinfo{NGED source file}\ProvidesFile{\jobname.dtx}
 %</dtx>
-[\ngefiledate\space \ngefileversion\space \ngefiledescription]
+[\ngefiledate\space \ngefileversion\space \ngefileinfo]
+%    \begin{macrocode}
 %<*driver>
-%^^A Switching to the amsdtx class because it provides nice indexing hooks.
-%^^A Oops: but it loses the \changes stuff which we always kind of liked
-%^^A Maybe just copy and hack?
-\documentclass{amsdtx}
-\usepackage{url}
+\documentclass{ltxdoc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[numbered]{hypdoc}
+\usepackage{xspace}
 \usepackage{units}
-\usepackage{hyperref}
-\newcommand{\defined}[1]{\textbf{#1}}
-\usepackage{todonotes}
-\EnableCrossrefs         
+\EnableCrossrefs
 \CodelineIndex
 \RecordChanges
-\usepackage{xspace}
+
+% copied from amsdtx.cls
+%    \begin{macrocode}
+\makeatletter
+\let\@xp\expandafter
+\newif\ifcodeline@index
+\newcommand*{\autoindex}[1]{%
+%^^A causes an error.  Something about codeline@index?
+%^^A    \index{#1\ifcodeline@index\encapchar usage\fi}%
+  \index{#1\encapchar usage}
+}
+\newcommand{\ntt}{\normalfont\ttfamily}
+\newcommand*{\indexcs}[1]{%
+    \@xp\@xp\@xp\@indexcs\@xp\@nobslash\string#1\@nil
+}
+\def\@indexcs#1\@nil{%
+    \autoindex{#1\actualchar
+        \string\verb\quotechar*\verbatimchar
+            \@xp\@bothoftwo\string\ #1\@empty
+        \verbatimchar
+    }%
+}
+\def\@bothoftwo#1#2{#1#2}
+\def\category@index#1#2{%
+    {\ntt#2}%
+    \@category@index{#1}{#2}%
+}
+\def\@category@index#1#2{%
+    \autoindex{%
+        #2\actualchar\string\texttt{#2}%
+        \ifx\@nil#1\@nil\else\space#1\fi
+    }%
+}
+\chardef\bslchar=`\\ % p. 424, TeXbook
+\newcommand{\addbslash}{\expandafter\@addbslash\string}
+\def\@addbslash#1{\bslchar\@nobslash#1}
+\newcommand{\nobslash}{\expandafter\@nobslash\string}
+\def\@nobslash#1{\ifnum`#1=\bslchar\else#1\fi}
+\def\@boxorbreak{%
+    \leavevmode
+    \ifmmode\hbox\else\ifdim\lastskip=\z@\penalty9999 \fi\fi
+}
+\DeclareRobustCommand{\cs}[1]{%
+    \@boxorbreak{%
+        \ntt
+        \addbslash#1\@empty
+        \@xp\@xp\@xp\@indexcs\@xp\@nobslash\string#1\@nil
+    }%
+}
+\let\cn\cs
+\DeclareRobustCommand{\cls}{\category@index{class}}
+\DeclareRobustCommand{\pkg}{\category@index{package}}
+\DeclareRobustCommand{\opt}{\category@index{option}}
+\DeclareRobustCommand{\env}[1]{{\ntt#1}\SpecialEnvIndex{#1}}
+\DeclareRobustCommand{\fn}{\category@index{}}
+\DeclareRobustCommand{\bst}{\category@index{\string\BibTeX{} style}}
+\DeclareRobustCommand{\cnt}{\category@index{counter}}
+\DeclareRobustCommand{\fnt}{\category@index{font}}
+\def\allowtthyphens{\begingroup
+  \fontencoding{OT1}\fontfamily{cmtt}%
+  \expandafter\let\csname OT1+cmtt\endcsname\relax
+  \try@load@fontshape
+  \endgroup
+  \expandafter\let\csname OT1+cmtt\endcsname\@empty
+}
+\hfuzz2pc
+\vbadness9999 \hbadness5000
+\def\AmS{{\protect\usefont{OMS}{cmsy}{m}{n}%
+  A\kern-.1667em\lower.5ex\hbox{M}\kern-.125emS}}
+\def\latex/{{\protect\LaTeX}}
+\def\amslatex/{{\protect\AmS-\protect\LaTeX}}
+\def\tex/{{\protect\TeX}}
+\def\amstex/{{\protect\AmS-\protect\TeX}}
+\def\bibtex/{{Bib\protect\TeX}}
+\def\makeindx/{MakeIndex}
+\def\xypic/{XY\mbox{-}pic}
+\newcommand{\Textures}{\textit{Textures}}
+\def\<#1>{\textit{$\langle$#1\/$\rangle$}}
+\makeatother
+%    \end{macrocode}
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
 %</driver>
 % \fi
-%
+% 
 % \CheckSum{0}
 %
 % \CharacterTable
@@ -84,14 +294,10 @@
 % \newcommand\LaTeXEnvironment[1]{\texttt{#1}}     %^^A use \env instead
 %^^A TODO: hack e.g. |\cls| to |\let\ntt| be something use like |\nsf|
 % 
-% \newcommand{\oarg}[1]{[\meta{#1}]}
-% \newcommand{\marg}[1]{\{\meta{#1}\}}
-%^^A This one is for optional arguments to commands, 
-%^^A not class/package options, so I think it needs another name
-%^^A oops: already defined?
-% \renewcommand\option[1]{\texttt{#1}}
+% \newcommand{\option}[1]{\texttt{#1}}
 % \newcommand{\truefalse}{\normalfont\texttt{true}/\texttt{false}}
 % \newcommand\nged{\textsf{nged}\xspace}
+% \newcommand{\defined}[1]{\textbf{#1}}
 % \MakeShortVerb{\|}
 %
 % \newenvironment{TODO}{\par\noindent\textbf{TODO:}}{\par}
@@ -112,7 +318,7 @@
 % \DoNotIndex{\(,\[,\],\),\item,\myvector,\mymatrix,
 %             \Span,\FiniteSet,\setS}
 %
-% \title{\nged: A Next Generation Educational Bundle}
+% \title{\nged: A Next Generation Educational Bundle \\ Version \ngefileversion}
 % \author{Matthew Leingang \\ leingang@courant.nyu.edu}
 %
 %

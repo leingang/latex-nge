@@ -82,7 +82,6 @@ And some examples.
           \file{ngemode.sty}{\from{\jobname.dtx}{modes}}
           \file{ngemisc.sty}{\from{\jobname.dtx}{misc}}
           \file{\jobname.drv}{\from{\jobname.dtx}{driver}}
-          \file{ngesvninfo.sty}{\from{\jobname.dtx}{ngesvninfo}}
 	      \file{example.tex}{\from{\jobname.dtx}{example}}
           \file{test_exam1.tex}{\from{\jobname.dtx}{examunit1}}
           \file{test_exam2.tex}{\from{\jobname.dtx}{examunit2}}
@@ -92,12 +91,12 @@ And some examples.
 %</install>
 %<install>\endbatchfile
 %<*internal>
-\usedir{source/latex/demopkg}
+\usedir{source/latex/nged}
 \generate{
   \file{\jobname.ins}{\from{\jobname.dtx}{install}}
 }
 \nopreamble\nopostamble
-\usedir{doc/latex/demopkg}
+\usedir{doc/latex/nged}
 \generate{
   \file{README.txt}{\from{\jobname.dtx}{readme}}
 }
@@ -109,7 +108,7 @@ And some examples.
 %</internal>
 %    \begin{macrocode}
 \RequirePackage{svnurl}
-\PassOptionsToPackage{nofancy}{svninfo}
+\PassOptionsToPackage{nofancy,final}{svninfo}
 \svnInfo $Id$
 \svnKeyword $HeadURL$
 \edef\ngefiledate{\svnInfoMaxYear/\svnInfoMaxMonth/\svnInfoMaxDay}
@@ -1459,7 +1458,7 @@ And some examples.
 
 \newcommand{\answerbubble}[2][]{%
   % initialize variables
-  \setkeys{answerbubble}{fill=false}
+  \setkeys{answerbubble}{fill=false,correct=false}
   % process options
   \setkeys{answerbubble}{#1}%
   \tikzstyle{answerbubble}=[

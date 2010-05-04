@@ -85,9 +85,9 @@ and the derived files           svnurl.ins,
 \usepackage{lmodern}
 \usepackage{\jobname}
 
-\svnInfo $Id: nged.dtx 768 2010-04-30 04:00:18Z leingang $
-\svnKeyword $HeadURL: https://subversive.cims.nyu.edu/mathclinical/nge/branches/3.0-dev2/nged.dtx $
-\parseSvnInfoHeadURL
+%^^A\svnInfo $Id: nged.dtx 768 2010-04-30 04:00:18Z leingang $
+%^^A\svnKeyword $HeadURL: https://subversive.cims.nyu.edu/mathclinical/nge/branches/3.0-dev2/nged.dtx $
+%^^A\parseSvnInfoHeadURL
 
 \usepackage[numbered]{hypdoc}
 \let\pkg=\textsf
@@ -104,7 +104,7 @@ and the derived files           svnurl.ins,
 %\GetFileInfo{\jobname.sty}
 %
 %\title{^^A
-%  \textsf{svnurl} --- description text\thanks{^^A
+%  \textsf{svnurl} --- Parse the subversion URL\thanks{^^A
 %    This file describes version \fileversion, last revised \filedate.^^A
 %  }^^A
 %}
@@ -139,6 +139,7 @@ and the derived files           svnurl.ins,
 %    \begin{macrocode}
 %<*package>
 \RequirePackage{svninfo}
+\PassOptionsToClass{nofancy}{svninfo}
 %\RequirePackage{xspace}
 
 \def\svnInfoBranch{--branch--}
@@ -167,7 +168,7 @@ and the derived files           svnurl.ins,
 		\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@branchflag}}
 			{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@branch}
 		    {\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@tagflag}}
-				{\expandafter\@parseSvnInfoHeadURL@tag}
+				{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@tag}
 				{\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@trunkflag}}
 					{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@trunk}
 					{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL}}}

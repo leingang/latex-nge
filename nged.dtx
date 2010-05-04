@@ -1,8 +1,10 @@
 % \iffalse meta-comment
 % !TEX program  = pdfLaTeX
+%
 % $Id$
 % $HeadURL$
-% See http://www.texdev.net/2009/10/06/a-model-dtx-file/ 
+%
+% See <http://www.texdev.net/2009/10/06/a-model-dtx-file/>
 % for information about the organization of this file
 %<*internal>
 \iffalse
@@ -80,6 +82,7 @@ And some examples.
           \file{ngemode.sty}{\from{\jobname.dtx}{modes}}
           \file{ngemisc.sty}{\from{\jobname.dtx}{misc}}
           \file{\jobname.drv}{\from{\jobname.dtx}{driver}}
+          \file{ngesvninfo.sty}{\from{\jobname.dtx}{ngesvninfo}}
 	      \file{example.tex}{\from{\jobname.dtx}{example}}
           \file{test_exam1.tex}{\from{\jobname.dtx}{examunit1}}
           \file{test_exam2.tex}{\from{\jobname.dtx}{examunit2}}
@@ -104,52 +107,21 @@ And some examples.
   \expandafter\endgroup
 \fi
 %</internal>
-\RequirePackage{svninfo}
+%    \begin{macrocode}
+\RequirePackage{svnurl}
+\PassOptionsToPackage{nofancy}{svninfo}
 \svnInfo $Id$
 \svnKeyword $HeadURL$
 \edef\ngefiledate{\svnInfoMaxYear/\svnInfoMaxMonth/\svnInfoMaxDay}
-\makeatletter
-\def\svnInfoBranch{--branch--}
-\def\svnInfoTag{--tag--}
-\newboolean{ngesvnurlisbranch}
-\newboolean{ngesvnurlistag}
-\newboolean{ngesvnurlistrunk}
-\def\@parseSvnInfoHeadURL@branchflag{branches}
-\def\@parseSvnInfoHeadURL@tagflag{tags}
-\def\@parseSvnInfoHeadURL@trunkflag{trunk}
-\def\@parseSvnInfoHeadURL@branch#1/#2/\relax/{%
-  \setboolean{ngesvnurlisbranch}{true}%
-  \xdef\ngesvnInfoBranch{#1}}
-\def\@parseSvnInfoHeadURL@tag#1/#2/\relax/{%
-  \setboolean{ngesvnurlistag}{true}%
-  \xdef\ngesvnInfoTag{#1}}
-\def\@parseSvnInfoHeadURL@trunk#1/\relax/{%
-  \setboolean{ngesvnurlistrunk}{true}}
-\def\parseSvnInfoHeadURL{\expandafter\@parseSvnInfoHeadURL\svnInfoHeadURL/\relax/}
-\def\@parseSvnInfoHeadURL#1/{
-	\let\@parseSvnInfoHeadURL@next=\relax
-	\ifx\relax#1
-		\let\@parsesvnInfoHeadURL@next=\empty%
-	\else
-		\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@branchflag}}
-			{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@branch}
-		    {\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@tagflag}}
-				{\expandafter\@parseSvnInfoHeadURL@tag}
-				{\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@trunkflag}}
-					{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@trunk}
-					{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL}}}
-	\fi
-	\expandafter\@parseSvnInfoHeadURL@next
-}
 \parseSvnInfoHeadURL
-\ifthenelse{\boolean{ngesvnurlisbranch}}{
-  \xdef\ngefileversion{b\ngesvnInfoBranch}
+\ifthenelse{\boolean{svnurlisbranch}}{
+  \xdef\ngefileversion{b\svnInfoBranch}
   }{
-  \ifthenelse{\boolean{ngesvnurlistag}}{
+  \ifthenelse{\boolean{svnurlistag}}{
     \xdef\ngefileversion{v\svnInfoTag}
     }{
     \xdef\ngefileversion{r\svnInfoMaxRevision}}}
-\makeatother
+%    \end{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 %<examclass>\def\ngefileinfo{NGED class for math exams}           \ProvidesClass{ngeexam}
 %<quizclass>\def\ngefileinfo{NGED class for math quizzes}         \ProvidesClass{ngequiz}
@@ -164,11 +136,12 @@ And some examples.
 %<versions>\def\ngefileinfo{NGED package for versioning}          \ProvidesPackage{ngever}
 %<variants>\def\ngefileinfo{NGED package for variants}            \ProvidesPackage{ngevar}
 %<modes>\def\ngefileinfo{NGED package for document modes}         \ProvidesPackage{ngemode}
+%<ngesvninfo>\def\ngefileinfo{NGED package for self-versioning}   \ProvidesPackage{ngesvninfo}
 %<misc>\def\ngefileinfo{NGED miscellaneous package}               \ProvidesPackage{ngemisc}
 %<*dtx>
 \def\ngefileinfo{NGED source file}\ProvidesFile{\jobname.dtx}
 %</dtx>
-[\ngefiledate\space \ngefileversion\space \ngefileinfo]
+%<!ngesvninfo>[\ngefiledate\space \ngefileversion\space \ngefileinfo]
 %    \begin{macrocode}
 %<*driver>
 \documentclass{ltxdoc}
@@ -480,6 +453,8 @@ And some examples.
 % as in a docstrip file.  As of this version this command produces no
 % output.
 %
+%
+%
 % \subsection{Miscellaneous eye candy}
 %
 % \DescribeEnv{centeredpage}
@@ -564,6 +539,9 @@ And some examples.
 % \StopEventually{\PrintChanges\PrintIndex}
 %
 % \section{Implementation}
+%
+% \subsection{Package version}
+%
 %
 % \subsection{Document Classes}
 % \subsubsection{Prerequisites}
@@ -1332,7 +1310,7 @@ And some examples.
 % \begin{environment}{partset}
 % List of a ``bag'' of parts
 %    \begin{macrocode}
-\ngeset{part set/item sep/.initial=\z@}
+\ngeset{part set/.cd,item sep/.initial=\z@,label/.initial=(\roman*)}
 \newenvironment{partset}[1][]{
   \ifnge@prob@ownpage
     \ngeset{part set/item sep=\fill}
@@ -1343,7 +1321,7 @@ And some examples.
   \ngeset{part set/.cd,#1}
   \let\ltx@item=\item
   \def\item{\ltx@item}
-  \begin{enumerate}[label=(\roman*),itemsep=\ngeget{part set/item sep}]
+  \begin{enumerate}[label=\ngeget{part set/label},itemsep=\ngeget{part set/item sep}]
   }{%
   \end{enumerate}
 }
@@ -1454,7 +1432,7 @@ And some examples.
   \setkeys{answerbox}{#1}%
   \ifthenelse{\boolean{KV@answerbox@eol}}{%
     \leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill}{\relax}%
-  \@ifundefined{cmdKV@answerbox@prompt}{}{\cmdKV@answerbox@prompt }
+  \@ifundefined{cmdKV@answerbox@prompt}{}{\mbox{\cmdKV@answerbox@prompt}~}
   \tikz[baseline=0.5cm]{
     \node[above,rectangle,
           draw=\answerboxboxcolor,

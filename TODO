@@ -1,0 +1,22 @@
+NGE tasks for 3.0 release
+=========================
+
+[ ] Fill in worksheet class
+    (Should be much like a quiz, just without gradeblanks)
+
+[ ] fix the gradeblank bug
+    seems to end up in strange places, especially on a front-and-back quiz.
+    This might have something to do with the ownpage option to problem.
+
+[ ] migrate ngeform command options to pgfkeys
+
+[ ] separate source code, unit tests, and examples into their own files
+
+Targeted for 3.1
+================
+
+[ ] mcitem package for multiple choice items
+    
+[ ] mcitem class for distributed development 
+
+[ ] makefile

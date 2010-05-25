@@ -75,6 +75,7 @@ And some examples.
 \generate{\file{ngeexam.cls}{\from{\jobname.dtx}{examclass}}
           \file{ngequiz.cls}{\from{\jobname.dtx}{quizclass}}
           \file{ngewksht.cls}{\from{\jobname.dtx}{worksheetclass}}
+          \file{ngeutils.sty}{\from{\jobname.dtx}{utils}}         
           \file{ngeform.sty}{\from{\jobname.dtx}{forms}}
           \file{ngeprob.sty}{\from{\jobname.dtx}{problems}}         
           \file{ngever.sty}{\from{\jobname.dtx}{versions}}         
@@ -130,8 +131,9 @@ And some examples.
 %<examunit1>\def\ngefileinfo{NGED Unit Test 1}                    \ProvidesFile{test_ngeexam1.tex}
 %<examunit2>\def\ngefileinfo{NGED Unit Test 2}                    \ProvidesFile{test_ngeexam2.tex}
 %<examunit3>\def\ngefileinfo{NGED Unit Test 3}                    \ProvidesFile{test_ngeexam3.tex}
-%<forms>\def\ngefileinfo{NGED package for exam/quiz forms}        \ProvidesPackage{ngeform}
+%<utils>\def\ngefileinfo{NGED base utilities}                     \ProvidesPackage{ngeutils}
 %<problems>\def\ngefileinfo{NGED package for problem structure}   \ProvidesPackage{ngeprob}
+%<forms>\def\ngefileinfo{NGED package for exam/quiz forms}        \ProvidesPackage{ngeform}
 %<versions>\def\ngefileinfo{NGED package for versioning}          \ProvidesPackage{ngever}
 %<variants>\def\ngefileinfo{NGED package for variants}            \ProvidesPackage{ngevar}
 %<modes>\def\ngefileinfo{NGED package for document modes}         \ProvidesPackage{ngemode}
@@ -328,7 +330,9 @@ And some examples.
 % \subsection{Other classes which do this kind of thing}
 %
 % Look at \cls{examdesign}, \cls{mathexam}, and \cls{exam}.
-% 
+%
+%
+%  
 % \section{Classes}
 %
 % \subsection{Exams}
@@ -435,6 +439,26 @@ And some examples.
 % similar to the original, differing only in minor ways to promote academic
 % honesty.
 %
+% Not implemented yet.  In fact, the interface is not worked out yet, either.
+%
+% \DescribeMacro{\newvariant\marg{name}} 
+%      Name a new variant.
+% 
+% \DescribeMacro{\usevariant\marg{name}} 
+%      Set the variant to be used in this document.
+%
+% \DescribeMacro{\thevariant}
+%      Insert the variant
+% 
+% \DescribeMacro{\variantchoice\marg{name1=toks1, name2=toks2,...}} 
+%      Process \meta{toks1} in variant \meta{name1}, etc.
+%
+% \DescribeMacro{\variantset\marg{variable}\marg{name1=toks1, name2=toks2,...}}
+%      Define a variable \meta{variable} which is \meta{toks1} in variant \meta{name1}, etc.
+%
+% \DescribeMacro{\variantget\marg{variable}}
+%      Retrieve the variable \meta{variable}, using whatever tokens correspond to the currently used variant.
+%
 % \subsection{Document versions}
 %
 % By \defined{version} we mean an instance of the master document
@@ -448,7 +472,7 @@ And some examples.
 % This version label is typeset along the right margin of the page
 % along with the date and time the document was typeset.
 %
-% \DescribeMacro{\changes\marg{version}{date}{change}} records changes
+% \DescribeMacro{\changes\marg{version}\marg{date}\marg{change}} records changes
 % as in a docstrip file.  As of this version this command produces no
 % output.
 %
@@ -538,9 +562,6 @@ And some examples.
 % \StopEventually{\PrintChanges\PrintIndex}
 %
 % \section{Implementation}
-%
-% \subsection{Package version}
-%
 %
 % \subsection{Document Classes}
 % \subsubsection{Prerequisites}
@@ -653,27 +674,18 @@ And some examples.
 %    \begin{macrocode}
 \RequirePackage{geometry}
 %    \end{macrocode}
-
-% \subsubsection{pgfkeys interface}
 %
-% pgfkeys rocks.  We should try to do any configuration we can through its interface.
-%
-%    \begin{macrocode}
-\RequirePackage{pgfkeys}
-\def\ngeset{\pgfqkeys{/nge}}
-\def\ngestring{\pgfqkeys{/nge/strings}}
-\def\ngeget#1{\pgfkeysvalueof{/nge/#1}}
-%    \end{macrocode}
 %
 % \subsubsection{Loading other \nged packages}
 %
 %    \begin{macrocode}
+\RequirePackage{ngeutil}
 \RequirePackage{ngeprob}
 \RequirePackage{ngeform}
 \RequirePackage{ngemisc}
 %    \end{macrocode}
 %
-% \subsection{course name}
+% \subsubsection{course name}
 %
 % \begin{macro}{\course}
 %    \begin{macrocode}
@@ -1077,6 +1089,30 @@ And some examples.
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsection{ngeutils.sty}
+%
+% This is low-level stuff that gets required by each package.
+%
+%    \begin{macrocode}
+%<*utils>
+%    \end{macrocode}
+%
+% \subsubsection{pgfkeys interface}
+%
+% pgfkeys rocks.  We should try to do any configuration we can through its interface.
+%
+%    \begin{macrocode}
+\RequirePackage{pgfkeys}
+\def\ngeset{\pgfqkeys{/nge}}
+\def\ngestring{\pgfqkeys{/nge/strings}}
+\def\ngeget#1{\pgfkeysvalueof{/nge/#1}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%</utils>
+%    \end{macrocode}
+%
+%
 % \subsection{ngeprob.sty}
 %
 % \begin{TODO}
@@ -1086,6 +1122,7 @@ And some examples.
 %    \begin{macrocode}
 %<*problems>
 
+\RequirePackage{ngeutils}
 \RequirePackage{ifthen}
 \RequirePackage{pgfkeys}
 
@@ -1374,6 +1411,7 @@ And some examples.
 \RequirePackage{xkeyval}
 \RequirePackage{xspace}
 \InputIfFileExists{svgnam.def}
+\RequirePackage{ngeutils}
 
 \makeatletter
 \newboolean{examformshowanswers}
@@ -1544,6 +1582,7 @@ And some examples.
 %
 %    \begin{macrocode}
 %<*versions>
+\RequirePackage{ngeutils}
 \RequirePackage{eso-pic}
 \RequirePackage{datetime}
 \newcommand{\@version}{\relax}
@@ -1589,6 +1628,66 @@ And some examples.
 %    \end{macrocode}
 % \end{macro}
 %  
+% 
+% \subsection{ngevar.sty}
+%
+%    \begin{macrocode}
+%<*variants>
+\RequirePackage{ngeutils}
+\ngeset{renew variants/.style={variants/.cd}}
+%    \end{macrocode}
+%
+% \begin{macro}{\newvariant}
+% Initialize a new variant.  Initially it just swallows its input.
+%    \begin{macrocode}
+       \newcommand{\newvariant}[1]{
+         \ngeset{variants/#1/.code={}}
+         \ngeset{renew variants/.append style={#1/.code={}}}
+       }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\usevariant,\thevariant}
+%  Adopt a variant.  Internally the variant's key is redefined to regurgitate its input.
+%    \begin{macrocode}
+       \newcommand{\usevariant}[1]{
+         \xdef\thevariant{#1}
+         \ngeset{renew variants,#1/.code={##1}}
+       }      
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\variantchoice}
+%  Process different tokens based on the variants.  The nomenclature is from the 
+%  |\mathchoice| macro, which gives options for display, inline, script, and scriptscript math modes.
+%  See the \TeX{}Book. 
+%    \begin{macrocode}
+       \newcommand{\variantchoice}[1]{%
+         \ngeset{variants/.cd,#1}%
+       }      
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\variantset}
+%    \begin{macrocode}
+       \newcommand{\variantset}[2]{
+         \ngeset{variables/.cd,#1/.initial={\variantchoice{#2}}}
+       }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\variantget}
+%    \begin{macrocode}
+       \newcommand{\variantget}[1]{
+         \ngeget{variables/#1}
+       }
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+%</variants>
+%    \end{macrocode}
+
 % \subsection{Miscellaneous}
 % \begin{environment}{centeredpage}
 %    \begin{macrocode}

@@ -1,0 +1,37 @@
+\documentclass{minimal}
+\usepackage{ngevar}
+
+\newvariant{A}
+\newvariant{B}
+\newvariant{C}
+
+\usevariant{C}
+
+\begin{document}
+
+\variantset{f}{A=x^2,B=x^3,C=x^4}
+\usevariant{A}
+
+This is variant \thevariant.
+
+Today is \variantchoice{A=Monday,B=Tuesday,C=Wednesday}.
+
+Let $f(x)=\variantget{f}$.
+
+\usevariant{B}
+
+This is variant \thevariant.
+
+Today is \variantchoice{A=Monday,B=Tuesday,C=Wednesday}.
+
+Let $f(x)=\variantget{f}$.
+
+\usevariant{C}
+
+This is variant \thevariant.
+
+Today is \variantchoice{A=Monday,B=Tuesday,C=Wednesday}.
+
+Let $f(x)=\variantget{f}$.
+
+\end{document}

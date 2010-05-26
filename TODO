@@ -8,8 +8,10 @@ NGE tasks for 3.0 release
     seems to end up in strange places, especially on a front-and-back quiz.
     This might have something to do with the ownpage option to problem.
 
-[ ] fix the svnurl bug
+[-] fix the svnurl bug
     The svninfo package adds code the the page header.  Don't want that.
+    Fixed the symptom, not sure about the cause.
+
 
 [ ] migrate ngeform command options to pgfkeys
 

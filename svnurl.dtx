@@ -175,6 +175,8 @@ and the derived files           svnurl.ins,
 	\fi
 	\expandafter\@parseSvnInfoHeadURL@next
 }
+\@svnInfoDraft@false
+\AtBeginDocument{\makeatletter\@svnInfoDraft@false\makeatother}
 %</package>
 %    \end{macrocode}
 %\Finale

@@ -66,6 +66,7 @@ and the derived files           ngeexam.cls
                                 ngevar.sty
                                 ngemode.sty
                                 ngemisc.sty
+                                ngeutils.sty
                                 nged.drv
 
 And some examples.
@@ -139,12 +140,11 @@ And some examples.
 %<versions>\def\ngefileinfo{NGED package for versioning}          \ProvidesPackage{ngever}
 %<variants>\def\ngefileinfo{NGED package for variants}            \ProvidesPackage{ngevar}
 %<modes>\def\ngefileinfo{NGED package for document modes}         \ProvidesPackage{ngemode}
-%<ngesvninfo>\def\ngefileinfo{NGED package for self-versioning}   \ProvidesPackage{ngesvninfo}
 %<misc>\def\ngefileinfo{NGED miscellaneous package}               \ProvidesPackage{ngemisc}
 %<*dtx>
 \def\ngefileinfo{NGED source file}\ProvidesFile{\jobname.dtx}
 %</dtx>
-%<!ngesvninfo>[\ngefiledate\space \ngefileversion\space \ngefileinfo]
+[\ngefiledate\space \ngefileversion\space \ngefileinfo]
 %    \begin{macrocode}
 %<*driver>
 \documentclass{ltxdoc}

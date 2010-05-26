@@ -1098,6 +1098,8 @@ And some examples.
 %    \begin{macrocode}
 %<*utils>
 \RequirePackage{tikz}
+\RequirePackage{ifthen}
+\RequirePackage{xspace}
 %    \end{macrocode}
 %
 % \subsubsection{pgfkeys interface}
@@ -1422,12 +1424,9 @@ And some examples.
 %
 %    \begin{macrocode}
 %<*forms>
-\RequirePackage{ifthen}
-\RequirePackage{tikz}
-\RequirePackage{xkeyval}
-\RequirePackage{xspace}
-\InputIfFileExists{svgnam.def}
 \RequirePackage{ngeutils}
+\RequirePackage{xkeyval}
+\InputIfFileExists{svgnam.def}
 
 \makeatletter
 \newboolean{examformshowanswers}

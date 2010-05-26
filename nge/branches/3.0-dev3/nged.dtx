@@ -110,9 +110,10 @@ And some examples.
 %    \begin{macrocode}
 \RequirePackage{svnurl}
 \PassOptionsToPackage{nofancy,final}{svninfo}
+\bgroup
 \svnInfo $Id$
 \svnKeyword $HeadURL$
-\edef\ngefiledate{\svnInfoMaxYear/\svnInfoMaxMonth/\svnInfoMaxDay}
+\xdef\ngefiledate{\svnInfoMaxYear/\svnInfoMaxMonth/\svnInfoMaxDay}
 \parseSvnInfoHeadURL
 \ifthenelse{\boolean{svnurlisbranch}}{
   \xdef\ngefileversion{b\svnInfoBranch}
@@ -121,6 +122,7 @@ And some examples.
     \xdef\ngefileversion{v\svnInfoTag}
     }{
     \xdef\ngefileversion{r\svnInfoMaxRevision}}}
+\egroup
 %    \end{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 %<examclass>\def\ngefileinfo{NGED class for math exams}           \ProvidesClass{ngeexam}
@@ -679,7 +681,7 @@ And some examples.
 % \subsubsection{Loading other \nged packages}
 %
 %    \begin{macrocode}
-\RequirePackage{ngeutil}
+\RequirePackage{ngeutils}
 \RequirePackage{ngeprob}
 \RequirePackage{ngeform}
 \RequirePackage{ngemisc}
@@ -1095,6 +1097,7 @@ And some examples.
 %
 %    \begin{macrocode}
 %<*utils>
+\RequirePackage{tikz}
 %    \end{macrocode}
 %
 % \subsubsection{pgfkeys interface}
@@ -1128,10 +1131,42 @@ And some examples.
 
 \pgfqkeys{/nge/strings}{points/.initial=Points}
 \newif\ifnge@prob@grade@blank@left
-\pgfqkeys{/nge/problem/grade blank margin}{.is choice,
-  left/.code=\nge@prob@grade@blank@lefttrue,
-  right/.code=\nge@prob@grade@blank@leftfalse,
+\tikzstyle{grade blank}=[]%fancy: [draw,fill=red!20,rounded corners]
+\ngeset{problem/grade blank margin/.cd,
+  .is choice,
+  left/.style={grade blank location=bottom left of problem},
+  right/.style={grade blank location=bottom right of problem},
   .initial=right}
+\ngeset{problem/grade blank location/.cd,
+  .is choice,
+  bottom left of problem/.code={
+    \tikzstyle{grade blank}+=[
+       at={([xshift=1cm]0,0 -| current page.south west)},
+       anchor=south west
+    ]
+  },
+  bottom right of problem/.code={
+    \tikzstyle{grade blank}+=[
+       at={([xshift=-1cm]0,0 -| current page.south east)},
+       anchor=south east
+    ]
+  },
+  bottom left of page/.code={
+    \tikzstyle{grade blank}+=[
+       at={([xshift=1cm,yshift=1cm]current page.south west)},
+       anchor=south west
+    ]
+  },
+  bottom right of page/.code={
+    \tikzstyle{grade blank}+=[
+       at={([xshift=-1cm,yshift=1cm]current page.south east)},
+       anchor=south east
+    ]
+  },
+  .initial=bottom right of problem
+}
+\ngeset{problem/grade blank contents/.initial={\rule{0pt}{1cm}\rule{1cm}{0.5pt} / \arabic{probpoints}
+}}
 \newif\ifnge@prob@ownpage
 \def\nge@prob@headfont{\bfseries}
 \ngeset{problem/.cd,
@@ -1259,7 +1294,10 @@ And some examples.
 %    \end{macrocode}
 % Initialize.
 %    \begin{macrocode}
-	\ngeset{problem/points=0,every problem/.try}
+	\ngeset{
+	  problem/points=0,
+	  problem/grade blank location=bottom right of problem,
+	  every problem/.try}
 %    \end{macrocode}
 % Process options
 %    \begin{macrocode}
@@ -1292,37 +1330,15 @@ And some examples.
 % corner and switch back to the normal font. 
 %    \begin{macrocode}
 \def\endproblem{%
-  \ifnge@prob@ownpage
-  \vfill
-  % format the grade blank in  bottom left/right corner of the page
-    \ifnge@prob@grade@blank@left 
-      \def\tmp@corner{south west}
-      \def\tmp@xshift{1cm}
-      \tikzstyle{grade blank}=[%
-        at=(current page.south west),
-        xshift=1cm,yshift=1cm,above right]
-    \else
-      \def\tmp@corner{south east}
-      \def\tmp@xshift{-1cm}
-      \tikzstyle{grade blank}=[%
-        at=(current page.south east),
-        xshift=-1cm,yshift=1cm,above left]
-    \fi
+  \ifnge@prob@ownpage\vfill\fi
 %   could be prettier, e.g., [%text width=7cm,fill=red!20,rounded corners,
-    \begin{tikzpicture}[remember picture,overlay] 
-       \node[grade blank]
-      { 
-        \rule{0pt}{1cm}\rule{1cm}{0.5pt} / \arabic{probpoints}
-      }; 
-    \end{tikzpicture}
-  \else
-  % put the grade blank in the left/right margin
-  % \vfill
-  % this could perhaps be done with tikz, too.
-    \normalfont\normalcolor
-    \ifnge@prob@grade@blank@left\reversemarginpar\else\normalmarginpar\fi%
-    \marginpar{\exam@gradeblank{\arabic{probpoints}}}
-  \fi
+  \begin{tikzpicture}[remember picture,overlay] 
+     \draw node[grade blank]
+    { 
+      \normalfont\normalcolor
+      \ngeget{problem/grade blank contents}
+    }; 
+  \end{tikzpicture}
 }
 %    \end{macrocode}
 % \end{environment}

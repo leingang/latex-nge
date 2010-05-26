@@ -4,9 +4,12 @@ NGE tasks for 3.0 release
 [ ] Fill in worksheet class
     (Should be much like a quiz, just without gradeblanks)
 
-[ ] fix the gradeblank bug
+[X] fix the gradeblank bug
     seems to end up in strange places, especially on a front-and-back quiz.
     This might have something to do with the ownpage option to problem.
+
+[ ] fix the svnurl bug
+    The svninfo package adds code the the page header.  Don't want that.
 
 [ ] migrate ngeform command options to pgfkeys
 

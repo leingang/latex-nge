@@ -1,0 +1,33 @@
+\documentclass{article}
+\title{Test of grade blank placement}
+\usepackage{ngeprob}
+
+\begin{document}
+\pagestyle{plain}
+\thispagestyle{plain}
+\maketitle
+
+\begin{problem}[points=1,grade blank location=bottom right of page]
+%\pgfkeys{/tikz/grade blank/.show code}
+Problem~1 should have the grade blank at the bottom right of the page.
+\end{problem}
+
+\begin{problem}[points=2,ownpage,grade blank location=bottom left of page]
+Problem~2 should have the grade blank at the bottom left of the page.
+\end{problem}
+
+\clearpage
+\begin{problem}[points=3,grade blank location=bottom left of problem]
+Problem~3 should have the grade blank at the bottom left of the problem.
+\end{problem}
+
+\begin{problem}[points=4,grade blank location=bottom right of problem]
+Problem~4 should have the grade blank at the bottom right of the problem.
+\end{problem}
+
+\begin{problem}[points=5,grade blank contents={\rule{0pt}{1cm}\rule{1cm}{0.5pt} // \arabic{probpoints}}]
+Problem~5 has a customized grade blank contents
+\end{problem}
+
+\end{document}
+

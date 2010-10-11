@@ -1366,18 +1366,26 @@ And some examples.
 %    \begin{macrocode}
 \ngeset{part set/.cd,item sep/.initial=\z@,label/.initial=(\roman*)}
 \newenvironment{partset}[1][]{
-  \ifnge@prob@ownpage
-    \ngeset{part set/item sep=\fill}
-  \else
-    \ngeset{part set/item sep=0pt}
-  \fi
-  \ngeset{every part set/.try}
-  \ngeset{part set/.cd,#1}
-  \let\ltx@item=\item
-  \def\item{\ltx@item}
-  \begin{enumerate}[label=\ngeget{part set/label},itemsep=\ngeget{part set/item sep}]
-  }{%
-  \end{enumerate}
+    \ifnge@prob@ownpage
+        \ngeset{part set/item sep=\fill}
+    \else
+        \ngeset{part set/item sep=0pt}
+    \fi
+    \ngeset{every part set/.try}
+    \ngeset{
+        part set/.cd,
+        #1,
+        label/.get=\nge@partset@label,
+        item sep/.get=\nge@partset@itemsep
+    }
+    \let\ltx@item=\item
+    \def\item{\ltx@item}
+    \begin{enumerate}[
+        label=\nge@partset@label,
+        itemsep=\nge@partset@itemsep
+    ]
+}{% end of part set environment
+    \end{enumerate}
 }
 %    \end{macrocode}
 % \end{environment} 
@@ -1385,20 +1393,100 @@ And some examples.
 % \begin{environment}{partsequence}
 % List of a sequence of parts
 %    \begin{macrocode}
-\ngeset{part sequence/item sep/.initial=\z@}
-\newenvironment{partsequence}[1][]{
-  \ifnge@prob@ownpage
-    \ngeset{part sequence/item sep=\fill}
-  \else
-    \ngeset{part sequence/item sep=0pt}
-  \fi
-  \ngeset{every part sequence/.try}
-  \ngeset{part sequence/.cd,#1}
-  \let\ltx@item=\item
-  \def\item{\null\ltx@item}
-  \begin{enumerate}[label=(\alph*),itemsep=\ngeget{part sequence/item sep}]
-  }{%
-  \end{enumerate}
+\newcounter{probpartseqpoints}
+\newif\ifnge@probpartseq@showgradeblank
+\ngeset{
+    part sequence part/.style={
+        points/.code={%
+            \setcounter{probpartseqpoints}{#1}
+%    \end{macrocode}
+% \begin{TODO}
+% Problems with parts with point values should 
+% compute probpoints intelligently.  However,
+% since the problem's point value is displayed at the top of the 
+% problem, and the sum isn't determined until the end, this will
+% require some kind of per-problem auxfile trickery. 
+% \end{TODO}        
+%    \begin{macrocode}
+                %\addtocounter{probpoints}{probpartseqpoints} not yet
+            },
+        show grade blank/.is if=nge@probpartseq@showgradeblank,
+        hide grade blank/.style={show grade blank=false},
+        score code/.initial={\relax},
+        points=0,
+        hide grade blank
+    }
+}
+\newenvironment{partsequence}[1][]{%
+    \ngeset{
+        item sep/.initial=\z@
+     }
+    \ifnge@prob@ownpage
+        \ngeset{item sep=\fill}
+    \else
+        \ngeset{item sep=0pt}
+    \fi%
+    \ngeset{
+        every part sequence/.try,
+        #1
+    }%
+    \let\ltx@item=\item
+    %  \def\item{\null\ltx@item}
+    \renewcommand\item[1][]{
+        \ltx@item%
+        \ngeset{
+            % We are local to this group, so
+            % reusing this key is temporary
+            % another way to do this is with a 'part sequence part' style
+            % declared at the top level and invoked here.
+%            part sequence part/.show code,
+%            part sequence part,
+            points/.code={%
+                \setcounter{probpartseqpoints}{####1}
+%    \end{macrocode}
+% \begin{TODO}
+% Problems with parts with point values should 
+% compute probpoints intelligently.  However,
+% since the problem's point value is displayed at the top of the 
+% problem, and the sum isn't determined until the end, this will
+% require some kind of per-problem auxfile trickery. 
+% \end{TODO}        
+%    \begin{macrocode}
+                %\addtocounter{probpoints}{probpartseqpoints} not yet
+            },
+            show grade blank/.is if=nge@probpartseq@showgradeblank,
+            hide grade blank/.style={show grade blank=false},
+            score code/.initial={\relax},
+            points=0,
+            hide grade blank,
+            every part/.try, % could be set in partsequence open
+            ##1 % keys to item command,
+        }%
+        \ifnge@probpartseq@showgradeblank
+            \ngeset{score code/.get=\nge@partsequence@scorecode}%
+            \begin{tikzpicture}[remember picture,overlay]
+                \node (here) {}; 
+                \node [
+                    grade blank,
+                    at={([xshift=1cm]current page.south west |- here.base)},
+                    inner sep=\z@,
+                    outer sep=\z@,
+                    anchor=south west
+                ] { 
+                    \normalfont\normalcolor
+                    \ifx\relax\nge@partsequence@scorecode
+                    \else
+                        {\small\nge@partsequence@scorecode}
+                    \fi
+                    \rule{0pt}{1cm}\rule{1cm}{0.5pt} / \arabic{probpartseqpoints}
+                }; 
+            \end{tikzpicture}%
+        \fi%
+    }
+    \ngeset{item sep/.get=\nge@partsequence@itemsep}
+    \begin{enumerate}[label=(\alph*),itemsep=\nge@partsequence@itemsep]
+}{% end of partsequence environment
+	\end{enumerate}
 }
 %    \end{macrocode}
 % \end{environment} 

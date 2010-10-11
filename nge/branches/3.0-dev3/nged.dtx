@@ -1398,7 +1398,7 @@ And some examples.
 \ngeset{
     part sequence part/.style={
         points/.code={%
-            \setcounter{probpartseqpoints}{#1}
+            \setcounter{probpartseqpoints}{##1}
 %    \end{macrocode}
 % \begin{TODO}
 % Problems with parts with point values should 
@@ -1408,7 +1408,7 @@ And some examples.
 % require some kind of per-problem auxfile trickery. 
 % \end{TODO}        
 %    \begin{macrocode}
-                %\addtocounter{probpoints}{probpartseqpoints} not yet
+            %\addtocounter{probpoints}{probpartseqpoints} not yet
             },
         show grade blank/.is if=nge@probpartseq@showgradeblank,
         hide grade blank/.style={show grade blank=false},
@@ -1432,33 +1432,11 @@ And some examples.
     }%
     \let\ltx@item=\item
     %  \def\item{\null\ltx@item}
-    \renewcommand\item[1][]{
+    \renewcommand\item[1][]{%
+        \null%
         \ltx@item%
         \ngeset{
-            % We are local to this group, so
-            % reusing this key is temporary
-            % another way to do this is with a 'part sequence part' style
-            % declared at the top level and invoked here.
-%            part sequence part/.show code,
-%            part sequence part,
-            points/.code={%
-                \setcounter{probpartseqpoints}{####1}
-%    \end{macrocode}
-% \begin{TODO}
-% Problems with parts with point values should 
-% compute probpoints intelligently.  However,
-% since the problem's point value is displayed at the top of the 
-% problem, and the sum isn't determined until the end, this will
-% require some kind of per-problem auxfile trickery. 
-% \end{TODO}        
-%    \begin{macrocode}
-                %\addtocounter{probpoints}{probpartseqpoints} not yet
-            },
-            show grade blank/.is if=nge@probpartseq@showgradeblank,
-            hide grade blank/.style={show grade blank=false},
-            score code/.initial={\relax},
-            points=0,
-            hide grade blank,
+            part sequence part,
             every part/.try, % could be set in partsequence open
             ##1 % keys to item command,
         }%

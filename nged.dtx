@@ -130,9 +130,18 @@ And some examples.
 \def\svnInfoBranch{--branch--}
 \def\svnInfoTag{--tag--}
 \RequirePackage{ifthen}
-\newboolean{svnurlisbranch}
-\newboolean{svnurlistag}
-\newboolean{svnurlistrunk}
+\ifcsname ifngesvnurlisbranch\endcsname
+\else
+    \newboolean{ngesvnurlisbranch}
+\fi
+\ifcsname ifngesvnurlistag\endcsname
+\else
+    \newboolean{ngesvnurlistag}
+\fi
+\ifcsname ifngesvnurlistrunk\endcsname
+\else
+    \newboolean{ngesvnurlistrunk}
+\fi
 
 \def\@parseSvnInfoHeadURL@branchflag{branches}
 \def\@parseSvnInfoHeadURL@tagflag{tags}
@@ -142,13 +151,13 @@ And some examples.
 \def\@parseSvnInfoHeadURL@tagflag{tags}
 \def\@parseSvnInfoHeadURL@trunkflag{trunk}
 \def\@parseSvnInfoHeadURL@branch#1/#2/\relax/{%
-  \setboolean{svnurlisbranch}{true}%
+  \setboolean{ngesvnurlisbranch}{true}%
   \xdef\svnInfoBranch{#1}}
 \def\@parseSvnInfoHeadURL@tag#1/#2/\relax/{%
-  \setboolean{svnurlistag}{true}%
+  \setboolean{ngesvnurlistag}{true}%
   \xdef\svnInfoTag{#1}}
 \def\@parseSvnInfoHeadURL@trunk#1/\relax/{%
-  \setboolean{svnurlistrunk}{true}}
+  \setboolean{ngesvnurlistrunk}{true}}
 \def\parseSvnInfoHeadURL{\expandafter\@parseSvnInfoHeadURL\nge@svnInfoHeadURL/\relax/}
 \def\@parseSvnInfoHeadURL#1/{
 \let\@parseSvnInfoHeadURL@next=\relax
@@ -168,14 +177,12 @@ And some examples.
 
 \parseSvnInfoHeadURL
 
-\ifthenelse{\boolean{svnurlisbranch}}{%
+\ifthenelse{\boolean{ngesvnurlisbranch}}{%
     \def\ngefileversion{b\svnInfoBranch}
     }{%
-    \ifthenelse{\boolean{svnurlistag}}{%
+    \ifthenelse{\boolean{ngesvnurlistag}}{%
         \def\ngefileversion{v\svnInfoTag}
     }}% otherwise leave it as is; the rNNN tag.
-   
-\makeatother
 %    \end{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 %<examclass>\def\ngefileinfo{NGED class for math exams}           \ProvidesClass{ngeexam}
@@ -1182,7 +1189,7 @@ And some examples.
 \RequirePackage{ngeutils}
 \RequirePackage{ifthen}
 \RequirePackage{pgfkeys}
-
+\makeatletter
 \pgfqkeys{/nge/strings}{points/.initial=Points}
 \newif\ifnge@prob@grade@blank@left
 \tikzstyle{grade blank}=[]%fancy: [draw,fill=red!20,rounded corners]
@@ -1474,7 +1481,7 @@ And some examples.
         hide grade blank
     }
 }
-\newenvironment{partsequence}[1][]{%
+\newenvironment{partsequence}[1][]{%w
     \ngeset{
         item sep/.initial=\z@
      }
@@ -1550,8 +1557,8 @@ And some examples.
 \RequirePackage{ngeutils}
 \RequirePackage{xkeyval}
 \InputIfFileExists{svgnam.def}
-
 \makeatletter
+
 \newboolean{examformshowanswers}
 \newcommand{\examformshowanswers}{\setboolean{examformshowanswers}{true}}
 \newcommand{\examformhideanswers}{\setboolean{examformshowanswers}{false}}
@@ -1586,6 +1593,27 @@ And some examples.
 \define@cmdkey{answerbox}{height}{}
 %% prompt - text that goes before the answer box
 \define@cmdkey{answerbox}{prompt}{}
+
+% and now the pgfkeys way to do the same thing:
+\newif\ifnge@answerbox@showanswer
+\newif\ifnge@answerbox@eol
+\ngeset{
+    answer box/.style={
+        answer font/.initial=\normalfont\sffamily\Large,
+        answer color/.initial=FireBrick,
+        answer box color/.initial=ScantronGreen,
+        width/.initial=1cm,
+        height/.initial=1cm,
+        show answer/.is if=\ifnge@answerbox@showanswer
+        showanswer/.style={show answer}, % deprecating
+        end of line/.is if=\ifnge@answerbox@eol,
+        eol/.style={end of line}, % deprecating
+        prompt/.initial=\relax,
+        answer/.initial=\relax,
+    }
+    every answer box/.style={}
+}
+
 
 % These boxes could be implemented with LaTeX boxes,
 % but not the bubbles. So does it make sense to partially refactor?

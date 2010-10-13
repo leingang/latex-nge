@@ -108,42 +108,74 @@ And some examples.
   \expandafter\endgroup
 \fi
 %</internal>
+% This code parses subversion keyword information and sets the
+% |\ngefileversion| and |\ngefiledate| macros.
 %    \begin{macrocode}
-%\RequirePackage{svnurl}
-%\PassOptionsToPackage{nofancy,final}{svninfo}
-\bgroup
 \makeatletter
-
-\def\svnInfo $Id${
-    \xdef\nge@svnInfoMaxYear{#3}
-    \xdef\nge@svnInfoMaxMonth{#4}
-    \xdef\nge@svnInfoMaxDay{#5}
-    \xdef\nge@svnInfoMaxRevision{#2}
+\def\nge@svnInfo $#1: #2 #3 #4-#5-#6 #7 #8 ${%
+    \xdef\nge@svnInfoMaxYear{#4}
+    \xdef\nge@svnInfoMaxMonth{#5}
+    \xdef\nge@svnInfoMaxDay{#6}
+    \xdef\nge@svnInfoMaxRevision{#3}
 }
-\def\svnKeyword $#1: #2${
+\def\nge@svnKeyword $#1: #2${
     \expandafter\xdef\csname nge@svnInfo#1\endcsname{#2}
 }
-\svnInfo $Id$
-\svnKeyword $HeadURL$
+\nge@svnInfo $Id$
+\nge@svnKeyword $HeadURL$
+\def\ngefiledate{\nge@svnInfoMaxYear/\nge@svnInfoMaxMonth/\nge@svnInfoMaxDay}
 
-\xdef\ngefiledate{\nge@svnInfoMaxYear/\nge@svnInfoMaxMonth/\nge@svnInfoMaxDay}
+\def\ngefileversion{r\nge@svnInfoMaxRevision}
 
-\svnInfo $Id$
-\svnKeyword $HeadURL$
+\def\svnInfoBranch{--branch--}
+\def\svnInfoTag{--tag--}
+\RequirePackage{ifthen}
+\newboolean{svnurlisbranch}
+\newboolean{svnurlistag}
+\newboolean{svnurlistrunk}
 
-\xdef\ngefiledate{\nge@svnInfoMaxYear/\nge@svnInfoMaxMonth/\nge@svnInfoMaxDay}
+\def\@parseSvnInfoHeadURL@branchflag{branches}
+\def\@parseSvnInfoHeadURL@tagflag{tags}
+\def\@parseSvnInfoHeadURL@trunkflag{trunk}
 
-%\parseSvnInfoHeadURL
-%\ifthenelse{\boolean{svnurlisbranch}}{
-%  \xdef\ngefileversion{b\svnInfoBranch}
-%  }{
-%  \ifthenelse{\boolean{svnurlistag}}{
-%    \xdef\ngefileversion{v\svnInfoTag}
-%    }{
-%    \xdef\ngefileversion{r\svnInfoMaxRevision}}}
-\xdef\ngefileversion{r\nge@svnInfoMaxRevision}
+\def\@parseSvnInfoHeadURL@branchflag{branches}
+\def\@parseSvnInfoHeadURL@tagflag{tags}
+\def\@parseSvnInfoHeadURL@trunkflag{trunk}
+\def\@parseSvnInfoHeadURL@branch#1/#2/\relax/{%
+  \setboolean{svnurlisbranch}{true}%
+  \xdef\svnInfoBranch{#1}}
+\def\@parseSvnInfoHeadURL@tag#1/#2/\relax/{%
+  \setboolean{svnurlistag}{true}%
+  \xdef\svnInfoTag{#1}}
+\def\@parseSvnInfoHeadURL@trunk#1/\relax/{%
+  \setboolean{svnurlistrunk}{true}}
+\def\parseSvnInfoHeadURL{\expandafter\@parseSvnInfoHeadURL\nge@svnInfoHeadURL/\relax/}
+\def\@parseSvnInfoHeadURL#1/{
+\let\@parseSvnInfoHeadURL@next=\relax
+\ifx\relax#1
+\let\@parsesvnInfoHeadURL@next=\empty%
+\else
+\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@branchflag}}
+{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@branch}
+    {\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@tagflag}}
+{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@tag}
+{\ifthenelse{\equal{#1}{\@parseSvnInfoHeadURL@trunkflag}}
+{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL@trunk}
+{\let\@parseSvnInfoHeadURL@next=\@parseSvnInfoHeadURL}}}
+\fi
+\expandafter\@parseSvnInfoHeadURL@next
+}
 
-\egroup
+\parseSvnInfoHeadURL
+
+\ifthenelse{\boolean{svnurlisbranch}}{%
+    \def\ngefileversion{b\svnInfoBranch}
+    }{%
+    \ifthenelse{\boolean{svnurlistag}}{%
+        \def\ngefileversion{v\svnInfoTag}
+    }}% otherwise leave it as is; the rNNN tag.
+   
+\makeatother
 %    \end{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 %<examclass>\def\ngefileinfo{NGED class for math exams}           \ProvidesClass{ngeexam}

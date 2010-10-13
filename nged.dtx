@@ -1378,8 +1378,8 @@ And some examples.
         label/.get=\nge@partset@label,
         item sep/.get=\nge@partset@itemsep
     }
-    \let\ltx@item=\item
-    \def\item{\ltx@item}
+    \let\ltx@item=\item%
+    \def\item{\ltx@item}%
     \begin{enumerate}[
         label=\nge@partset@label,
         itemsep=\nge@partset@itemsep
@@ -1392,6 +1392,11 @@ And some examples.
 %
 % \begin{environment}{partsequence}
 % List of a sequence of parts
+% \begin{TODO}
+% This needs to be applied to part sets, too.
+% Per DRY we should actually move this code to a general 
+% problem part environment or style and adapt in each case.
+% \end{TODO}
 %    \begin{macrocode}
 \newcounter{probpartseqpoints}
 \newif\ifnge@probpartseq@showgradeblank

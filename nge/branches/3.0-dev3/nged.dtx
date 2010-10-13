@@ -109,20 +109,40 @@ And some examples.
 \fi
 %</internal>
 %    \begin{macrocode}
-\RequirePackage{svnurl}
-\PassOptionsToPackage{nofancy,final}{svninfo}
+%\RequirePackage{svnurl}
+%\PassOptionsToPackage{nofancy,final}{svninfo}
 \bgroup
+\makeatletter
+
+\def\svnInfo $Id${
+    \xdef\nge@svnInfoMaxYear{#3}
+    \xdef\nge@svnInfoMaxMonth{#4}
+    \xdef\nge@svnInfoMaxDay{#5}
+    \xdef\nge@svnInfoMaxRevision{#2}
+}
+\def\svnKeyword $#1: #2${
+    \expandafter\xdef\csname nge@svnInfo#1\endcsname{#2}
+}
 \svnInfo $Id$
 \svnKeyword $HeadURL$
-\xdef\ngefiledate{\svnInfoMaxYear/\svnInfoMaxMonth/\svnInfoMaxDay}
-\parseSvnInfoHeadURL
-\ifthenelse{\boolean{svnurlisbranch}}{
-  \xdef\ngefileversion{b\svnInfoBranch}
-  }{
-  \ifthenelse{\boolean{svnurlistag}}{
-    \xdef\ngefileversion{v\svnInfoTag}
-    }{
-    \xdef\ngefileversion{r\svnInfoMaxRevision}}}
+
+\xdef\ngefiledate{\nge@svnInfoMaxYear/\nge@svnInfoMaxMonth/\nge@svnInfoMaxDay}
+
+\svnInfo $Id$
+\svnKeyword $HeadURL$
+
+\xdef\ngefiledate{\nge@svnInfoMaxYear/\nge@svnInfoMaxMonth/\nge@svnInfoMaxDay}
+
+%\parseSvnInfoHeadURL
+%\ifthenelse{\boolean{svnurlisbranch}}{
+%  \xdef\ngefileversion{b\svnInfoBranch}
+%  }{
+%  \ifthenelse{\boolean{svnurlistag}}{
+%    \xdef\ngefileversion{v\svnInfoTag}
+%    }{
+%    \xdef\ngefileversion{r\svnInfoMaxRevision}}}
+\xdef\ngefileversion{r\nge@svnInfoMaxRevision}
+
 \egroup
 %    \end{macrocode}
 \NeedsTeXFormat{LaTeX2e}
@@ -297,7 +317,7 @@ And some examples.
 %    
 %
 % \title{\nged: A Next Generation Educational Bundle \\ 
-%        Version \ngefileversion, revision \svnInfoMaxRevision}
+%        Version \ngefileversion, \ngefiledate}
 % \author{Matthew Leingang \\ leingang@courant.nyu.edu}
 %
 %

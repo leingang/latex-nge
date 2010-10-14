@@ -1358,6 +1358,7 @@ And some examples.
 	\ngeset{
 	  problem/points=0,
 	  problem/grade blank location=bottom right of problem,
+	  problem/marker/.code={\def\theproblem{##1}},
 	  every problem/.try}
 %    \end{macrocode}
 % Process options
@@ -1388,7 +1389,12 @@ And some examples.
 }
 %    \end{macrocode}
 % At the end of the problem, put a grade blank in the bottom-right
-% corner and switch back to the normal font. 
+% corner and switch back to the normal font.  If the ownpage option is in force,
+% clear the page.  
+%
+% Note that this is two consecutive |\clearpages|.  This usually results in only one page being cleared.
+% If, however, vertical material is added accidentally or purposefully between the end of one problem 
+% and the start of another, there will be a page between.
 %    \begin{macrocode}
 \def\endproblem{%
   \ifnge@prob@ownpage\vfill\fi
@@ -1400,6 +1406,7 @@ And some examples.
       \ngeget{problem/grade blank contents}
     }; 
   \end{tikzpicture}
+  \ifnge@prob@ownpage\clearpage\fi
 }
 %    \end{macrocode}
 % \end{environment}

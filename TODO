@@ -13,9 +13,9 @@ NGE tasks for 3.0 release
 
 [ ] migrate ngeform command options to pgfkeys
 
-[ ] s/Scantron/OMR/g
+[X] s/Scantron/OMR/g
 
-[*] Add and debug a marker key for problems to appear in header/table of problems.
+[X] Add and debug a marker key for problems to appear in header/table of problems.
     Currently \begin{problem} starts a new page, but maybe \end{problem} should
     clear the page.  
 

@@ -15,6 +15,12 @@ NGE tasks for 3.0 release
 
 [ ] s/Scantron/OMR/g
 
+[*] Add and debug a marker key for problems to appear in header/table of problems.
+    Currently \begin{problem} starts a new page, but maybe \end{problem} should
+    clear the page.  
+
+    2010-10-14 16:20:54 : looks fixed.
+
 [ ] Change part{sequence,set} \item to \part with options
 
 [ ] separate source code, unit tests, and examples into their own files

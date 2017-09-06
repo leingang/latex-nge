@@ -1,4 +1,4 @@
- % \iffalse meta-comment
+% \iffalse meta-comment
 % !TEX program  = pdfLaTeX
 %
 % $Id$
@@ -933,7 +933,8 @@ And some examples.
 \ifthenelse{\boolean{solutionsmode}}
 {\message{(* solutions mode on *)}
 \definecolor{darkred}{rgb}{0.75,0,0}
-\newcommand{\solutionfont}{\color{darkred}\normalfont}
+\colorlet{solution}{darkred}
+\newcommand{\solutionfont}{\color{solution}\normalfont}
 \AtBeginDocument{\renewcommand{\problemfont}{\itshape}}
 \examformshowanswers
 %    \end{macrocode}
@@ -947,9 +948,11 @@ And some examples.
 %    \begin{macrocode}
 \renewenvironment{solution}[1][Solution]{%
 	\renewcommand{\qedsymbol}{{\Large$\blacktriangle$}}
-	\nopagebreak[3]
+	\medskip\nopagebreak[3]
 	\begingroup\solutionfont 
-	\begin{proof}[#1]}{\end{proof}\endgroup}
+	\textit{#1.} }{%
+    \leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\qedsymbol
+    \endgroup}
 %    \end{macrocode}
 % \end{environment}
 %    \begin{macrocode}

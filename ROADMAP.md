@@ -94,9 +94,9 @@ So how does Joseph do it?  Both the beamer and siunitx repositories include scri
 Then include a script like this in the documentation:
 
 ```bash
-$ unzip foo.tds.zip
-$ cd foo.tds
-$ cp -R * `kpsexpand '$TEXMFHOME'`
+unzip foo.tds.zip
+cd foo.tds
+cp -R * `kpsexpand '$TEXMFHOME'`
 ```
 That last line is the critical one.  Needs to be checked.
 
@@ -105,13 +105,13 @@ That last line is the critical one.  Needs to be checked.
 Once it's on CTAN, maybe users will be able to run
 
 ```bash
-$ tlmgr --usermode install nge
+tlmgr --usermode install nge
 ```
 
 or
 
 ```bash
-$ sudo tlmgr install nge
+sudo tlmgr install nge
 ```
 
 ### Installing from source
